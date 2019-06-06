@@ -1,0 +1,9 @@
+export const SET_CURRENT_USER = "SET_CURRENT_USER";
+export const LOADING = "LOADING";
+export const ERROR = "ERROR";
+export const USERDATA = "USERDATA";
+export const CUSTOMERINFO = "CUSTOMERINFO";
+export const DEVICETYPES = "DEVICETYPES";
+export const FETCH_CONNECTION_INFO = "FETCH_CONNECTION_INFO";
+export const MAP_RAW_DATA_TO_MODIFIED_DATA = "MAP_RAW_DATA_TO_MODIFIED_DATA";
+export const SET_VID = "SET_VID";
