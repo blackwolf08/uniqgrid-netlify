@@ -210,13 +210,12 @@ button {
   height: calc(100% - 60px);
 }
 
-.link-p {
+/* .link-p {
   text-decoration: none;
   color: white;
   cursor: pointer;
-  height: 200%;
   width: 100%;
-}
+} */
 
 .mysites-connection-list {
   font-weight: 800;

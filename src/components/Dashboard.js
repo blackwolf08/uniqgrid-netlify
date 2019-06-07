@@ -11,10 +11,17 @@ import ConnectionInfo from "./ConnectionInfo";
 import { fetchUserData } from "../actions/userData";
 import { connect } from "react-redux";
 import Spinner from "../images/index";
+import { refreshUser } from "../actions/auth";
 
 //this is the parent component of all the logged in stuff
 
 class Dashboard extends Component {
+  componentDidMount() {
+    //this function refreshes the user token every 100 sec
+    setInterval(() => {
+      refreshUser();
+    }, 100000);
+  }
   render() {
     if (this.props.isLoading) {
       this.props.fetchUserData();

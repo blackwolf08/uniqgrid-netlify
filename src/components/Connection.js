@@ -9,9 +9,9 @@ export default class Connection extends Component {
       id,
       name,
       power,
-      powerPer,
-      consumption,
-      consumptionPer
+      //powerPer,
+      consumption
+      //consumptionPer
     } = this.props;
 
     const redirect = `/dashboard/my-sites/${id}`;
@@ -23,13 +23,14 @@ export default class Connection extends Component {
           </div>
           <div className="my-col">
             <p>
-              {power} <span style={{ color: "green" }}>({powerPer})</span>
+              {power}{" "}
+              {/*<span style={{ color: "green" }}>({powerPer}) </span>*/}
             </p>
           </div>
           <div className="my-col">
             <p>
               {consumption}{" "}
-              <span style={{ color: "red" }}>({consumptionPer})</span>
+              {/*<span style={{ color: "red" }}>({consumptionPer})</span>*/}
             </p>
           </div>
           <div

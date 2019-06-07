@@ -29,6 +29,12 @@ class AuthLogin extends Component {
     }
   }
 
+  componentWillMount() {
+    if (typeof localStorage.jwtToken !== "undefined") {
+      window.location.href = "/dashboard/my-sites";
+    }
+  }
+
   handleSubmit = e => {
     e.preventDefault();
     this.setState({

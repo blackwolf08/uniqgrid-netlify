@@ -34,7 +34,9 @@ class MyDevice extends Component {
       deviceId,
       isLoading: true,
       deviceActivated: true,
-      deviceName: name
+      deviceName: name,
+      selectValue: "",
+      graphData: ""
     });
     const URL = `https://cors-anywhere.herokuapp.com/http://portal.uniqgridcloud.com:8080/api/device/${deviceId}`;
     axios.get(URL).then(res => {
@@ -103,6 +105,47 @@ class MyDevice extends Component {
     };
 
     return options;
+  };
+
+  noDataSetOptions = () => {
+    let s = this.noDataPoints();
+    let heading = this.state.selectValue.split("_");
+    heading = heading.join(" ");
+    const options = {
+      title: {
+        text: `${heading} Analysis`
+      },
+      animationEnabled: true,
+      exportEnabled: true,
+      theme: "light2",
+      data: [
+        {
+          type: "area",
+          dataPoints: [...s]
+        }
+      ]
+    };
+
+    return options;
+  };
+
+  noDataPoints = () => {
+    return [
+      {
+        label: moment().format("MMM Do YY"),
+        y: 0
+      }
+    ];
+  };
+
+  dataPoints = () => {
+    let s = this.state.graphData.map(e => {
+      return {
+        label: moment(e.ts).format("MMM Do YY"),
+        y: e.value * 1
+      };
+    });
+    return s;
   };
 
   filterWeek = () => {
@@ -237,17 +280,6 @@ class MyDevice extends Component {
     });
   };
 
-  dataPoints = () => {
-    console.log(this.state.graphData);
-    let s = this.state.graphData.map(e => {
-      return {
-        label: moment(e.ts).format("MMM Do YY"),
-        y: e.value * 1
-      };
-    });
-    return s;
-  };
-
   render() {
     let CanvasJSChart = CanvasJSReact.CanvasJSChart;
     const listOfConnections = this.state.connections.map(connection => {
@@ -321,9 +353,10 @@ class MyDevice extends Component {
                 {/* <p>{this.state.graphData}</p> */}
                 <div>
                   {!this.state.graphData && (
-                    <div>
-                      <h1>NO DATA</h1>
-                    </div>
+                    <CanvasJSChart
+                      options={this.noDataSetOptions()}
+                      /* onRef = {ref => this.chart = ref} */
+                    />
                   )}
                   {this.state.isLoading && (
                     <div style={{ height: "400px" }}>

@@ -57,51 +57,42 @@ class LeftPart extends Component {
         <div className="circle">
           <p>{shortName}</p>
         </div>
-        <button className={this.state.mysite}>
-          <Link
-            style={{ width: "100%", height: "100%" }}
-            className="link-p"
-            to="/dashboard/my-sites"
-          >
-            My Site
-          </Link>
-        </button>
-        <button className={this.state.mydevice}>
-          <Link
-            style={{ width: "100%", height: "100%" }}
-            className="link-p"
-            to="/dashboard/my-device"
-          >
-            My Device
-          </Link>
-        </button>
-        <button className={this.state.myrequests}>
-          <Link
-            style={{ width: "100%", height: "100%" }}
-            className="link-p"
-            to="/dashboard/my-requests"
-          >
-            My Requests
-          </Link>
-        </button>
-        <button className={this.state.feedback}>
-          <Link
-            style={{ width: "100%", height: "100%" }}
-            className="link-p"
-            to="/dashboard/feedback"
-          >
-            FeedBack
-          </Link>
-        </button>
-        <button className={this.state.myprofile}>
-          <Link
-            style={{ width: "100%", height: "100%" }}
-            className="link-p"
-            to="/dashboard/my-profile"
-          >
-            My Profile
-          </Link>
-        </button>
+        <Link
+          style={{ width: "100%" }}
+          className="link-p"
+          to="/dashboard/my-sites"
+        >
+          <button className={this.state.mysite}>My Site</button>
+        </Link>
+        <Link
+          style={{ width: "100%" }}
+          className="link-p"
+          to="/dashboard/my-device"
+        >
+          <button className={this.state.mydevice}>My Device</button>
+        </Link>
+        <Link
+          style={{ width: "100%" }}
+          className="link-p"
+          to="/dashboard/my-requests"
+        >
+          <button className={this.state.myrequests}>My Requests</button>
+        </Link>
+        <Link
+          style={{ width: "100%" }}
+          className="link-p"
+          to="/dashboard/feedback"
+        >
+          <button className={this.state.feedback}>FeedBack</button>
+        </Link>
+
+        <Link
+          style={{ width: "100%" }}
+          className="link-p"
+          to="/dashboard/my-profile"
+        >
+          <button className={this.state.myprofile}>My Profile</button>
+        </Link>
       </div>
     );
   }

@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import Container from "@material-ui/core/Container";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
+import Spinner from "../images";
 
 class MyProfile extends Component {
   state = {
@@ -11,11 +12,51 @@ class MyProfile extends Component {
     isSubmitButtonDisabled: true,
     name: this.props.data.name ? this.props.data.name : "",
     phone: this.props.data.phone ? this.props.data.phone : "",
-    email: this.props.data.email ? this.props.data.email : ""
+    email: this.props.data.email ? this.props.data.email : "",
+    spinner: false
   };
 
   handleSubmit = e => {
     e.preventDefault();
+    this.setState({
+      spinner: true
+    });
+    let obj = {
+      properties: [
+        {
+          property: "email",
+          value: `${this.state.email}`
+        },
+        {
+          property: "firstname",
+          value: `${this.state.name}`
+        },
+        {
+          property: "mobilephone",
+          value: `${this.state.phone}`
+        }
+      ]
+    };
+    //make the req, convert array into JSON object
+    fetch(
+      `https://cors-anywhere.herokuapp.com/https://api.hubapi.com/contacts/v1/contact/vid/${
+        this.props.vid
+      }/profile?hapikey=bdcec428-e806-47ec-b7fd-ece8b03a870b`,
+      {
+        method: "POST",
+        body: JSON.stringify(obj)
+      }
+    )
+      .then(res => {
+        //redirecting to my-requests page
+        window.location.reload();
+        this.setState({
+          spinner: false
+        });
+      })
+      .catch(res => {
+        console.log(res);
+      });
   };
 
   handleClick = () => {
@@ -39,6 +80,8 @@ class MyProfile extends Component {
         shortName += e[0].toUpperCase();
       });
     }
+    if (this.state.spinner) return <Spinner />;
+
     return (
       <div className="flex h-w-100">
         <Helmet>
@@ -79,7 +122,7 @@ class MyProfile extends Component {
             />
             <br />
             <TextField
-              id="name"
+              id="phone"
               label="Phone"
               value={this.state.phone}
               style={styles.textField}
@@ -125,7 +168,8 @@ const styles = {
 };
 
 const mapStateToProps = state => ({
-  data: state.userdata.customerInfo.data
+  data: state.userdata.customerInfo.data,
+  vid: state.userdata.vid
 });
 
 export default connect(mapStateToProps)(MyProfile);

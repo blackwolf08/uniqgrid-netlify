@@ -99,7 +99,7 @@ export default class MySite extends Component {
           <Connection
             key={i}
             id={i}
-            name={`${this.state.nameOfSites[i]}`}
+            name={`${this.state.nameOfSites[i] || "--"}`}
             power={`
               - kW`}
             powerPer={`55%`}
@@ -113,12 +113,12 @@ export default class MySite extends Component {
           <Connection
             key={i}
             id={i}
-            name={`${this.state.nameOfSites[j]}`}
-            power={`${this.state.properties[this.state.kWASite[j]].value} kW`}
+            name={`${this.state.nameOfSites[j]} || "--"`}
+            power={`${this.state.properties[this.state.kWASite[j]].value ||
+              "--"} kW`}
             powerPer={`55%`}
-            consumption={`${
-              this.state.properties[this.state.kWASite[j]].value
-            } kW`}
+            consumption={`${this.state.properties[this.state.kWASite[j]]
+              .value || "--"} kW`}
             consumptionPer={`100%`}
           />
         );

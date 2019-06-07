@@ -7,6 +7,7 @@ import SolarPvGenerator from "./SolarPvGenerator";
 import InstalledDevices from "./InstalledDevices";
 import { fetchConnetionInfo } from "../actions/fetchConnectionInfo";
 import { connect } from "react-redux";
+import Spinner from "../images/index";
 
 class ConnectionInfo extends Component {
   state = {
@@ -32,7 +33,8 @@ class ConnectionInfo extends Component {
     average_monthly_energy_cost: "",
     electricity_quality: "",
     bodyArray: [],
-    finalArray: []
+    finalArray: [],
+    enableSpinner: false
   };
 
   componentDidMount() {
@@ -123,6 +125,9 @@ class ConnectionInfo extends Component {
     } else if (value === 4) {
       this.handleTabChange("installed-devices");
     } else if (value === 5) {
+      this.setState({
+        enableSpinner: true
+      });
       let obj = {};
       let properties = [];
       let toSend = [];
@@ -150,10 +155,13 @@ class ConnectionInfo extends Component {
                 }`
         }
       )
-        .then(function(res) {
+        .then(res => {
           window.location.reload();
+          this.setState({
+            enableSpinner: false
+          });
         })
-        .catch(function(res) {
+        .catch(res => {
           console.log(res);
         });
     }
@@ -178,6 +186,9 @@ class ConnectionInfo extends Component {
   };
 
   render() {
+    if (this.state.enableSpinner) {
+      return <Spinner />;
+    }
     return (
       <div className="view">
         <Helmet>
@@ -299,19 +310,23 @@ class ConnectionInfo extends Component {
           )}
           {this.state.active === 5 && (
             <>
-              <InstalledDevices
-                handleChildrenChange={this.handleChildrenChange}
-                update={this.update}
-                data={this.props.info}
-              />
-              <button
-                className="update-button"
-                onClick={() => {
-                  this.handleUpdateButtonClick(5);
-                }}
-              >
-                Update
-              </button>
+              {!this.state.enableSpinner && (
+                <>
+                  <InstalledDevices
+                    handleChildrenChange={this.handleChildrenChange}
+                    update={this.update}
+                    data={this.props.info}
+                  />
+                  <button
+                    className="update-button"
+                    onClick={() => {
+                      this.handleUpdateButtonClick(5);
+                    }}
+                  >
+                    Update
+                  </button>
+                </>
+              )}
             </>
           )}
           {this.state.update && <button className="edit-button">Update</button>}
