@@ -157,9 +157,6 @@ class ConnectionInfo extends Component {
       )
         .then(res => {
           window.location.reload();
-          this.setState({
-            enableSpinner: false
-          });
         })
         .catch(res => {
           console.log(res);

@@ -4,7 +4,7 @@ export default class SolarPvGenerator extends Component {
   state = {
     adopted_solar: "-",
     interested: true,
-    total_capacity_kwp: "",
+    solar_capacity_kwp: "",
     solar_generator_operational_since: "",
     solar_panel_oem: "",
     solar_inverter_oem: "",
@@ -27,11 +27,7 @@ export default class SolarPvGenerator extends Component {
           interested: true
         });
       }
-      if (key.indexOf("kwp") > -1) {
-        this.setState({
-          total_capacity_kwp: this.props.data[key].value.toString()
-        });
-      }
+
       if (key.indexOf("operational") > -1) {
         this.setState({
           solar_generator_operational_since: this.props.data[
@@ -52,6 +48,15 @@ export default class SolarPvGenerator extends Component {
       if (key.indexOf("installer") > -1) {
         this.setState({
           solar_installer: this.props.data[key].value.toString()
+        });
+      }
+    });
+    Object.keys(this.props.data).forEach(key => {
+      let a = key.split(" ");
+      let b = a.join("_");
+      if (b.indexOf("solar_capacity_kwp") > -1) {
+        this.setState({
+          solar_capacity_kwp: this.props.data[key].value.toString()
         });
       }
     });
@@ -126,9 +131,9 @@ export default class SolarPvGenerator extends Component {
               <input
                 className="address-details-input "
                 type="text"
-                value={this.state.total_capacity_kwp}
+                value={this.state.solar_capacity_kwp}
                 onChange={this.handleChange}
-                name="total_capacity_kwp"
+                name="solar_capacity_kwp"
               />
             </div>
             <div className="address-details-div ">

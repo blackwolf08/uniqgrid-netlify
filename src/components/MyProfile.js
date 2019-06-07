@@ -50,9 +50,6 @@ class MyProfile extends Component {
       .then(res => {
         //redirecting to my-requests page
         window.location.reload();
-        this.setState({
-          spinner: false
-        });
       })
       .catch(res => {
         console.log(res);

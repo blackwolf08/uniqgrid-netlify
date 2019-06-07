@@ -10,6 +10,7 @@ export default class MySite extends Component {
   state = {
     maxConnections: 0,
     kWASite: {},
+    solarPower: {},
     properties: {},
     ready: false,
     nameOfSites: []
@@ -26,6 +27,7 @@ export default class MySite extends Component {
 
       axios.get(URL).then(res => {
         const properties = res.data.properties;
+        console.log(properties);
         let arrayOfStrings = [];
         let noOfSites = [];
         //get the keys of data returned eg, connection_name_site_1_, energy_site_1 etc
@@ -70,8 +72,17 @@ export default class MySite extends Component {
             kWASite.push(site);
           }
         });
+        let solarPower = [];
+        arrayOfStrings.forEach(site => {
+          if (site.search("solar_capacity_kwp_site") >= 0) {
+            solarPower.push(site);
+          } else if (site.search("solar_capacity_kwp") >= 0) {
+            solarPower.push(site);
+          }
+        });
         this.setState({
-          kWASite
+          kWASite,
+          solarPower
         });
         //get the max number of sites of the current user
         noOfSites.sort();
@@ -89,6 +100,7 @@ export default class MySite extends Component {
     let list = [];
     for (let i = 1; i <= this.state.maxConnections; i++) {
       let j = i - 1;
+      let k = i - 2;
       //this if conditon stat
       if (j === this.state.maxConnections - 1) {
         j = this.state.maxConnections - 1;
@@ -100,11 +112,17 @@ export default class MySite extends Component {
             key={i}
             id={i}
             name={`${this.state.nameOfSites[i] || "--"}`}
-            power={`
-              - kW`}
+            power={`${
+              this.state.properties[this.state.kWASite[j]]
+                ? this.state.properties[this.state.kWASite[j]].value
+                : "--"
+            } kW`}
             powerPer={`55%`}
-            consumption={`
-              - kW`}
+            consumption={`${
+              this.state.properties[this.state.solarPower[j]]
+                ? this.state.properties[this.state.solarPower[j]].value
+                : "--"
+            } kW`}
             consumptionPer={`100%`}
           />
         );
@@ -113,12 +131,18 @@ export default class MySite extends Component {
           <Connection
             key={i}
             id={i}
-            name={`${this.state.nameOfSites[j]} || "--"`}
-            power={`${this.state.properties[this.state.kWASite[j]].value ||
-              "--"} kW`}
+            name={`${this.state.nameOfSites[j] || "--"}`}
+            power={`${
+              this.state.properties[this.state.kWASite[j]]
+                ? this.state.properties[this.state.kWASite[j]].value
+                : "--"
+            } kW`}
             powerPer={`55%`}
-            consumption={`${this.state.properties[this.state.kWASite[j]]
-              .value || "--"} kW`}
+            consumption={`${
+              this.state.properties[this.state.solarPower[k]]
+                ? this.state.properties[this.state.solarPower[k]].value
+                : "--"
+            } kW`}
             consumptionPer={`100%`}
           />
         );
