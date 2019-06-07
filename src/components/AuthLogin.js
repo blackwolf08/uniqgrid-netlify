@@ -3,11 +3,10 @@ import Spinner from "../images/index";
 import { connect } from "react-redux";
 import logo from "../images/logo.png";
 import { Helmet } from "react-helmet";
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
 class AuthLogin extends Component {
   state = {
-    isDisabled: true,
     username: "",
     password: "",
     isLoading: false,
@@ -15,6 +14,7 @@ class AuthLogin extends Component {
   };
 
   validateEmail() {
+    //matching email with regex
     let regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     let emailToVerify = this.state.username;
     let result = regex.test(String(emailToVerify).toLowerCase());
@@ -29,7 +29,6 @@ class AuthLogin extends Component {
     }
   }
 
-
   handleSubmit = e => {
     e.preventDefault();
     this.setState({
@@ -40,6 +39,7 @@ class AuthLogin extends Component {
       username: this.state.username.toLowerCase
     });
     const authType = "signin";
+    //send email and password to this function from props
     this.props
       .onAuth(authType, this.state)
       .then(() => {
@@ -49,23 +49,16 @@ class AuthLogin extends Component {
           password: "",
           emailNotValid: false
         });
+        //if successfully logged in push user to my Dashboard component
         this.props.history.push("/dashboard/my-sites");
       })
-      .catch(() => {
-
-      });
+      .catch(() => {});
   };
 
   handleChange = e => {
     this.setState({
       [e.target.name]: e.target.value
     });
-
-    if (this.state.username.length > 1 && this.state.password.length > 1) {
-      this.setState({
-        isDisabled: false
-      });
-    }
 
     this.validateEmail();
   };
@@ -96,8 +89,8 @@ class AuthLogin extends Component {
             <span style={{ color: "red" }}>
               {this.props.error && (
                 <>
-                Email/Password Invalid
-                <br />
+                  Email/Password Invalid
+                  <br />
                 </>
               )}
               {this.state.emailNotValid && <>Please enter a valid email</>}
@@ -116,8 +109,10 @@ class AuthLogin extends Component {
               onChange={this.handleChange}
               className="auth-input"
             />
-            <button className="auth-button" disabled={this.state.isDisabled}>Login</button>
-            <Link to="/login" className="auth-p">Forgot Password?</Link>
+            <button className="auth-button">Login</button>
+            <Link to="/login" className="auth-p">
+              Forgot Password?
+            </Link>
           </form>
         </div>
       </div>

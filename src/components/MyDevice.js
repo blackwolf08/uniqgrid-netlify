@@ -238,6 +238,7 @@ class MyDevice extends Component {
   };
 
   dataPoints = () => {
+    console.log(this.state.graphData);
     let s = this.state.graphData.map(e => {
       return {
         label: moment(e.ts).format("MMM Do YY"),
@@ -319,8 +320,11 @@ class MyDevice extends Component {
                 </button>
                 {/* <p>{this.state.graphData}</p> */}
                 <div>
-                  {this.state.graphData &&
-                    this.state.graphData.length === 0 && <h4>No Data</h4>}
+                  {!this.state.graphData && (
+                    <div>
+                      <h1>NO DATA</h1>
+                    </div>
+                  )}
                   {this.state.isLoading && (
                     <div style={{ height: "400px" }}>
                       <Spinner />

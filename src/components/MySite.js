@@ -16,75 +16,80 @@ export default class MySite extends Component {
   };
 
   componentWillMount() {
-    if(typeof localStorage.jwtToken !== "undefined")
-    {
-    let jwt = localStorage.jwtToken;
-    jwt = jwtDecode(jwt);
-    const URL = `https://cors-anywhere.herokuapp.com/https://api.hubapi.com/contacts/v1/contact/email/${
-      jwt.sub
-    }/profile?hapikey=bdcec428-e806-47ec-b7fd-ece8b03a870b`;
+    // this full piece of code executes to get the keys from te object we get from the API and processes the raw data into a more feature rich text
+    if (typeof localStorage.jwtToken !== "undefined") {
+      let jwt = localStorage.jwtToken;
+      jwt = jwtDecode(jwt);
+      const URL = `https://cors-anywhere.herokuapp.com/https://api.hubapi.com/contacts/v1/contact/email/${
+        jwt.sub
+      }/profile?hapikey=bdcec428-e806-47ec-b7fd-ece8b03a870b`;
 
-    axios.get(URL).then(res => {
-      const properties = res.data.properties;
-      let arrayOfStrings = [];
-      let noOfSites = [];
-      Object.keys(properties).forEach(key => {
-        arrayOfStrings.push(key);
-      });
+      axios.get(URL).then(res => {
+        const properties = res.data.properties;
+        let arrayOfStrings = [];
+        let noOfSites = [];
+        //get the keys of data returned eg, connection_name_site_1_, energy_site_1 etc
+        Object.keys(properties).forEach(key => {
+          arrayOfStrings.push(key);
+        });
+        //check for the keys which stores the name of sites
+        arrayOfStrings.forEach(site => {
+          // according to the struct of API this piece of code gives site number as connection_site_'2'_, outputs 2
+          let nanCheck = isNaN(parseInt(site.charAt(site.length - 2), 10));
+          if (site.search("site") >= 0 && !nanCheck) {
+            noOfSites.push(parseInt(site.charAt(site.length - 2), 10));
+          }
+        });
+        let nameOfSites = [];
+        arrayOfStrings.sort();
+        //get the names of the sites
+        arrayOfStrings.forEach(site => {
+          if (site.search("electricity_connection_name") >= 0) {
+            nameOfSites.push(res.data.properties[site].value);
+          }
+        });
+        this.setState({
+          nameOfSites: nameOfSites
+        });
 
-      arrayOfStrings.forEach(site => {
-        let nanCheck = isNaN(parseInt(site.charAt(site.length - 2), 10));
-        if (site.search("site") >= 0 && !nanCheck) {
-          noOfSites.push(parseInt(site.charAt(site.length - 2), 10));
+        if (noOfSites.length === 0) {
+          noOfSites.push(1);
         }
-      });
-      let nameOfSites = [];
-      arrayOfStrings.sort();
-      arrayOfStrings.forEach(site => {
-        if (site.search("electricity_connection_name") >= 0) {
-          nameOfSites.push(res.data.properties[site].value);
-        }
+
+        arrayOfStrings.sort();
+        this.setState({
+          properties
+        });
+
+        let kWASite = [];
+        // gives us the power that are used to render power in my site area
+        arrayOfStrings.forEach(site => {
+          if (site.search("connected_load_kw_site") >= 0) {
+            kWASite.push(site);
+          } else if (site.search("connected_load_kw") >= 0) {
+            kWASite.push(site);
+          }
+        });
+        this.setState({
+          kWASite
+        });
+        //get the max number of sites of the current user
+        noOfSites.sort();
+        this.setState({
+          maxConnections: noOfSites[noOfSites.length - 1]
+        });
       });
       this.setState({
-        nameOfSites: nameOfSites
+        ready: true
       });
-
-      if (noOfSites.length === 0) {
-        noOfSites.push(1);
-      }
-
-      arrayOfStrings.sort();
-      this.setState({
-        properties
-      });
-
-      let kWASite = [];
-      arrayOfStrings.forEach(site => {
-        if (site.search("connected_load_kw_site") >= 0) {
-          kWASite.push(site);
-        } else if (site.search("connected_load_kw") >= 0) {
-          kWASite.push(site);
-        }
-      });
-      this.setState({
-        kWASite
-      });
-
-      noOfSites.sort();
-      this.setState({
-        maxConnections: noOfSites[noOfSites.length - 1]
-      });
-    });
-    this.setState({
-      ready: true
-    });
-  }
+    }
   }
 
   render() {
     let list = [];
     for (let i = 1; i <= this.state.maxConnections; i++) {
       let j = i - 1;
+      //this if conditon stat
       if (j === this.state.maxConnections - 1) {
         j = this.state.maxConnections - 1;
       }

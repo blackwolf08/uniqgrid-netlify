@@ -5,6 +5,7 @@ import { fetchUserData } from "../actions/userData";
 import { connect } from "react-redux";
 
 class NavBar extends Component {
+  //this logout function calls the logout function from the redux
   logout = e => {
     e.preventDefault();
     this.props.logout();

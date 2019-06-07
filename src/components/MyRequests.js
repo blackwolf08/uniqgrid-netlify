@@ -21,17 +21,22 @@ class MyRequests extends Component {
     site: "",
     device: "",
     content: "",
-    redirect: false
+    redirect: false,
+    email: ""
   };
 
   componentDidMount() {
     if (typeof localStorage.jwtToken !== "undefined") {
       let jwt = localStorage.jwtToken;
       jwt = jwtDecode(jwt);
+      this.setState({
+        email: jwt.sub
+      });
+      //decoding jwt to get email of user jwt.sub contains the email of user
       const URL = `https://cors-anywhere.herokuapp.com/https://api.hubapi.com/contacts/v1/contact/email/${
         jwt.sub
       }/profile?hapikey=bdcec428-e806-47ec-b7fd-ece8b03a870b`;
-
+      //this req is to get all the data from server, to filter out site names
       axios.get(URL).then(res => {
         const properties = res.data.properties;
         let arrayOfStrings = [];
@@ -39,15 +44,18 @@ class MyRequests extends Component {
         Object.keys(properties).forEach(key => {
           arrayOfStrings.push(key);
         });
+        // arrofstrings contains all the keys of the data
 
         arrayOfStrings.forEach(site => {
           let nanCheck = isNaN(parseInt(site.charAt(site.length - 2), 10));
+          //checking acc to the struct of API that id that key has any sub string site in it then appending to no of sites
           if (site.search("site") >= 0 && !nanCheck) {
             noOfSites.push(parseInt(site.charAt(site.length - 2), 10));
           }
         });
         let nameOfSites = [];
         arrayOfStrings.sort();
+        // name of sites are stored in the array
         arrayOfStrings.forEach(site => {
           if (site.search("electricity_connection_name") >= 0) {
             nameOfSites.push(res.data.properties[site].value);
@@ -56,11 +64,12 @@ class MyRequests extends Component {
         this.setState({
           nameOfSites: nameOfSites
         });
-
+        // this condition is for if the sites has no int char in it sepecifying the number of site
         if (noOfSites.length === 0) {
           noOfSites.push(1);
         }
       });
+      // all done, now ready to render
       this.setState({
         ready: true
       });
@@ -77,7 +86,6 @@ class MyRequests extends Component {
     this.setState({
       [e.target.name]: e.target.value
     });
-    console.log(this.state.site);
   };
 
   handleClick = () => {
@@ -87,15 +95,17 @@ class MyRequests extends Component {
   };
 
   handleSubmit = e => {
+    // this next step is used to over write the default behavior of the form to submit the data and refreshing
     e.preventDefault();
+    //obj is the object created to be sent to API and in response we get back a ticket number
     let obj = [
-      { name: "email", value: "demo@uniqgrid.com" },
+      { name: "email", value: `${this.state.email}` },
       { name: "createdate", value: Date.now() },
       { name: "site", value: this.state.site },
       { name: "device", value: this.state.device },
       { name: "content", value: this.state.content }
     ];
-    console.log(JSON.stringify(obj));
+    //make the req, convert array into JSON object
     fetch(
       `https://cors-anywhere.herokuapp.com/https://api.hubapi.com/crm-objects/v1/objects/tickets?hapikey=bdcec428-e806-47ec-b7fd-ece8b03a870b`,
       {
@@ -104,7 +114,7 @@ class MyRequests extends Component {
       }
     )
       .then(res => {
-        console.log("submitted success", res);
+        //redirecting to my-requests page
         this.setState({ redirect: true });
       })
       .catch(function(res) {
@@ -121,14 +131,16 @@ class MyRequests extends Component {
     }
 
     if (this.state.ready) {
-      this.state.nameOfSites.map(site => {
+      // list of websites to be as an option for select, we are creating <option>Name of site</option> with Material UI
+      this.state.nameOfSites.forEach(site => {
         listOfSites.push(
           <MenuItem key={uuid.v4()} value={site}>
             {site}
           </MenuItem>
         );
       });
-      this.props.devices.map(device => {
+      // same as above, creates options for select for devices array
+      this.props.devices.forEach(device => {
         listOfDevices.push(
           <MenuItem key={uuid.v4()} value={device.name}>
             {device.name}
@@ -142,6 +154,7 @@ class MyRequests extends Component {
           <title>My Requests</title>
         </Helmet>
         {this.state.ready && (
+          // this section is basically the table with tickets
           <>
             <h1 className="mysites-heading">My Requests</h1>
             <div className="myrequest-hero">
@@ -204,6 +217,7 @@ class MyRequests extends Component {
                 </>
               )}
               {this.state.newTicket && (
+                // this section contains the form elements to raise a new ticket
                 <>
                   <form onSubmit={this.handleSubmit}>
                     <FormControl>

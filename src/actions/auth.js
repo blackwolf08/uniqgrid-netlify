@@ -24,7 +24,7 @@ export function authUser(type, userData) {
     return new Promise((resolve, reject) => {
       return apiCall(
         "post",
-        "http://portal.uniqgridcloud.com:8080/api/auth/login",
+        "https://cors-anywhere.herokuapp.com/http://portal.uniqgridcloud.com:8080/api/auth/login",
         userData
       )
         .then(async res => {
@@ -61,7 +61,7 @@ const ff = () => {
   console.log("hi");
   apiCall(
     "post",
-    "http://portal.uniqgridcloud.com:8080/api/auth/login",
+    "https://cors-anywhere.herokuapp.com/http://portal.uniqgridcloud.com:8080/api/auth/login",
     refreshData
   )
     .then(async res => {

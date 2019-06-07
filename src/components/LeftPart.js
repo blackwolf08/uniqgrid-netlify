@@ -12,6 +12,11 @@ class LeftPart extends Component {
   };
 
   componentDidMount() {
+    //this function changes the highlighted menu according to url
+    this.changeHighlighted();
+  }
+
+  changeHighlighted = () => {
     let url = window.location.href;
     url = url.split("/");
 
@@ -36,9 +41,10 @@ class LeftPart extends Component {
         myprofile: "leftpart-menu bg-active"
       });
     }
-  }
+  };
 
   render() {
+    //get short name of the user to be displayed in the circle
     let shortName = "";
     if (typeof this.props.data !== "undefined") {
       let nameArr = this.props.data.name.split(" ");
@@ -100,6 +106,8 @@ class LeftPart extends Component {
     );
   }
 }
+
+// we bring in this data to get the name of the user logged in
 
 const mapStateToProps = state => ({
   data: state.userdata.customerInfo.data

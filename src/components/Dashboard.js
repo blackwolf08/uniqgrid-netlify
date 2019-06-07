@@ -12,6 +12,8 @@ import { fetchUserData } from "../actions/userData";
 import { connect } from "react-redux";
 import Spinner from "../images/index";
 
+//this is the parent component of all the logged in stuff
+
 class Dashboard extends Component {
   render() {
     if (this.props.isLoading) {
@@ -29,9 +31,11 @@ class Dashboard extends Component {
     return (
       <div>
         <NavBar />
+        {/*these two are static components and will not change in any route change */}
         <LeftPart />
         <div className="view">
           <Switch>
+            {/* rendering components according to routes */}
             <Route
               key="my-sites"
               path="/dashboard/my-sites"
@@ -70,9 +74,13 @@ class Dashboard extends Component {
   }
 }
 
+//this function connects our redux states to the props of this componets which are then passed on to all the children componets
+
 const mapStateToProps = state => ({
   isLoading: state.userdata.isLoading
 });
+
+//exporting the component with a method of react-redux library to have acccesss to redux states
 
 export default connect(
   mapStateToProps,
