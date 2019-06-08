@@ -16,6 +16,11 @@ class MyProfile extends Component {
     spinner: false
   };
 
+  componentDidMount()
+  {
+    console.log(this.props.data)
+  }
+
   handleSubmit = e => {
     e.preventDefault();
     this.setState({
@@ -42,9 +47,14 @@ class MyProfile extends Component {
       `https://cors-anywhere.herokuapp.com/https://api.hubapi.com/contacts/v1/contact/vid/${
         this.props.vid
       }/profile?hapikey=bdcec428-e806-47ec-b7fd-ece8b03a870b`,
+      
       {
         method: "POST",
-        body: JSON.stringify(obj)
+        headers: {
+          'Accept': 'application/json',
+          "Content-Type": "application/json"
+        },
+        body: obj
       }
     )
       .then(res => {
@@ -52,7 +62,8 @@ class MyProfile extends Component {
         window.location.reload();
       })
       .catch(res => {
-        console.log(res);
+        localStorage.clear();
+          window.location.href = "/login";
       });
   };
 

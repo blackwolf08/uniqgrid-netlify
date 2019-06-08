@@ -103,8 +103,9 @@ class FeedBack extends Component {
           isSubmitted: !this.state.isSubmitted
         });
       })
-      .catch(function(res) {
-        console.log(res);
+      .catch(res=>{
+        localStorage.clear();
+          window.location.href = "/login";
       });
   };
 

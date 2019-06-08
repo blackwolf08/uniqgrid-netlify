@@ -627,3 +627,78 @@ input:focus {
 .active-filter {
   background-color: #999;
 }
+
+/* Extra small devices (portrait phones, less than 576px) */
+@media (max-width: 575.98px) {
+  .left-part {
+    display: none;
+  }
+  .view {
+    width: 100vw;
+    left: 0;
+  }
+  .connection-info-tabs {
+    font-size: 0.72rem;
+  }
+  .address-details-input {
+    outline: none;
+    padding: 0.5rem;
+    background-color: #eee;
+    border: none;
+    min-width: 150px !important;
+    max-width: 150px !important;
+    min-height: 50px !important;
+    max-height: 50px !important;
+  }
+
+  .address-details-select {
+    outline: none;
+    padding: 0.5rem;
+    background-color: #eee;
+    border: none;
+    min-width: 150px !important;
+    max-width: 150px !important;
+    min-height: 50px !important;
+    max-height: 50px !important;
+  }
+  .address-details,
+  .solar-pv-generator,
+  .installed-devices {
+    padding: 10px;
+  }
+
+  .update-button {
+    bottom: 50px;
+    right: 0px;
+  }
+
+  .solar-pv-generator > p {
+    height: 50px !important;
+  }
+
+  .address-details-div {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-line-pack: center;
+    align-content: center;
+    position: relative;
+    margin-bottom: 5px;
+  }
+
+  .address-details-div p {
+    width: 300px !important;
+  }
+}
+
+/* // Small devices (landscape phones, 576px and up) */
+@media (min-width: 576px) and (max-width: 767.98px) {
+}
+
+/* // Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) and (max-width: 991.98px) {
+}
+
+/* // Large devices (desktops, 992px and up) */
+@media (min-width: 992px) and (max-width: 1199.98px) {
+}

@@ -15,7 +15,8 @@ export function apiCall(method, path, data) {
         return resolve(res.data);
       })
       .catch(err => {
-        return reject(err.response);
+          localStorage.clear();
+            window.location.href = "/login";
       });
   });
 }

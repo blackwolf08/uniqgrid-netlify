@@ -12,6 +12,7 @@ import TextField from "@material-ui/core/TextField";
 import Select from "@material-ui/core/Select";
 import uuid from "uuid";
 import { Redirect } from "react-router-dom";
+import { fetchConnetionInfo } from '../actions/fetchConnectionInfo'
 
 class MyRequests extends Component {
   state = {
@@ -22,11 +23,13 @@ class MyRequests extends Component {
     device: "",
     content: "",
     redirect: false,
-    email: ""
+    email: "",
+    ticketNo: ""
   };
 
   componentDidMount() {
     if (typeof localStorage.jwtToken !== "undefined") {
+      this.props.fetchConnetionInfo();
       let jwt = localStorage.jwtToken;
       jwt = jwtDecode(jwt);
       this.setState({
@@ -68,6 +71,9 @@ class MyRequests extends Component {
         if (noOfSites.length === 0) {
           noOfSites.push(1);
         }
+      }).catch(res=>{
+        localStorage.clear();
+          window.location.href = "/login";
       });
       // all done, now ready to render
       this.setState({
@@ -86,7 +92,9 @@ class MyRequests extends Component {
     this.setState({
       [e.target.name]: e.target.value
     });
+
   };
+
 
   handleClick = () => {
     this.setState({
@@ -94,33 +102,89 @@ class MyRequests extends Component {
     });
   };
 
+  getTicket = e=>{
+    e.preventDefault();
+    let jwt = localStorage.jwtToken;
+        jwt = jwtDecode(jwt);
+      
+      const URL = `https://cors-anywhere.herokuapp.com/https://api.hubapi.com/contacts/v1/contact/email/${
+        jwt.sub
+      }/profile?hapikey=bdcec428-e806-47ec-b7fd-ece8b03a870b`;
+
+      axios.get(URL).then(res => {
+        const properties = res.data.properties;
+        console.log(properties);
+        let site  = this.state.site;
+        let id = site.charAt(site.length-1);
+        let nanCheck = isNaN(parseInt(id, 10));
+        let ticketToCheck = "";
+        if(nanCheck)
+        {
+          ticketToCheck = "tickets_site1_"
+        }
+        else{
+          ticketToCheck = `tickets_site${id}_`
+        }
+        Object.keys(properties).forEach(key=>{
+          if(key.search(ticketToCheck)>=0)
+          {
+            this.setState({
+              ticketNo :properties[key].value})
+          }
+          
+        })
+
+      }).catch(res=>{
+        localStorage.clear();
+          window.location.href = "/login";
+      });
+}
+
   handleSubmit = e => {
     // this next step is used to over write the default behavior of the form to submit the data and refreshing
     e.preventDefault();
     //obj is the object created to be sent to API and in response we get back a ticket number
     let obj = [
       { name: "email", value: `${this.state.email}` },
-      { name: "createdate", value: Date.now() },
       { name: "site", value: this.state.site },
       { name: "device", value: this.state.device },
-      { name: "content", value: this.state.content }
+      { name: "content", value: this.state.content },
+      {
+        name: "hs_pipeline_stage",
+        value: "1"
+      },
+      {
+        name: "hs_pipeline",
+        value: "0"
+      }
     ];
+    
     //make the req, convert array into JSON object
     fetch(
       `https://cors-anywhere.herokuapp.com/https://api.hubapi.com/crm-objects/v1/objects/tickets?hapikey=bdcec428-e806-47ec-b7fd-ece8b03a870b`,
       {
         method: "POST",
+        headers: {
+          'Accept': 'application/json',
+          "Content-Type": "application/json"
+        },
         body: JSON.stringify(obj)
       }
     )
       .then(res => {
         //redirecting to my-requests page
+        console.log(res);
+        this.setState({
+          site: ""
+        })
         this.setState({ redirect: true });
       })
       .catch(function(res) {
         console.log(res);
       });
   };
+
+ 
 
   render() {
     const { redirect } = this.state;
@@ -132,12 +196,24 @@ class MyRequests extends Component {
 
     if (this.state.ready) {
       // list of websites to be as an option for select, we are creating <option>Name of site</option> with Material UI
+      let i = 1;
       this.state.nameOfSites.forEach(site => {
-        listOfSites.push(
-          <MenuItem key={uuid.v4()} value={site}>
-            {site}
-          </MenuItem>
-        );
+        if(i===1)
+        {
+          listOfSites.push(
+            <MenuItem key={i} value={`site`}>
+              {site}
+            </MenuItem>
+          );
+        }
+        else {
+          listOfSites.push(
+            <MenuItem key={i} value={`site_${i}`}>
+              {site}
+            </MenuItem>
+          );
+        }
+        i++;
       });
       // same as above, creates options for select for devices array
       this.props.devices.forEach(device => {
@@ -160,6 +236,27 @@ class MyRequests extends Component {
             <div className="myrequest-hero">
               {!this.state.newTicket && (
                 <>
+                <form onSubmit={this.getTicket}>
+                <FormControl>
+                      <InputLabel htmlFor="site">Site</InputLabel>
+                      <Select
+                        value={this.state.site}
+                        name="site"
+                        style={{ width: "300px" }}
+                        onChange={this.handleSelectChange}
+                        placeholder={this.state.site}
+                        inputProps={{
+                          name: "site",
+                          id: "site"
+                        }}
+                      >
+                        {listOfSites}
+                      </Select>
+                    </FormControl>
+                    <Button type="submit" color="primary" variant="contained"
+                      style={styles.button}>Get Ticket</Button>
+                </form>
+                <br />
                   <Table className="table">
                     <thead>
                       <tr>
@@ -173,7 +270,7 @@ class MyRequests extends Component {
                     </thead>
                     <tbody>
                       <tr>
-                        <td />
+                        <td>{this.state.ticketNo}</td>
                         <td />
                         <td />
                         <td />
@@ -294,4 +391,4 @@ const mapSateToProps = state => ({
   devices: state.userdata.data
 });
 
-export default connect(mapSateToProps)(MyRequests);
+export default connect(mapSateToProps, { fetchConnetionInfo })(MyRequests);

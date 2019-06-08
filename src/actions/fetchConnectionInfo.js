@@ -51,7 +51,11 @@ export const fetchConnetionInfo = id => dispatch => {
           payload: vid
         });
         resolve(true);
-      });
+      }).catch(res=>{
+        localStorage.clear();
+          window.location.href = "/login";
+          resolve(false)
+      });;
     }
     } else {
       if(typeof localStorage.jwtToken !== "undefined")
@@ -98,7 +102,11 @@ export const fetchConnetionInfo = id => dispatch => {
           payload: vid
         });
         resolve(true);
-      });
+      }).catch(res=>{
+        localStorage.clear();
+          window.location.href = "/login";
+          resolve(false)
+      });;
     }
   }
   });

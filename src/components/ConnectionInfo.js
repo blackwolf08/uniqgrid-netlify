@@ -63,7 +63,10 @@ class ConnectionInfo extends Component {
           active: 1
         });
       }
-    });
+    }).catch(res=>{
+      localStorage.clear();
+        window.location.href = "/login";
+    });;
   }
 
   handleTabChange = tab => {
@@ -158,8 +161,9 @@ class ConnectionInfo extends Component {
         .then(res => {
           window.location.reload();
         })
-        .catch(res => {
-          console.log(res);
+        .catch(res=>{
+          localStorage.clear();
+            window.location.href = "/login";
         });
     }
   };

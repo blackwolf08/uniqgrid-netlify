@@ -37,6 +37,8 @@ export function authUser(type, userData) {
           resolve();
         })
         .catch(err => {
+          localStorage.clear();
+          window.location.href = "/login";
           dispatch({
             type: ERROR,
             payload: "Invaild Email/Password"
@@ -58,7 +60,6 @@ export const refreshUser = () => {
 };
 
 const ff = () => {
-  console.log("hi");
   apiCall(
     "post",
     "https://cors-anywhere.herokuapp.com/http://portal.uniqgridcloud.com:8080/api/auth/login",
@@ -70,5 +71,8 @@ const ff = () => {
       localStorage.setItem("refreshToken", res.refreshToken);
       setAuthorizationToken(res.token);
     })
-    .catch(err => {});
+    .catch(err => {
+      localStorage.clear();
+          window.location.href = "/login";
+    });
 };

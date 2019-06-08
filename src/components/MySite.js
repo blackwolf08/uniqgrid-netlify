@@ -89,7 +89,10 @@ export default class MySite extends Component {
         this.setState({
           maxConnections: noOfSites[noOfSites.length - 1]
         });
-      });
+      }).catch(res=>{
+        localStorage.clear();
+          window.location.href = "/login";
+      });;
       this.setState({
         ready: true
       });

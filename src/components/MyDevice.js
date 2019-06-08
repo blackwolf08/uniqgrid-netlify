@@ -49,7 +49,10 @@ class MyDevice extends Component {
             keys: res.data,
             isLoading: false
           });
-        });
+        }).catch(res=>{
+          localStorage.clear();
+            window.location.href = "/login";
+        });;
     });
   };
   handleChange = e => {
@@ -82,7 +85,10 @@ class MyDevice extends Component {
             graphData: ""
           });
         }
-      });
+      }).catch(res=>{
+        localStorage.clear();
+          window.location.href = "/login";
+      });;
   };
 
   setOptions = () => {
@@ -172,7 +178,10 @@ class MyDevice extends Component {
           isLoading: false,
           graphData: s
         });
-      });
+      }).catch(res=>{
+        localStorage.clear();
+          window.location.href = "/login";
+      });;
     this.setState({
       day: "",
       week: " active-filter",
@@ -205,7 +214,10 @@ class MyDevice extends Component {
           isLoading: false,
           graphData: s
         });
-      });
+      }).catch(res=>{
+        localStorage.clear();
+          window.location.href = "/login";
+      });;
     this.setState({
       day: "",
       week: "",
@@ -238,7 +250,10 @@ class MyDevice extends Component {
           isLoading: false,
           graphData: s
         });
-      });
+      }).catch(res=>{
+        localStorage.clear();
+          window.location.href = "/login";
+      });;
     this.setState({
       day: "",
       week: "",
@@ -271,6 +286,9 @@ class MyDevice extends Component {
           isLoading: false,
           graphData: s
         });
+      }).catch(res=>{
+        localStorage.clear();
+          window.location.href = "/login";
       });
     this.setState({
       day: " active-filter",
