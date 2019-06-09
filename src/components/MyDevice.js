@@ -179,8 +179,11 @@ class MyDevice extends Component {
           graphData: s
         });
       }).catch(res=>{
-        localStorage.clear();
-          window.location.href = "/login";
+        if(res.status === 401)
+                {
+                  localStorage.clear();
+                window.location.href = "/login";
+                }
       });;
     this.setState({
       day: "",
@@ -251,8 +254,11 @@ class MyDevice extends Component {
           graphData: s
         });
       }).catch(res=>{
-        localStorage.clear();
-          window.location.href = "/login";
+        if(res.status === 401)
+                {
+                  localStorage.clear();
+                window.location.href = "/login";
+                }
       });;
     this.setState({
       day: "",
@@ -287,8 +293,11 @@ class MyDevice extends Component {
           graphData: s
         });
       }).catch(res=>{
-        localStorage.clear();
-          window.location.href = "/login";
+        if(res.status === 401)
+                {
+                  localStorage.clear();
+                window.location.href = "/login";
+                }
       });
     this.setState({
       day: " active-filter",
@@ -332,7 +341,7 @@ class MyDevice extends Component {
           {listOfConnections}
           <div className="my-device-graph">
             {this.state.deviceActivated && (
-              <div>
+              <div className="filter">
                 <h4 style={{ width: "100%", textAlign: "center" }}>
                   {this.state.deviceName}
                 </h4>

@@ -641,10 +641,6 @@ input:focus {
     font-size: 0.72rem;
   }
   .address-details-input {
-    outline: none;
-    padding: 0.5rem;
-    background-color: #eee;
-    border: none;
     min-width: 150px !important;
     max-width: 150px !important;
     min-height: 50px !important;
@@ -652,10 +648,6 @@ input:focus {
   }
 
   .address-details-select {
-    outline: none;
-    padding: 0.5rem;
-    background-color: #eee;
-    border: none;
     min-width: 150px !important;
     max-width: 150px !important;
     min-height: 50px !important;
@@ -664,7 +656,7 @@ input:focus {
   .address-details,
   .solar-pv-generator,
   .installed-devices {
-    padding: 10px;
+    padding: 20px;
   }
 
   .update-button {
@@ -676,18 +668,29 @@ input:focus {
     height: 50px !important;
   }
 
-  .address-details-div {
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -ms-flex-line-pack: center;
-    align-content: center;
-    position: relative;
-    margin-bottom: 5px;
-  }
-
   .address-details-div p {
     width: 300px !important;
+  }
+
+  .auth-container {
+    width: 90%;
+  }
+
+  img.mysite-icons1{
+    margin: 0;
+    margin-top: -5px;
+  }
+  img.mysite-icons2{
+    margin: 0;
+    margin-left: -20px;
+  }
+  .mysites-heading{
+    font-size: 2rem;
+  }
+  .filter-button{
+    width: 50vw;
+    margin: 10px;
+    margin-left: 60px;
   }
 }
 

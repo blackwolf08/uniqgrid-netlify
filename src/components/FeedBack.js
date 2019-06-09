@@ -104,8 +104,11 @@ class FeedBack extends Component {
         });
       })
       .catch(res=>{
-        localStorage.clear();
-          window.location.href = "/login";
+        if(res.status === 401)
+                {
+                  localStorage.clear();
+                window.location.href = "/login";
+                }
       });
   };
 

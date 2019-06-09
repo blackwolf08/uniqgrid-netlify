@@ -5,20 +5,44 @@ import Container from "@material-ui/core/Container";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import Spinner from "../images";
+import jwtDecode from 'jwt-decode'
+import axios from 'axios'
 
 class MyProfile extends Component {
   state = {
     readOnly: true,
     isSubmitButtonDisabled: true,
-    name: this.props.data.name ? this.props.data.name : "",
-    phone: this.props.data.phone ? this.props.data.phone : "",
-    email: this.props.data.email ? this.props.data.email : "",
+    firstname: "",
+    mobilephone: "",
+    email: "",
     spinner: false
   };
 
   componentDidMount()
   {
-    console.log(this.props.data)
+    this.setState({
+      spinner: true
+    })
+    if(localStorage.jwtToken)
+    {
+      let jwtToken = jwtDecode(localStorage.jwtToken)
+      axios.get(`https://cors-anywhere.herokuapp.com/https://api.hubapi.com/contacts/v1/contact/email/${jwtToken.sub}/profile?hapikey= bdcec428-e806-47ec-b7fd-ece8b03a870b`)
+      .then(res=>{
+        console.log(res)
+        this.setState({
+          firstname: res.data.properties.firstname.value,
+          email: res.data.properties.email.value,
+          mobilephone: res.data.properties.mobilephone.value,
+          spinner: false,
+          vid:  res.data.vid
+        })
+      })
+      .catch(res=>{
+        localStorage.clear();
+        window.location.href = "/login";
+      })
+    }
+    
   }
 
   handleSubmit = e => {
@@ -34,32 +58,30 @@ class MyProfile extends Component {
         },
         {
           property: "firstname",
-          value: `${this.state.name}`
+          value: `${this.state.firstname}`
         },
         {
           property: "mobilephone",
-          value: `${this.state.phone}`
+          value: `${this.state.mobilephone}`
         }
       ]
     };
     //make the req, convert array into JSON object
-    fetch(
-      `https://cors-anywhere.herokuapp.com/https://api.hubapi.com/contacts/v1/contact/vid/${
-        this.props.vid
+    axios({
+      url: `https://cors-anywhere.herokuapp.com/https://api.hubapi.com/contacts/v1/contact/vid/${
+        this.state.vid
       }/profile?hapikey=bdcec428-e806-47ec-b7fd-ece8b03a870b`,
-      
-      {
-        method: "POST",
+      method: "POST",
+      config: { 
         headers: {
-          'Accept': 'application/json',
-          "Content-Type": "application/json"
-        },
-        body: obj
-      }
-    )
+          'Content-Type': 'application/json'
+        }
+      },
+      data : obj
+    })
       .then(res => {
         //redirecting to my-requests page
-        window.location.reload();
+       window.location.reload();
       })
       .catch(res => {
         localStorage.clear();
@@ -106,10 +128,10 @@ class MyProfile extends Component {
             onSubmit={this.handleSubmit}
           >
             <TextField
-              id="name"
+              id="firstname"
               label="Name"
               onChange={this.handleChange}
-              value={this.state.name}
+              value={this.state.firstname}
               style={styles.textField}
               margin="normal"
               InputProps={{
@@ -130,9 +152,9 @@ class MyProfile extends Component {
             />
             <br />
             <TextField
-              id="phone"
+              id="mobilephone"
               label="Phone"
-              value={this.state.phone}
+              value={this.state.mobilephone}
               style={styles.textField}
               onChange={this.handleChange}
               margin="normal"

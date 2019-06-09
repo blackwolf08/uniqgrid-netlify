@@ -40,18 +40,24 @@ export const fetchUserData = () => dispatch => {
                 });
               })
               .catch(res => {
-                localStorage.clear();
-                window.location.href = "/login";
+                if (res.status === 401) {
+                  localStorage.clear();
+                  window.location.href = "/login";
+                }
               });
           })
           .catch(res => {
-            localStorage.clear();
-            window.location.href = "/login";
+            if (res.status === 401) {
+              localStorage.clear();
+              window.location.href = "/login";
+            }
           });
       })
       .catch(res => {
-        localStorage.clear();
-        window.location.href = "/login";
+        if (res.status === 401) {
+          localStorage.clear();
+          window.location.href = "/login";
+        }
       });
   }
 };

@@ -12,7 +12,7 @@ import TextField from "@material-ui/core/TextField";
 import Select from "@material-ui/core/Select";
 import uuid from "uuid";
 import { Redirect } from "react-router-dom";
-import { fetchConnetionInfo } from '../actions/fetchConnectionInfo'
+import { fetchConnetionInfo } from "../actions/fetchConnectionInfo";
 
 class MyRequests extends Component {
   state = {
@@ -40,41 +40,46 @@ class MyRequests extends Component {
         jwt.sub
       }/profile?hapikey=bdcec428-e806-47ec-b7fd-ece8b03a870b`;
       //this req is to get all the data from server, to filter out site names
-      axios.get(URL).then(res => {
-        const properties = res.data.properties;
-        let arrayOfStrings = [];
-        let noOfSites = [];
-        Object.keys(properties).forEach(key => {
-          arrayOfStrings.push(key);
-        });
-        // arrofstrings contains all the keys of the data
+      axios
+        .get(URL)
+        .then(res => {
+          const properties = res.data.properties;
+          let arrayOfStrings = [];
+          let noOfSites = [];
+          Object.keys(properties).forEach(key => {
+            arrayOfStrings.push(key);
+          });
+          // arrofstrings contains all the keys of the data
 
-        arrayOfStrings.forEach(site => {
-          let nanCheck = isNaN(parseInt(site.charAt(site.length - 2), 10));
-          //checking acc to the struct of API that id that key has any sub string site in it then appending to no of sites
-          if (site.search("site") >= 0 && !nanCheck) {
-            noOfSites.push(parseInt(site.charAt(site.length - 2), 10));
+          arrayOfStrings.forEach(site => {
+            let nanCheck = isNaN(parseInt(site.charAt(site.length - 2), 10));
+            //checking acc to the struct of API that id that key has any sub string site in it then appending to no of sites
+            if (site.search("site") >= 0 && !nanCheck) {
+              noOfSites.push(parseInt(site.charAt(site.length - 2), 10));
+            }
+          });
+          let nameOfSites = [];
+          arrayOfStrings.sort();
+          // name of sites are stored in the array
+          arrayOfStrings.forEach(site => {
+            if (site.search("electricity_connection_name") >= 0) {
+              nameOfSites.push(res.data.properties[site].value);
+            }
+          });
+          this.setState({
+            nameOfSites: nameOfSites
+          });
+          // this condition is for if the sites has no int char in it sepecifying the number of site
+          if (noOfSites.length === 0) {
+            noOfSites.push(1);
+          }
+        })
+        .catch(res => {
+          if (res.status === 401) {
+            localStorage.clear();
+            window.location.href = "/login";
           }
         });
-        let nameOfSites = [];
-        arrayOfStrings.sort();
-        // name of sites are stored in the array
-        arrayOfStrings.forEach(site => {
-          if (site.search("electricity_connection_name") >= 0) {
-            nameOfSites.push(res.data.properties[site].value);
-          }
-        });
-        this.setState({
-          nameOfSites: nameOfSites
-        });
-        // this condition is for if the sites has no int char in it sepecifying the number of site
-        if (noOfSites.length === 0) {
-          noOfSites.push(1);
-        }
-      }).catch(res=>{
-        localStorage.clear();
-          window.location.href = "/login";
-      });
       // all done, now ready to render
       this.setState({
         ready: true
@@ -92,9 +97,7 @@ class MyRequests extends Component {
     this.setState({
       [e.target.name]: e.target.value
     });
-
   };
-
 
   handleClick = () => {
     this.setState({
@@ -102,43 +105,50 @@ class MyRequests extends Component {
     });
   };
 
-  getTicket = e=>{
+  getTicket = e => {
     e.preventDefault();
     let jwt = localStorage.jwtToken;
-        jwt = jwtDecode(jwt);
-      
-      const URL = `https://cors-anywhere.herokuapp.com/https://api.hubapi.com/contacts/v1/contact/email/${
-        jwt.sub
-      }/profile?hapikey=bdcec428-e806-47ec-b7fd-ece8b03a870b`;
+    jwt = jwtDecode(jwt);
 
-      axios.get(URL).then(res => {
+    const URL = `https://cors-anywhere.herokuapp.com/https://api.hubapi.com/contacts/v1/contact/email/${
+      jwt.sub
+    }/profile?hapikey=bdcec428-e806-47ec-b7fd-ece8b03a870b`;
+
+    axios
+      .get(URL)
+      .then(res => {
+        this.setState({
+          vid: res.data.vid
+        })
         const properties = res.data.properties;
         console.log(properties);
-        let site  = this.state.site;
-        let id = site.charAt(site.length-1);
+        let site = this.state.site;
+        let id = site.charAt(site.length - 1);
         let nanCheck = isNaN(parseInt(id, 10));
         let ticketToCheck = "";
-        if(nanCheck)
-        {
-          ticketToCheck = "tickets_site1_"
+        if (nanCheck) {
+          ticketToCheck = "tickets_site1_";
+        } else {
+          ticketToCheck = `tickets_site${id}_`;
         }
-        else{
-          ticketToCheck = `tickets_site${id}_`
-        }
-        Object.keys(properties).forEach(key=>{
-          if(key.search(ticketToCheck)>=0)
-          {
+        Object.keys(properties).forEach(key => {
+          if (key.search(ticketToCheck) >= 0) {
             this.setState({
-              ticketNo :properties[key].value})
+              ticketNo: properties[key].value
+            });
           }
-          
-        })
-
-      }).catch(res=>{
-        localStorage.clear();
+        });
+        if (this.state.ticketNo) {
+          let tickets = this.state.ticketNo.split(",");
+        }
+      })
+      .catch(res => {
+        if (res.status === 401) {
+          localStorage.clear();
           window.location.href = "/login";
+        }
       });
-}
+  };
 
   handleSubmit = e => {
     // this next step is used to over write the default behavior of the form to submit the data and refreshing
@@ -158,33 +168,33 @@ class MyRequests extends Component {
         value: "0"
       }
     ];
-    
-    //make the req, convert array into JSON object
-    fetch(
-      `https://cors-anywhere.herokuapp.com/https://api.hubapi.com/crm-objects/v1/objects/tickets?hapikey=bdcec428-e806-47ec-b7fd-ece8b03a870b`,
-      {
-        method: "POST",
+    axios({
+      url: `https://cors-anywhere.herokuapp.com/https://api.hubapi.com/crm-objects/v1/objects/tickets?hapikey=bdcec428-e806-47ec-b7fd-ece8b03a870b`,
+      method: "POST",
+      config: {
         headers: {
-          'Accept': 'application/json',
           "Content-Type": "application/json"
-        },
-        body: JSON.stringify(obj)
-      }
-    )
+        }
+      },
+      data: obj
+    })
       .then(res => {
         //redirecting to my-requests page
         console.log(res);
         this.setState({
-          site: ""
-        })
+          site: "",
+          objectId: res.data.objectId
+        });
         this.setState({ redirect: true });
+        //window.location.reload();
       })
-      .catch(function(res) {
-        console.log(res);
+      .catch(res => {
+        if (res.status === 401) {
+          localStorage.clear();
+          window.location.href = "/login";
+        }
       });
   };
-
- 
 
   render() {
     const { redirect } = this.state;
@@ -198,15 +208,13 @@ class MyRequests extends Component {
       // list of websites to be as an option for select, we are creating <option>Name of site</option> with Material UI
       let i = 1;
       this.state.nameOfSites.forEach(site => {
-        if(i===1)
-        {
+        if (i === 1) {
           listOfSites.push(
             <MenuItem key={i} value={`site`}>
               {site}
             </MenuItem>
           );
-        }
-        else {
+        } else {
           listOfSites.push(
             <MenuItem key={i} value={`site_${i}`}>
               {site}
@@ -236,8 +244,8 @@ class MyRequests extends Component {
             <div className="myrequest-hero">
               {!this.state.newTicket && (
                 <>
-                <form onSubmit={this.getTicket}>
-                <FormControl>
+                  <form onSubmit={this.getTicket}>
+                    <FormControl>
                       <InputLabel htmlFor="site">Site</InputLabel>
                       <Select
                         value={this.state.site}
@@ -253,10 +261,16 @@ class MyRequests extends Component {
                         {listOfSites}
                       </Select>
                     </FormControl>
-                    <Button type="submit" color="primary" variant="contained"
-                      style={styles.button}>Get Ticket</Button>
-                </form>
-                <br />
+                    <Button
+                      type="submit"
+                      color="primary"
+                      variant="contained"
+                      style={styles.button}
+                    >
+                      Get Ticket
+                    </Button>
+                  </form>
+                  <br />
                   <Table className="table">
                     <thead>
                       <tr>
@@ -391,4 +405,7 @@ const mapSateToProps = state => ({
   devices: state.userdata.data
 });
 
-export default connect(mapSateToProps, { fetchConnetionInfo })(MyRequests);
+export default connect(
+  mapSateToProps,
+  { fetchConnetionInfo }
+)(MyRequests);
