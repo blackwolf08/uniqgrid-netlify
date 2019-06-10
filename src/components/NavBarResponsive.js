@@ -28,7 +28,7 @@ class NavBarResponsive extends React.Component {
     return (
       <div className="navbar-responsive-2" style={{zIndex:'1000'}}>
         <Navbar color="faded" style={{backgroundColor:'rgb(241,241,241)'}} light>
-          <NavbarBrand href="/" className="mr-auto"><img  className="logo" alt="logo"src={logo}></img></NavbarBrand>
+          <NavbarBrand href="/dashboard/my-sites" className="mr-auto"><img  className="logo" alt="logo"src={logo}></img></NavbarBrand>
           <NavbarToggler onClick={this.toggleNavbar} className="mr-2 ham-burger" />
           <Collapse className="collapse" isOpen={!this.state.collapsed} navbar>
             <Nav navbar>
