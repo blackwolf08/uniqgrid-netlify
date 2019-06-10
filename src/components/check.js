@@ -27,6 +27,11 @@ export default class Check extends Component {
         resultObject[temp] = properties[key];
       });
       console.log(resultObject);
+    }).catch(res=>{
+      if (res.status === 401) {
+        localStorage.clear();
+        window.location.href = "/login";
+      }
     });
     return <div />;
   }

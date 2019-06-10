@@ -52,9 +52,11 @@ export const fetchConnetionInfo = id => dispatch => {
         });
         resolve(true);
       }).catch(res=>{
-        localStorage.clear();
+        if (res.status === 401) {
+          localStorage.clear();
           window.location.href = "/login";
           resolve(false)
+        }
       });;
     }
     } else {
@@ -103,9 +105,11 @@ export const fetchConnetionInfo = id => dispatch => {
         });
         resolve(true);
       }).catch(res=>{
-        localStorage.clear();
+        if (res.status === 401) {
+          localStorage.clear();
           window.location.href = "/login";
           resolve(false)
+        }
       });;
     }
   }

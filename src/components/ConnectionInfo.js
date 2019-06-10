@@ -64,8 +64,10 @@ class ConnectionInfo extends Component {
         });
       }
     }).catch(res=>{
-      localStorage.clear();
+      if (res.status === 401) {
+        localStorage.clear();
         window.location.href = "/login";
+      }
     });;
   }
 

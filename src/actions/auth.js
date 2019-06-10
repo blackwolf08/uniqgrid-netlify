@@ -37,8 +37,10 @@ export function authUser(type, userData) {
           resolve();
         })
         .catch(err => {
-          localStorage.clear();
-          window.location.href = "/login";
+          if (err.status === 401) {
+            localStorage.clear();
+            window.location.href = "/login";
+          }
           dispatch({
             type: ERROR,
             payload: "Invaild Email/Password"
@@ -72,7 +74,9 @@ const ff = () => {
       setAuthorizationToken(res.token);
     })
     .catch(err => {
-      localStorage.clear();
-          window.location.href = "/login";
+      if (err.status === 401) {
+        localStorage.clear();
+        window.location.href = "/login";
+      }
     });
 };

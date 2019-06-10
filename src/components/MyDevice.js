@@ -50,8 +50,10 @@ class MyDevice extends Component {
             isLoading: false
           });
         }).catch(res=>{
-          localStorage.clear();
+          if (res.status === 401) {
+            localStorage.clear();
             window.location.href = "/login";
+          }
         });;
     });
   };
@@ -86,8 +88,10 @@ class MyDevice extends Component {
           });
         }
       }).catch(res=>{
-        localStorage.clear();
+        if (res.status === 401) {
+          localStorage.clear();
           window.location.href = "/login";
+        }
       });;
   };
 
@@ -218,8 +222,10 @@ class MyDevice extends Component {
           graphData: s
         });
       }).catch(res=>{
-        localStorage.clear();
+        if (res.status === 401) {
+          localStorage.clear();
           window.location.href = "/login";
+        }
       });;
     this.setState({
       day: "",

@@ -33,6 +33,9 @@ class MyRequests extends Component {
 
   componentDidMount() {
     if (typeof localStorage.jwtToken !== "undefined") {
+      this.setState({
+        spinner: true
+      })
       this.props.fetchConnetionInfo();
       let jwt = localStorage.jwtToken;
       jwt = jwtDecode(jwt);
@@ -77,6 +80,9 @@ class MyRequests extends Component {
           if (noOfSites.length === 0) {
             noOfSites.push(1);
           }
+          this.setState({
+            spinner: false
+          })
         })
         .catch(res => {
           if (res.status === 401) {
@@ -114,6 +120,7 @@ class MyRequests extends Component {
 
   getTicket = e => {
     e.preventDefault();
+
     this.setState({
       spinner: true
     });
@@ -155,9 +162,11 @@ class MyRequests extends Component {
           ticketArray.push(ticket);
         });
         this.setState({
-          spinner: false,
           ticketArray
         });
+        this.setState({
+          spinner: false
+        })
 
       })
       .catch(res => {
@@ -267,9 +276,7 @@ class MyRequests extends Component {
             objRec.forEach(ticket => {
               ticketArray.push(ticket);
             });
-            this.setState({
-              spinner: false
-            });
+
             ticketArray.forEach(ticket=>{
               arrToSend.push(ticket)
             });
@@ -290,14 +297,15 @@ class MyRequests extends Component {
               }
             }).then(res => {
               this.setState({
-                spinner: false
-              });
-              this.setState({
                 site: "",
                 objectId: res.data.objectId
               });
               this.setState({ redirect: true });
+              this.setState({
+                spinner: false
+              })
             });
+            
           })
           .catch(res => {
             if (res.status === 401) {
@@ -320,7 +328,7 @@ class MyRequests extends Component {
     const { redirect } = this.state;
     let listOfSites = [];
     let listOfDevices = [];
-    if (redirect) {
+    if (redirect && !this.state.spinner) {
       return <Redirect to="/dashboard/my-requests" />;
     }
     if (this.state.spinner) {
@@ -370,133 +378,137 @@ class MyRequests extends Component {
         );
       });
     }
-    return (
-      <div>
-        <Helmet>
-          <title>My Requests</title>
-        </Helmet>
-        {this.state.ready && (
-          // this section is basically the table with tickets
-          <>
-            <h1 className="mysites-heading">My Requests</h1>
-            <div className="myrequest-hero">
-              {!this.state.newTicket && (
-                <>
-                  <form onSubmit={this.getTicket}>
-                    <FormControl>
-                      <InputLabel htmlFor="site">Site</InputLabel>
-                      <Select
-                        value={this.state.site}
-                        name="site"
-                        style={{ width: "300px" }}
-                        onChange={this.handleSelectChange}
-                        placeholder={this.state.site}
-                        inputProps={{
-                          name: "site",
-                          id: "site"
-                        }}
+    if(!this.state.spinner)
+    {
+      return (
+        <div>
+          <Helmet>
+            <title>My Requests</title>
+          </Helmet>
+          {this.state.ready && (
+            // this section is basically the table with tickets
+            <>
+              <h1 className="mysites-heading">My Requests</h1>
+              <div className="myrequest-hero">
+                {!this.state.newTicket && (
+                  <>
+                    <form onSubmit={this.getTicket}>
+                      <FormControl>
+                        <InputLabel htmlFor="site">Site</InputLabel>
+                        <Select
+                          value={this.state.site}
+                          name="site"
+                          style={{ width: "300px" }}
+                          onChange={this.handleSelectChange}
+                          placeholder={this.state.site}
+                          inputProps={{
+                            name: "site",
+                            id: "site"
+                          }}
+                        >
+                          {listOfSites}
+                        </Select>
+                      </FormControl>
+                      <Button
+                        type="submit"
+                        color="primary"
+                        variant="contained"
+                        style={styles.button}
                       >
-                        {listOfSites}
-                      </Select>
-                    </FormControl>
-                    <Button
-                      type="submit"
-                      color="primary"
-                      variant="contained"
-                      style={styles.button}
-                    >
-                      Get Ticket
-                    </Button>
-                  </form>
-                  <br />
-                  <Table className="table">
-                    <thead>
-                      <tr>
-                        <th>Ticket Number</th>
-                        <th>Connection Name</th>
-                        <th>Created On</th>
-                        <th>Device</th>
-                        <th>Description</th>
-                        <th>Status</th>
-                      </tr>
-                    </thead>
-                    <tbody>{listOfTickets}</tbody>
-                  </Table>
-                  <Button
-                    color="primary"
-                    variant="contained"
-                    onClick={this.handleClick}
-                    style={styles.button}
-                  >
-                    Raise New Ticket
-                  </Button>
-                </>
-              )}
-              {this.state.newTicket && (
-                // this section contains the form elements to raise a new ticket
-                <>
-                  <form onSubmit={this.handleSubmit}>
-                    <FormControl>
-                      <InputLabel htmlFor="site">Site</InputLabel>
-                      <Select
-                        value={this.state.site}
-                        name="site"
-                        style={{ width: "300px" }}
-                        onChange={this.handleSelectChange}
-                        placeholder={this.state.site}
-                        inputProps={{
-                          name: "site",
-                          id: "site"
-                        }}
-                      >
-                        {listOfSites}
-                      </Select>
-                    </FormControl>
+                        Get Ticket
+                      </Button>
+                    </form>
                     <br />
-                    <FormControl>
-                      <InputLabel htmlFor="device">Device</InputLabel>
-                      <Select
-                        value={this.state.device}
-                        name="device"
-                        style={{ width: "300px" }}
-                        onChange={this.handleSelectChange}
-                        placeholder={this.state.device}
-                        inputProps={{
-                          name: "device",
-                          id: "device"
-                        }}
-                      >
-                        {listOfDevices}
-                      </Select>
-                    </FormControl>
-                    <br />
-                    <TextField
-                      id="content"
-                      name="content"
-                      onChange={this.handleContentChange}
-                      value={this.state.content}
-                      label="Description"
-                      placeholder="Short Description"
-                      multiline
-                      margin="normal"
-                    />
-                    <br />
+                    <Table className="table">
+                      <thead>
+                        <tr>
+                          <th>Ticket Number</th>
+                          <th>Connection Name</th>
+                          <th>Created On</th>
+                          <th>Device</th>
+                          <th>Description</th>
+                          <th>Status</th>
+                        </tr>
+                      </thead>
+                      <tbody>{listOfTickets}</tbody>
+                    </Table>
                     <Button
                       color="primary"
                       variant="contained"
+                      onClick={this.handleClick}
                       style={styles.button}
-                      type="submit"
                     >
-                      Submit
+                      Raise New Ticket
                     </Button>
-                  </form>
-                </>
-              )}
-            </div>
-          </>
-        )}
-      </div>
-    );
+                  </>
+                )}
+                {this.state.newTicket && (
+                  // this section contains the form elements to raise a new ticket
+                  <>
+                    <form onSubmit={this.handleSubmit}>
+                      <FormControl>
+                        <InputLabel htmlFor="site">Site</InputLabel>
+                        <Select
+                          value={this.state.site}
+                          name="site"
+                          style={{ width: "300px" }}
+                          onChange={this.handleSelectChange}
+                          placeholder={this.state.site}
+                          inputProps={{
+                            name: "site",
+                            id: "site"
+                          }}
+                        >
+                          {listOfSites}
+                        </Select>
+                      </FormControl>
+                      <br />
+                      <FormControl>
+                        <InputLabel htmlFor="device">Device</InputLabel>
+                        <Select
+                          value={this.state.device}
+                          name="device"
+                          style={{ width: "300px" }}
+                          onChange={this.handleSelectChange}
+                          placeholder={this.state.device}
+                          inputProps={{
+                            name: "device",
+                            id: "device"
+                          }}
+                        >
+                          {listOfDevices}
+                        </Select>
+                      </FormControl>
+                      <br />
+                      <TextField
+                        id="content"
+                        name="content"
+                        onChange={this.handleContentChange}
+                        value={this.state.content}
+                        label="Description"
+                        placeholder="Short Description"
+                        multiline
+                        margin="normal"
+                        style={{height:'50px', width:'300px'}}
+                      />
+                      <br />
+                      <Button
+                        color="primary"
+                        variant="contained"
+                        style={styles.button}
+                        type="submit"
+                      >
+                        Submit
+                      </Button>
+                    </form>
+                  </>
+                )}
+              </div>
+            </>
+          )}
+        </div>
+      );
+    }
   }
 }
 
