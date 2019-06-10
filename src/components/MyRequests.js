@@ -257,7 +257,7 @@ class MyRequests extends Component {
 
             objRec = JSON.parse(objRec);
             console.log('before', objRec)
-            if(!Array.isArray(this.state.objRec))
+            if(!Array.isArray(objRec))
             {
               objRec = []
             }
@@ -362,7 +362,7 @@ class MyRequests extends Component {
           <tr key={uuid.v4()}>
             <td>{ticket.objectId}</td>
             <td>{this.state.site}</td>
-            <td>{moment.unix(ticket.createdAt).format("MMM Do YYYY")}</td>
+            <td>{moment.unix(ticket.createdAt).format("MMM Do")}</td>
             <td>{ticket.device}</td>
             <td>{ticket.content}</td>
             <td>False</td>
