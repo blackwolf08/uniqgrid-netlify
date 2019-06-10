@@ -14,8 +14,7 @@ import uuid from "uuid";
 import { Redirect } from "react-router-dom";
 import { fetchConnetionInfo } from "../actions/fetchConnectionInfo";
 import Spinner from "../images/index";
-import { compose } from "@material-ui/system";
-
+import moment from 'moment'
 class MyRequests extends Component {
   state = {
     newTicket: false,
@@ -363,7 +362,7 @@ class MyRequests extends Component {
           <tr key={uuid.v4()}>
             <td>{ticket.objectId}</td>
             <td>{this.state.site}</td>
-            <td>{ticket.createdAt}</td>
+            <td>{moment.unix(ticket.createdAt).format("MMM Do YYYY")}</td>
             <td>{ticket.device}</td>
             <td>{ticket.content}</td>
             <td>False</td>
