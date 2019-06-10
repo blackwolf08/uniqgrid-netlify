@@ -710,6 +710,37 @@ input:focus {
   .mr-auto.navbar-brand
   {
     height: 60px !important;
+    width: 100px !important;
+  }
+  .logo {
+    width: 130%;
+    height: 130%;
+    margin-left: -10px;
+    margin-top: -10px;
+  }
+  .ham-burger {
+    margin-top: -13px;
+  }
+  .collapse {
+    z-index: 100000;
+  }
+  .collapse > ul{
+    background-color: #eee;
+    opacity: 1;
+    z-index: 10000;
+  }
+  .res-nav {
+    padding: 5px;
+    text-align: center;
+    padding-top: 30px;
+    padding-bottom: 10px;
+  }
+  .feedback-form{
+    width: 80vw;
+    height: 40vh;
+  }
+  .feedback-form-heading{
+    font-size: 2rem;
   }
 }
 
