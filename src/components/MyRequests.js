@@ -13,6 +13,7 @@ import Select from "@material-ui/core/Select";
 import uuid from "uuid";
 import { Redirect } from "react-router-dom";
 import { fetchConnetionInfo } from "../actions/fetchConnectionInfo";
+import Spinner from "../images/index";
 
 class MyRequests extends Component {
   state = {
@@ -24,7 +25,10 @@ class MyRequests extends Component {
     content: "",
     redirect: false,
     email: "",
-    ticketNo: ""
+    spinner: false,
+    recievedObj: "",
+    newObj: {},
+    ticketArray: []
   };
 
   componentDidMount() {
@@ -103,10 +107,16 @@ class MyRequests extends Component {
     this.setState({
       newTicket: true
     });
+    this.setState({
+      site: "",
+    });
   };
 
   getTicket = e => {
     e.preventDefault();
+    this.setState({
+      spinner: true
+    });
     let jwt = localStorage.jwtToken;
     jwt = jwtDecode(jwt);
 
@@ -119,9 +129,8 @@ class MyRequests extends Component {
       .then(res => {
         this.setState({
           vid: res.data.vid
-        })
+        });
         const properties = res.data.properties;
-        console.log(properties);
         let site = this.state.site;
         let id = site.charAt(site.length - 1);
         let nanCheck = isNaN(parseInt(id, 10));
@@ -134,13 +143,21 @@ class MyRequests extends Component {
         Object.keys(properties).forEach(key => {
           if (key.search(ticketToCheck) >= 0) {
             this.setState({
-              ticketNo: properties[key].value
+              recievedObj: properties[key].value
             });
           }
         });
-        if (this.state.ticketNo) {
-          let tickets = this.state.ticketNo.split(",");
-        }
+        let objRec = this.state.recievedObj;
+        objRec = JSON.parse(objRec);
+        let ticketArray = [];
+        objRec.forEach(ticket => {
+          ticketArray.push(ticket);
+        });
+        this.setState({
+          spinner: false,
+          ticketArray
+        });
+
       })
       .catch(res => {
         if (res.status === 401) {
@@ -153,6 +170,9 @@ class MyRequests extends Component {
   handleSubmit = e => {
     // this next step is used to over write the default behavior of the form to submit the data and refreshing
     e.preventDefault();
+    this.setState({
+      spinner: true
+    });
     //obj is the object created to be sent to API and in response we get back a ticket number
     let obj = [
       { name: "email", value: `${this.state.email}` },
@@ -180,12 +200,94 @@ class MyRequests extends Component {
     })
       .then(res => {
         //redirecting to my-requests page
-        console.log(res);
-        this.setState({
-          site: "",
-          objectId: res.data.objectId
-        });
-        this.setState({ redirect: true });
+
+        let objToSend = {};
+
+        objToSend["objectId"] = res.data.objectId;
+        objToSend["content"] = res.data.properties.content.value;
+        objToSend["createdAt"] = res.data.properties.createdate.value;
+        objToSend["email"] = res.data.properties.email.value;
+        objToSend["device"] = res.data.properties.device.value;
+        let arrToSend = [];
+        arrToSend.push(objToSend);
+        let jwt = localStorage.jwtToken;
+        jwt = jwtDecode(jwt);
+
+        const URL = `https://cors-anywhere.herokuapp.com/https://api.hubapi.com/contacts/v1/contact/email/${
+          jwt.sub
+        }/profile?hapikey=bdcec428-e806-47ec-b7fd-ece8b03a870b`;
+
+        axios
+          .get(URL)
+          .then(res => {
+            this.setState({
+              vid: res.data.vid
+            });
+            const properties = res.data.properties;
+            let site = this.state.site;
+            let id = site.charAt(site.length - 1);
+            let nanCheck = isNaN(parseInt(id, 10));
+            let ticketToCheck = "";
+            if (nanCheck) {
+              ticketToCheck = "tickets_site1_";
+            } else {
+              ticketToCheck = `tickets_site${id}_`;
+            }
+            Object.keys(properties).forEach(key => {
+              if (key.search(ticketToCheck) >= 0) {
+                this.setState({
+                  recievedObj: properties[key].value
+                });
+              }
+            });
+            
+            let objRec = this.state.recievedObj;
+            objRec = JSON.parse(objRec);
+            if(!Array.isArray(this.state.objRec))
+            {
+              objRec = []
+            }
+            let ticketArray = [];
+            objRec.forEach(ticket => {
+              ticketArray.push(ticket);
+            });
+            this.setState({
+              spinner: false
+            });
+            ticketArray.forEach(ticket=>{
+              arrToSend.push(ticket)
+            });
+            axios({
+              url: `https://cors-anywhere.herokuapp.com/https://api.hubapi.com/contacts/v1/contact/vid/${
+                this.props.vid
+              }/profile?hapikey=bdcec428-e806-47ec-b7fd-ece8b03a870b`,
+              method: "POST",
+              data: {
+                properties: [
+                  {
+                    property: `${ticketToCheck}`,
+                    value: JSON.stringify(arrToSend)
+                  }
+                ]
+              }
+            }).then(res => {
+              this.setState({
+                spinner: false
+              });
+              this.setState({
+                site: "",
+                objectId: res.data.objectId
+              });
+              this.setState({ redirect: true });
+            });
+          })
+          .catch(res => {
+            if (res.status === 401) {
+              localStorage.clear();
+              window.location.href = "/login";
+            }
+          });
+
         //window.location.reload();
       })
       .catch(res => {
@@ -202,6 +304,9 @@ class MyRequests extends Component {
     let listOfDevices = [];
     if (redirect) {
       return <Redirect to="/dashboard/my-requests" />;
+    }
+    if (this.state.spinner) {
+      return <Spinner />;
     }
 
     if (this.state.ready) {
@@ -229,6 +334,21 @@ class MyRequests extends Component {
           <MenuItem key={uuid.v4()} value={device.name}>
             {device.name}
           </MenuItem>
+        );
+      });
+    }
+    let listOfTickets;
+    if (this.state.ticketArray) {
+      listOfTickets = this.state.ticketArray.map(ticket => {
+        return (
+          <tr key={uuid.v4()}>
+            <td>{ticket.objectId}</td>
+            <td>{this.state.site}</td>
+            <td>{ticket.createdAt}</td>
+            <td>{ticket.device}</td>
+            <td>{ticket.content}</td>
+            <td>False</td>
+          </tr>
         );
       });
     }
@@ -282,40 +402,7 @@ class MyRequests extends Component {
                         <th>Status</th>
                       </tr>
                     </thead>
-                    <tbody>
-                      <tr>
-                        <td>{this.state.ticketNo}</td>
-                        <td />
-                        <td />
-                        <td />
-                        <td />
-                        <td />
-                      </tr>
-                      <tr>
-                        <td />
-                        <td />
-                        <td />
-                        <td />
-                        <td />
-                        <td />
-                      </tr>
-                      <tr>
-                        <td />
-                        <td />
-                        <td />
-                        <td />
-                        <td />
-                        <td />
-                      </tr>
-                      <tr>
-                        <td />
-                        <td />
-                        <td />
-                        <td />
-                        <td />
-                        <td />
-                      </tr>
-                    </tbody>
+                    <tbody>{listOfTickets}</tbody>
                   </Table>
                   <Button
                     color="primary"
@@ -402,7 +489,8 @@ const styles = {
 };
 
 const mapSateToProps = state => ({
-  devices: state.userdata.data
+  devices: state.userdata.data,
+  vid: state.userdata.vid
 });
 
 export default connect(

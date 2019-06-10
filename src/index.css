@@ -628,6 +628,11 @@ input:focus {
   background-color: #999;
 }
 
+.navbar-responsive-2 {
+  display: none;
+}
+
+
 /* Extra small devices (portrait phones, less than 576px) */
 @media (max-width: 575.98px) {
   .left-part {
@@ -691,6 +696,20 @@ input:focus {
     width: 50vw;
     margin: 10px;
     margin-left: 60px;
+  }
+  .navbar-responsive-1 {
+    display: none;
+  }
+  .navbar-responsive-2 {
+    display: block;
+    height: 60px;
+  }
+  .navbar{
+    height: 60px !important;
+  }
+  .mr-auto.navbar-brand
+  {
+    height: 60px !important;
   }
 }
 

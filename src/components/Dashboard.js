@@ -12,6 +12,7 @@ import { fetchUserData } from "../actions/userData";
 import { connect } from "react-redux";
 import Spinner from "../images/index";
 import { refreshUser } from "../actions/auth";
+import NavBarResponsive from './NavBarResponsive'
 
 //this is the parent component of all the logged in stuff
 
@@ -29,6 +30,7 @@ class Dashboard extends Component {
         <div>
           <NavBar />
           <LeftPart />
+          <NavBarResponsive />
           <div className="view">
             <Spinner />
           </div>
@@ -40,6 +42,7 @@ class Dashboard extends Component {
         <NavBar />
         {/*these two are static components and will not change in any route change */}
         <LeftPart />
+        <NavBarResponsive />
         <div className="view">
           <Switch>
             {/* rendering components according to routes */}
