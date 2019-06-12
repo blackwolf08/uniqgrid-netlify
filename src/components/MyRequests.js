@@ -14,7 +14,7 @@ import uuid from "uuid";
 import { Redirect } from "react-router-dom";
 import { fetchConnetionInfo } from "../actions/fetchConnectionInfo";
 import Spinner from "../images/index";
-import moment from 'moment'
+import moment from "moment";
 class MyRequests extends Component {
   state = {
     newTicket: false,
@@ -28,14 +28,15 @@ class MyRequests extends Component {
     spinner: false,
     recievedObj: "",
     newObj: {},
-    ticketArray: []
+    ticketArray: [],
+    nameOfSite: ""
   };
 
   componentDidMount() {
     if (typeof localStorage.jwtToken !== "undefined") {
       this.setState({
         spinner: true
-      })
+      });
       this.props.fetchConnetionInfo();
       let jwt = localStorage.jwtToken;
       jwt = jwtDecode(jwt);
@@ -82,7 +83,7 @@ class MyRequests extends Component {
           }
           this.setState({
             spinner: false
-          })
+          });
         })
         .catch(res => {
           if (res.status === 401) {
@@ -107,6 +108,16 @@ class MyRequests extends Component {
     this.setState({
       [e.target.name]: e.target.value
     });
+    console.log(e.target.id, e.target);
+    this.setState({
+      nameOfSite: e.target.id
+    });
+  };
+
+  clickmee = e => {
+    this.setState({
+      nameOfSite: e.target.id
+    });
   };
 
   handleClick = () => {
@@ -114,7 +125,7 @@ class MyRequests extends Component {
       newTicket: true
     });
     this.setState({
-      site: "",
+      site: ""
     });
   };
 
@@ -147,7 +158,7 @@ class MyRequests extends Component {
         } else {
           ticketToCheck = `tickets_site${id}_`;
         }
-        console.log(ticketToCheck)
+        console.log(ticketToCheck);
         Object.keys(properties).forEach(key => {
           if (key.search(ticketToCheck) >= 0) {
             this.setState({
@@ -166,8 +177,7 @@ class MyRequests extends Component {
         });
         this.setState({
           spinner: false
-        })
-
+        });
       })
       .catch(res => {
         if (res.status === 401) {
@@ -183,7 +193,12 @@ class MyRequests extends Component {
     this.setState({
       spinner: true
     });
-    console.log(this.state.email,this.state.site,this.state.device,this.state.content)
+    console.log(
+      this.state.email,
+      this.state.site,
+      this.state.device,
+      this.state.content
+    );
     //obj is the object created to be sent to API and in response we get back a ticket number
     let obj = [
       { name: "email", value: `${this.state.email}` },
@@ -213,12 +228,14 @@ class MyRequests extends Component {
         //redirecting to my-requests page
 
         let objToSend = {};
-
+        console.log(res.data);
         objToSend["objectId"] = res.data.objectId;
         objToSend["content"] = res.data.properties.content.value;
         objToSend["createdAt"] = res.data.properties.createdate.value;
         objToSend["email"] = res.data.properties.email.value;
         objToSend["device"] = res.data.properties.device.value;
+        objToSend["isDeleted"] = res.data.isDeleted;
+
         let arrToSend = [];
         arrToSend.push(objToSend);
         let jwt = localStorage.jwtToken;
@@ -235,7 +252,7 @@ class MyRequests extends Component {
               vid: res.data.vid
             });
             const properties = res.data.properties;
-            console.log(properties)
+            console.log(properties);
             let site = this.state.site;
             let id = site.charAt(site.length - 1);
             let nanCheck = isNaN(parseInt(id, 10));
@@ -245,7 +262,7 @@ class MyRequests extends Component {
             } else {
               ticketToCheck = `tickets_site${id}_`;
             }
-            console.log(ticketToCheck,properties)
+            console.log(ticketToCheck, properties);
             Object.keys(properties).forEach(key => {
               if (key.search(ticketToCheck) >= 0) {
                 this.setState({
@@ -254,33 +271,31 @@ class MyRequests extends Component {
               }
             });
 
-            if(!this.state.recievedObj)
-            {
+            if (!this.state.recievedObj) {
               this.setState({
                 recievedObj: `[]`
-              })
+              });
             }
-            
+
             let objRec = this.state.recievedObj;
-            console.log('before1', objRec)
+            console.log("before1", objRec);
 
             objRec = JSON.parse(objRec);
-            console.log('before', objRec)
-            if(!Array.isArray(objRec))
-            {
-              objRec = []
+            console.log("before", objRec);
+            if (!Array.isArray(objRec)) {
+              objRec = [];
             }
-            console.log('after', objRec)
+            console.log("after", objRec);
 
             let ticketArray = [];
             objRec.forEach(ticket => {
               ticketArray.push(ticket);
             });
 
-            ticketArray.forEach(ticket=>{
-              arrToSend.push(ticket)
+            ticketArray.forEach(ticket => {
+              arrToSend.push(ticket);
             });
-            console.log('arr', arrToSend)
+            console.log("arr", arrToSend);
 
             axios({
               url: `https://cors-anywhere.herokuapp.com/https://api.hubapi.com/contacts/v1/contact/vid/${
@@ -303,9 +318,8 @@ class MyRequests extends Component {
               this.setState({ redirect: true });
               this.setState({
                 spinner: false
-              })
+              });
             });
-            
           })
           .catch(res => {
             if (res.status === 401) {
@@ -341,13 +355,18 @@ class MyRequests extends Component {
       this.state.nameOfSites.forEach(site => {
         if (i === 1) {
           listOfSites.push(
-            <MenuItem key={i} value={`site`}>
+            <MenuItem onClick={this.clickmee} key={i} id={site} value={`site`}>
               {site}
             </MenuItem>
           );
         } else {
           listOfSites.push(
-            <MenuItem key={i} value={`site_${i}`}>
+            <MenuItem
+              key={i}
+              onClick={this.clickmee}
+              id={site}
+              value={`site_${i}`}
+            >
               {site}
             </MenuItem>
           );
@@ -366,20 +385,23 @@ class MyRequests extends Component {
     let listOfTickets;
     if (this.state.ticketArray) {
       listOfTickets = this.state.ticketArray.map(ticket => {
-        return (
-          <tr key={uuid.v4()}>
-            <td>{ticket.objectId}</td>
-            <td>{this.state.site}</td>
-            <td>{moment.unix(ticket.createdAt).format("MMM Do")}</td>
-            <td>{ticket.device}</td>
-            <td>{ticket.content}</td>
-            <td>False</td>
-          </tr>
-        );
+        if (!ticket.isDeleted && typeof ticket.isDeleted !== "undefined") {
+          return (
+            <tr key={uuid.v4()}>
+              <td>{ticket.objectId}</td>
+              <td>{this.state.site}</td>
+              <td>{moment.unix(ticket.createdAt).format("MMM Do")}</td>
+              <td>{ticket.device}</td>
+              <td>{ticket.content}</td>
+              <td>False</td>
+            </tr>
+          );
+        } else {
+          return <></>;
+        }
       });
     }
-    if(!this.state.spinner)
-    {
+    if (!this.state.spinner) {
       return (
         <div>
           <Helmet>
@@ -399,7 +421,10 @@ class MyRequests extends Component {
                           value={this.state.site}
                           name="site"
                           style={{ width: "300px" }}
-                          onChange={this.handleSelectChange}
+                          onChange={e => {
+                            this.handleSelectChange(e);
+                            this.clickmee(e);
+                          }}
                           placeholder={this.state.site}
                           inputProps={{
                             name: "site",
@@ -489,7 +514,7 @@ class MyRequests extends Component {
                         placeholder="Short Description"
                         multiline
                         margin="normal"
-                        style={{height:'50px', width:'300px'}}
+                        style={{ height: "50px", width: "300px" }}
                       />
                       <br />
                       <Button

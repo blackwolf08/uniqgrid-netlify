@@ -19,7 +19,11 @@ class MyDevice extends Component {
     keys: [],
     selectValue: "Select Device",
     graphData: "",
-    startTime: Date.now() - 86400000,
+    startTime:
+      moment().valueOf() -
+      moment()
+        .subtract(1, "days")
+        .valueOf(),
     default: true,
     deviceActivated: false,
     day: " active-filter",
@@ -49,12 +53,13 @@ class MyDevice extends Component {
             keys: res.data,
             isLoading: false
           });
-        }).catch(res=>{
+        })
+        .catch(res => {
           if (res.status === 401) {
             localStorage.clear();
             window.location.href = "/login";
           }
-        });;
+        });
     });
   };
   handleChange = e => {
@@ -63,8 +68,12 @@ class MyDevice extends Component {
       default: false
     });
     this.setState({ selectValue: e.target.value });
-    let endtime = Date.now();
-    let startTime = Date.now() - 604800000;
+    let endtime = moment().valueOf();
+    let startTime =
+      moment().valueOf() -
+      moment()
+        .subtract(1, "days")
+        .valueOf();
     axios
       .get(
         `https://cors-anywhere.herokuapp.com/http://portal.uniqgridcloud.com:8080/api/plugins/telemetry/DEVICE/${
@@ -87,12 +96,13 @@ class MyDevice extends Component {
             graphData: ""
           });
         }
-      }).catch(res=>{
+      })
+      .catch(res => {
         if (res.status === 401) {
           localStorage.clear();
           window.location.href = "/login";
         }
-      });;
+      });
   };
 
   setOptions = () => {
@@ -159,19 +169,29 @@ class MyDevice extends Component {
   };
 
   filterWeek = () => {
-    let startTime = Date.now() - 604800000;
+    console.log(
+      moment().valueOf() -
+        moment()
+          .subtract("1", "weeks")
+          .valueOf()
+    );
+    let startTime =
+      moment().valueOf() -
+      moment()
+        .subtract("1", "weeks")
+        .valueOf();
     this.setState({
       startTime
     });
     this.setState({
       isLoading: true
     });
-    let endtime = Date.now();
+    let endtime = moment().valueOf();
     axios
       .get(
         `https://cors-anywhere.herokuapp.com/http://portal.uniqgridcloud.com:8080/api/plugins/telemetry/DEVICE/${
           this.state.deviceId
-        }/values/timeseries?limit=100&agg=NONE&keys=${
+        }/values/timeseries?limit=1000&interval=3600000&agg=MIN&keys=${
           this.state.selectValue
         }&startTs=${startTime}&endTs=${endtime}`
       )
@@ -182,13 +202,13 @@ class MyDevice extends Component {
           isLoading: false,
           graphData: s
         });
-      }).catch(res=>{
-        if(res.status === 401)
-                {
-                  localStorage.clear();
-                window.location.href = "/login";
-                }
-      });;
+      })
+      .catch(res => {
+        if (res.status === 401) {
+          localStorage.clear();
+          window.location.href = "/login";
+        }
+      });
     this.setState({
       day: "",
       week: " active-filter",
@@ -198,14 +218,18 @@ class MyDevice extends Component {
   };
 
   filterMonth = () => {
-    let startTime = Date.now() - 2628000000;
+    let startTime =
+      moment().valueOf() -
+      moment()
+        .subtract(1, "months")
+        .valueOf();
     this.setState({
       startTime
     });
     this.setState({
       isLoading: true
     });
-    let endtime = Date.now();
+    let endtime = moment().valueOf();
     axios
       .get(
         `https://cors-anywhere.herokuapp.com/http://portal.uniqgridcloud.com:8080/api/plugins/telemetry/DEVICE/${
@@ -221,12 +245,13 @@ class MyDevice extends Component {
           isLoading: false,
           graphData: s
         });
-      }).catch(res=>{
+      })
+      .catch(res => {
         if (res.status === 401) {
           localStorage.clear();
           window.location.href = "/login";
         }
-      });;
+      });
     this.setState({
       day: "",
       week: "",
@@ -236,14 +261,18 @@ class MyDevice extends Component {
   };
 
   filterYear = () => {
-    let startTime = Date.now() - 959220000000;
+    let startTime =
+      moment().valueOf() -
+      moment()
+        .subtract(1, "years")
+        .valueOf();
     this.setState({
       startTime
     });
     this.setState({
       isLoading: true
     });
-    let endtime = Date.now();
+    let endtime = moment().valueOf();
     axios
       .get(
         `https://cors-anywhere.herokuapp.com/http://portal.uniqgridcloud.com:8080/api/plugins/telemetry/DEVICE/${
@@ -259,13 +288,13 @@ class MyDevice extends Component {
           isLoading: false,
           graphData: s
         });
-      }).catch(res=>{
-        if(res.status === 401)
-                {
-                  localStorage.clear();
-                window.location.href = "/login";
-                }
-      });;
+      })
+      .catch(res => {
+        if (res.status === 401) {
+          localStorage.clear();
+          window.location.href = "/login";
+        }
+      });
     this.setState({
       day: "",
       week: "",
@@ -275,14 +304,24 @@ class MyDevice extends Component {
   };
 
   filterDay = () => {
-    let startTime = Date.now() - 86400000;
+    console.log(
+      moment().valueOf() -
+        moment()
+          .subtract("1", "days")
+          .valueOf()
+    );
+    let startTime =
+      moment().valueOf() -
+      moment()
+        .subtract("1", "days")
+        .valueOf();
     this.setState({
       startTime
     });
     this.setState({
       isLoading: true
     });
-    let endtime = Date.now();
+    let endtime = moment().valueOf();
     axios
       .get(
         `https://cors-anywhere.herokuapp.com/http://portal.uniqgridcloud.com:8080/api/plugins/telemetry/DEVICE/${
@@ -298,12 +337,12 @@ class MyDevice extends Component {
           isLoading: false,
           graphData: s
         });
-      }).catch(res=>{
-        if(res.status === 401)
-                {
-                  localStorage.clear();
-                window.location.href = "/login";
-                }
+      })
+      .catch(res => {
+        if (res.status === 401) {
+          localStorage.clear();
+          window.location.href = "/login";
+        }
       });
     this.setState({
       day: " active-filter",
