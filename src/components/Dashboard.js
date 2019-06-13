@@ -12,7 +12,8 @@ import { fetchUserData } from "../actions/userData";
 import { connect } from "react-redux";
 import Spinner from "../images/index";
 import { refreshUser } from "../actions/auth";
-import NavBarResponsive from './NavBarResponsive'
+import NavBarResponsive from "./NavBarResponsive";
+import NewConnection from "./NewConnection";
 
 //this is the parent component of all the logged in stuff
 
@@ -51,6 +52,12 @@ class Dashboard extends Component {
               path="/dashboard/my-sites"
               exact
               render={props => <MySite {...props} />}
+            />
+            <Route
+              key="new-connection"
+              path="/dashboard/new-connection"
+              exact
+              render={props => <NewConnection {...props} />}
             />
             <Route
               key="my-sites"

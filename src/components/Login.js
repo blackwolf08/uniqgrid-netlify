@@ -6,6 +6,7 @@ import { authUser } from "../actions/auth";
 import AuthLogin from "./AuthLogin";
 import Dashboard from "./Dashboard";
 import Check from "./check";
+import ResetPassword from "./ResetPassword";
 
 // this components defines our routes and based upon the routes renders component
 
@@ -21,6 +22,7 @@ class Login extends Component {
           path="/login"
           render={props => <AuthLogin signin onAuth={authUser} {...props} />}
         />
+        <Route path="/forgot-password" render={props => <ResetPassword />} />
         {/* if routed to dashboard check with hocs, if authenticated then give access */}
         {/* Dashboard component */}
         <Route path="/dashboard" component={withAuth(Dashboard)} />

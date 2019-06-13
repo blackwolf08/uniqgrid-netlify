@@ -44,21 +44,9 @@ class AuthLogin extends Component {
     this.setState({
       username: this.state.username.toLowerCase
     });
-    const authType = "signin";
-    //send email and password to this function from props
-    this.props
-      .onAuth(authType, this.state)
-      .then(() => {
-        this.setState({
-          isLoading: false,
-          username: "",
-          password: "",
-          emailNotValid: false
-        });
-        //if successfully logged in push user to my Dashboard component
-        this.props.history.push("/dashboard/my-sites");
-      })
-      .catch(() => {});
+
+    //if successfully logged in push user to my Dashboard component
+    //this.props.history.push("/dashboard/my-sites");
   };
 
   handleChange = e => {
@@ -108,16 +96,9 @@ class AuthLogin extends Component {
               onChange={this.handleChange}
               className="auth-input"
             />
-            <input
-              type="password"
-              name="password"
-              placeholder="Password"
-              onChange={this.handleChange}
-              className="auth-input"
-            />
-            <button className="auth-button">Login</button>
-            <Link to="/forgot-password" className="auth-p">
-              Forgot Password?
+            <button className="auth-button">Reset Password</button>
+            <Link to="/login" className="auth-p">
+              Login?
             </Link>
           </form>
         </div>

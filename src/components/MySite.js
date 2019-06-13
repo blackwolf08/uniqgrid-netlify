@@ -5,6 +5,7 @@ import axios from "axios";
 import icon1 from "../images/icon1.png";
 import icon2 from "../images/icon2.png";
 import jwtDecode from "jwt-decode";
+import { Link } from "react-router-dom";
 
 export default class MySite extends Component {
   state = {
@@ -25,77 +26,79 @@ export default class MySite extends Component {
         jwt.sub
       }/profile?hapikey=bdcec428-e806-47ec-b7fd-ece8b03a870b`;
 
-      axios.get(URL).then(res => {
-        const properties = res.data.properties;
-        console.log(properties);
-        let arrayOfStrings = [];
-        let noOfSites = [];
-        //get the keys of data returned eg, connection_name_site_1_, energy_site_1 etc
-        Object.keys(properties).forEach(key => {
-          arrayOfStrings.push(key);
-        });
-        //check for the keys which stores the name of sites
-        arrayOfStrings.forEach(site => {
-          // according to the struct of API this piece of code gives site number as connection_site_'2'_, outputs 2
-          let nanCheck = isNaN(parseInt(site.charAt(site.length - 2), 10));
-          if (site.search("site") >= 0 && !nanCheck) {
-            noOfSites.push(parseInt(site.charAt(site.length - 2), 10));
-          }
-        });
-        let nameOfSites = [];
-        arrayOfStrings.sort();
-        //get the names of the sites
-        arrayOfStrings.forEach(site => {
-          if (site.search("electricity_connection_name") >= 0) {
-            nameOfSites.push(res.data.properties[site].value);
-          }
-        });
-        this.setState({
-          nameOfSites: nameOfSites
-        });
+      axios
+        .get(URL)
+        .then(res => {
+          const properties = res.data.properties;
+          console.log(properties);
+          let arrayOfStrings = [];
+          let noOfSites = [];
+          //get the keys of data returned eg, connection_name_site_1_, energy_site_1 etc
+          Object.keys(properties).forEach(key => {
+            arrayOfStrings.push(key);
+          });
+          //check for the keys which stores the name of sites
+          arrayOfStrings.forEach(site => {
+            // according to the struct of API this piece of code gives site number as connection_site_'2'_, outputs 2
+            let nanCheck = isNaN(parseInt(site.charAt(site.length - 2), 10));
+            if (site.search("site") >= 0 && !nanCheck) {
+              noOfSites.push(parseInt(site.charAt(site.length - 2), 10));
+            }
+          });
+          let nameOfSites = [];
+          arrayOfStrings.sort();
+          //get the names of the sites
+          arrayOfStrings.forEach(site => {
+            if (site.search("electricity_connection_name") >= 0) {
+              nameOfSites.push(res.data.properties[site].value);
+            }
+          });
+          this.setState({
+            nameOfSites: nameOfSites
+          });
 
-        if (noOfSites.length === 0) {
-          noOfSites.push(1);
-        }
+          if (noOfSites.length === 0) {
+            noOfSites.push(1);
+          }
 
-        arrayOfStrings.sort();
-        this.setState({
-          properties
-        });
+          arrayOfStrings.sort();
+          this.setState({
+            properties
+          });
 
-        let kWASite = [];
-        // gives us the power that are used to render power in my site area
-        arrayOfStrings.forEach(site => {
-          if (site.search("connected_load_kw_site") >= 0) {
-            kWASite.push(site);
-          } else if (site.search("connected_load_kw") >= 0) {
-            kWASite.push(site);
+          let kWASite = [];
+          // gives us the power that are used to render power in my site area
+          arrayOfStrings.forEach(site => {
+            if (site.search("connected_load_kw_site") >= 0) {
+              kWASite.push(site);
+            } else if (site.search("connected_load_kw") >= 0) {
+              kWASite.push(site);
+            }
+          });
+          let solarPower = [];
+          arrayOfStrings.forEach(site => {
+            if (site.search("solar_capacity_kwp_site") >= 0) {
+              solarPower.push(site);
+            } else if (site.search("solar_capacity_kwp") >= 0) {
+              solarPower.push(site);
+            }
+          });
+          this.setState({
+            kWASite,
+            solarPower
+          });
+          //get the max number of sites of the current user
+          noOfSites.sort();
+          this.setState({
+            maxConnections: noOfSites[noOfSites.length - 1]
+          });
+        })
+        .catch(res => {
+          if (res.status === 401) {
+            localStorage.clear();
+            window.location.href = "/login";
           }
         });
-        let solarPower = [];
-        arrayOfStrings.forEach(site => {
-          if (site.search("solar_capacity_kwp_site") >= 0) {
-            solarPower.push(site);
-          } else if (site.search("solar_capacity_kwp") >= 0) {
-            solarPower.push(site);
-          }
-        });
-        this.setState({
-          kWASite,
-          solarPower
-        });
-        //get the max number of sites of the current user
-        noOfSites.sort();
-        this.setState({
-          maxConnections: noOfSites[noOfSites.length - 1]
-        });
-      }).catch(res=>{
-        if(res.status === 401)
-                {
-                  localStorage.clear();
-                window.location.href = "/login";
-                }
-      });;
       this.setState({
         ready: true
       });
@@ -183,7 +186,26 @@ export default class MySite extends Component {
             {list}
           </div>
         )}
+        <Link to="/dashboard/new-connection" style={styles.buttonAdd}>
+          <i style={{ color: "white" }} className="fas fa-plus" />
+        </Link>
       </div>
     );
   }
 }
+
+const styles = {
+  buttonAdd: {
+    position: "fixed",
+    bottom: "20px",
+    right: "20px",
+    padding: "20px",
+    borderRadius: "50%",
+    backgroundColor: "#67809f",
+    width: "50px",
+    height: "50px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center"
+  }
+};

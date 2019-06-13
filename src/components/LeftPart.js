@@ -36,6 +36,10 @@ class LeftPart extends Component {
       this.setState({
         feedback: "leftpart-menu bg-active"
       });
+    } else if (url.includes("new-connection")) {
+      this.setState({
+        mysite: "leftpart-menu bg-active"
+      });
     } else {
       this.setState({
         myprofile: "leftpart-menu bg-active"
