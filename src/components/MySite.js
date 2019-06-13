@@ -124,7 +124,7 @@ export default class MySite extends Component {
           <Connection
             key={i}
             id={i}
-            name={`${this.state.nameOfSites[i] || "--"}`}
+            name={`${this.state.nameOfSites[i - 1] || "--"}`}
             power={`${
               this.state.properties[this.state.kWASite[j]]
                 ? this.state.properties[this.state.kWASite[j]].value
@@ -144,7 +144,7 @@ export default class MySite extends Component {
           <Connection
             key={i}
             id={i}
-            name={`${this.state.nameOfSites[j] || "--"}`}
+            name={`${this.state.nameOfSites[i - 1] || "--"}`}
             power={`${
               this.state.properties[this.state.kWASite[j]]
                 ? this.state.properties[this.state.kWASite[j]].value

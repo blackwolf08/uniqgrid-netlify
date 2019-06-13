@@ -166,7 +166,7 @@ class ConnectionInfo extends Component {
         }
       )
         .then(res => {
-          //window.location.reload();
+          window.location.reload();
         })
         .catch(res => {
           if (res.status === 401) {

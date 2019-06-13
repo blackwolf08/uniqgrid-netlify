@@ -97,7 +97,8 @@ class NewConnection extends Component {
             this.setState({
               maxConnections: 1
             });
-          } else {
+          }
+          if (noOfSites.length !== 0) {
             noOfSites.sort();
             this.setState({
               maxConnections: noOfSites[noOfSites.length - 1]
@@ -199,8 +200,6 @@ class NewConnection extends Component {
             value: `${this.state.postal}`
           }
         ];
-        console.log(`{  "properties": ${JSON.stringify(objToSend)}
-      }`);
 
         fetch(
           `https://cors-anywhere.herokuapp.com/https://api.hubapi.com/contacts/v1/contact/vid/${
@@ -213,7 +212,7 @@ class NewConnection extends Component {
           }
         )
           .then(res => {
-            //window.location.reload();
+            window.location.reload();
           })
           .catch(res => {
             if (res.status === 401) {
@@ -257,8 +256,6 @@ class NewConnection extends Component {
             value: `${this.state.postal}`
           }
         ];
-        console.log(`{  "properties": ${JSON.stringify(objToSend)}
-      }`);
 
         fetch(
           `https://cors-anywhere.herokuapp.com/https://api.hubapi.com/contacts/v1/contact/vid/${
@@ -271,7 +268,7 @@ class NewConnection extends Component {
           }
         )
           .then(res => {
-            //window.location.reload();
+            window.location.reload();
           })
           .catch(res => {
             if (res.status === 401) {
