@@ -5,6 +5,8 @@ import { connect } from "react-redux";
 import Spinner from "../images/index";
 import csc from "country-state-city";
 import uuid from "uuid";
+import axios from "axios";
+import jwtDecode from "jwt-decode";
 
 class NewConnection extends Component {
   state = {
@@ -25,7 +27,8 @@ class NewConnection extends Component {
     street: "",
     electricity_connection_name: "",
     segment: "",
-    sub_segment: ""
+    sub_segment: "",
+    vid: ""
   };
 
   handleTabChange = tab => {
@@ -51,22 +54,85 @@ class NewConnection extends Component {
   };
 
   componentDidMount() {
-    this.setState({
-      isLoading: false
-    });
-    const listOfStates = csc.getStatesOfCountry("101");
-    let idd;
+    if (typeof localStorage.jwtToken !== "undefined") {
+      let jwt = localStorage.jwtToken;
+      jwt = jwtDecode(jwt);
+      const URL = `https://cors-anywhere.herokuapp.com/https://api.hubapi.com/contacts/v1/contact/email/${
+        jwt.sub
+      }/profile?hapikey=bdcec428-e806-47ec-b7fd-ece8b03a870b`;
 
-    setTimeout(() => {
-      listOfStates.forEach(stateI => {
-        if (stateI.name === this.state.state) {
-          idd = stateI.id;
-        }
-      });
+      axios
+        .get(URL)
+        .then(res => {
+          const properties = res.data.properties;
+          this.setState({
+            vid: res.data.vid
+          });
+          let arrayOfStrings = [];
+          let noOfSites = [];
+          //get the keys of data returned eg, connection_name_site_1_, energy_site_1 etc
+          Object.keys(properties).forEach(key => {
+            arrayOfStrings.push(key);
+          });
+          //check for the keys which stores the name of sites
+          arrayOfStrings.forEach(site => {
+            // according to the struct of API this piece of code gives site number as connection_site_'2'_, outputs 2
+            let nanCheck = isNaN(parseInt(site.charAt(site.length - 2), 10));
+            if (
+              site.search("electricity_connection_name") >= 0 &&
+              !nanCheck &&
+              properties[site].value !== ""
+            ) {
+              noOfSites.push(parseInt(site.charAt(site.length - 2), 10));
+            }
+          });
+          arrayOfStrings.sort();
+
+          if (noOfSites.length === 0) {
+            this.setState({
+              maxConnections: 0
+            });
+          }
+          if (properties["electricity_connection_name"].value !== "") {
+            this.setState({
+              maxConnections: 1
+            });
+          } else {
+            noOfSites.sort();
+            this.setState({
+              maxConnections: noOfSites[noOfSites.length - 1]
+            });
+          }
+
+          //get the max number of sites of the current user
+
+          this.setState({
+            isLoading: false
+          });
+          const listOfStates = csc.getStatesOfCountry("101");
+          let idd;
+
+          setTimeout(() => {
+            listOfStates.forEach(stateI => {
+              if (stateI.name === this.state.state) {
+                idd = stateI.id;
+              }
+            });
+            this.setState({
+              stateId: idd
+            });
+          }, 100);
+        })
+        .catch(res => {
+          if (res.status === 401) {
+            localStorage.clear();
+            window.location.href = "/login";
+          }
+        });
       this.setState({
-        stateId: idd
+        ready: true
       });
-    }, 100);
+    }
   }
   handleSelectChange = e => {
     this.setState({
@@ -84,9 +150,6 @@ class NewConnection extends Component {
     this.setState({
       [e.target.name]: e.target.value
     });
-    this.props.handleChildrenChange({
-      [e.target.name]: e.target.value
-    });
   };
   handleChange = e => {
     this.setState({
@@ -97,6 +160,126 @@ class NewConnection extends Component {
   handleUpdateButtonClick = value => {
     if (value === 1) {
       this.handleTabChange("connection-details");
+    }
+    if (value === 2) {
+      let objToSend;
+
+      if (this.state.maxConnections === 0) {
+        this.setState({
+          enableSpinner: true
+        });
+
+        objToSend = [
+          {
+            property: `electricity_connection_name`,
+            value: `${this.state.electricity_connection_name}`
+          },
+          {
+            property: `segment_site`,
+            value: `${this.state.segment}`
+          },
+          {
+            property: `sub_segment`,
+            value: `${this.state.sub_segment}`
+          },
+          {
+            property: `address`,
+            value: `${this.state.street}`
+          },
+          {
+            property: `city`,
+            value: `${this.state.city}`
+          },
+          {
+            property: `state`,
+            value: `${this.state.state}`
+          },
+          {
+            property: `zip`,
+            value: `${this.state.postal}`
+          }
+        ];
+        console.log(`{  "properties": ${JSON.stringify(objToSend)}
+      }`);
+
+        fetch(
+          `https://cors-anywhere.herokuapp.com/https://api.hubapi.com/contacts/v1/contact/vid/${
+            this.state.vid
+          }/profile?hapikey=bdcec428-e806-47ec-b7fd-ece8b03a870b`,
+          {
+            method: "POST",
+            body: `{  "properties": ${JSON.stringify(objToSend)}
+          }`
+          }
+        )
+          .then(res => {
+            //window.location.reload();
+          })
+          .catch(res => {
+            if (res.status === 401) {
+              localStorage.clear();
+              window.location.href = "/login";
+            }
+          });
+      } else {
+        let newId = parseInt(this.state.maxConnections) + 1;
+        this.setState({
+          enableSpinner: true
+        });
+
+        objToSend = [
+          {
+            property: `electricity_connection_name_site_${newId}_`,
+            value: `${this.state.electricity_connection_name}`
+          },
+          {
+            property: `segment_site_${newId}_`,
+            value: `${this.state.segment}`
+          },
+          {
+            property: `sub_segment_site_${newId}_`,
+            value: `${this.state.sub_segment}`
+          },
+          {
+            property: `street_site${newId}_`,
+            value: `${this.state.street}`
+          },
+          {
+            property: `city_site${newId}_`,
+            value: `${this.state.city}`
+          },
+          {
+            property: `state_site_${newId}_`,
+            value: `${this.state.state}`
+          },
+          {
+            property: `postal_code_site_${newId}_`,
+            value: `${this.state.postal}`
+          }
+        ];
+        console.log(`{  "properties": ${JSON.stringify(objToSend)}
+      }`);
+
+        fetch(
+          `https://cors-anywhere.herokuapp.com/https://api.hubapi.com/contacts/v1/contact/vid/${
+            this.state.vid
+          }/profile?hapikey=bdcec428-e806-47ec-b7fd-ece8b03a870b`,
+          {
+            method: "POST",
+            body: `{  "properties": ${JSON.stringify(objToSend)}
+          }`
+          }
+        )
+          .then(res => {
+            //window.location.reload();
+          })
+          .catch(res => {
+            if (res.status === 401) {
+              localStorage.clear();
+              window.location.href = "/login";
+            }
+          });
+      }
     }
   };
 

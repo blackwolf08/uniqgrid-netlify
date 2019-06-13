@@ -41,7 +41,11 @@ export default class MySite extends Component {
           arrayOfStrings.forEach(site => {
             // according to the struct of API this piece of code gives site number as connection_site_'2'_, outputs 2
             let nanCheck = isNaN(parseInt(site.charAt(site.length - 2), 10));
-            if (site.search("site") >= 0 && !nanCheck) {
+            if (
+              site.search("electricity_connection_name") >= 0 &&
+              !nanCheck &&
+              properties[site].value !== ""
+            ) {
               noOfSites.push(parseInt(site.charAt(site.length - 2), 10));
             }
           });

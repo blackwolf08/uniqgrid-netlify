@@ -45,30 +45,33 @@ class ConnectionInfo extends Component {
     this.setState({
       id
     });
-    this.props.fetchConnetionInfo(id).then(res => {
-      if (res) {
-        this.setState({
-          data: this.props.info
-        });
-        let name = "";
-        Object.keys(this.state.data).forEach(key => {
-          if (key.indexOf("connection") === 12) {
-            name = this.state.data[key].value.toString();
-          }
-        });
-        this.setState({
-          name
-        });
-        this.setState({
-          active: 1
-        });
-      }
-    }).catch(res=>{
-      if (res.status === 401) {
-        localStorage.clear();
-        window.location.href = "/login";
-      }
-    });;
+    this.props
+      .fetchConnetionInfo(id)
+      .then(res => {
+        if (res) {
+          this.setState({
+            data: this.props.info
+          });
+          let name = "";
+          Object.keys(this.state.data).forEach(key => {
+            if (key.indexOf("connection") === 12) {
+              name = this.state.data[key].value.toString();
+            }
+          });
+          this.setState({
+            name
+          });
+          this.setState({
+            active: 1
+          });
+        }
+      })
+      .catch(res => {
+        if (res.status === 401) {
+          localStorage.clear();
+          window.location.href = "/login";
+        }
+      });
   }
 
   handleTabChange = tab => {
@@ -150,6 +153,8 @@ class ConnectionInfo extends Component {
       this.setState({
         finalArray: toSend
       });
+      console.log(`{  "properties": ${JSON.stringify(toSend)}
+    }`);
       fetch(
         `https://cors-anywhere.herokuapp.com/https://api.hubapi.com/contacts/v1/contact/vid/${
           this.props.vid
@@ -161,14 +166,13 @@ class ConnectionInfo extends Component {
         }
       )
         .then(res => {
-          window.location.reload();
+          //window.location.reload();
         })
-        .catch(res=>{
-          if(res.status === 401)
-                {
-                  localStorage.clear();
-                window.location.href = "/login";
-                }
+        .catch(res => {
+          if (res.status === 401) {
+            localStorage.clear();
+            window.location.href = "/login";
+          }
         });
     }
   };

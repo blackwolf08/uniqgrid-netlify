@@ -62,7 +62,11 @@ class MyRequests extends Component {
           arrayOfStrings.forEach(site => {
             let nanCheck = isNaN(parseInt(site.charAt(site.length - 2), 10));
             //checking acc to the struct of API that id that key has any sub string site in it then appending to no of sites
-            if (site.search("site") >= 0 && !nanCheck) {
+            if (
+              site.search("electricity_connection_name") >= 0 &&
+              !nanCheck &&
+              properties[site].value !== ""
+            ) {
               noOfSites.push(parseInt(site.charAt(site.length - 2), 10));
             }
           });
@@ -70,7 +74,11 @@ class MyRequests extends Component {
           arrayOfStrings.sort();
           // name of sites are stored in the array
           arrayOfStrings.forEach(site => {
-            if (site.search("electricity_connection_name") >= 0) {
+            console.log(site);
+            if (
+              site.search("electricity_connection_name") >= 0 &&
+              properties[site].value !== ""
+            ) {
               nameOfSites.push(res.data.properties[site].value);
             }
           });
