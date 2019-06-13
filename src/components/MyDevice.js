@@ -19,11 +19,9 @@ class MyDevice extends Component {
     keys: [],
     selectValue: "Select Device",
     graphData: "",
-    startTime:
-      moment().valueOf() -
-      moment()
-        .subtract(1, "days")
-        .valueOf(),
+    startTime: moment()
+      .subtract(1, "days")
+      .valueOf(),
     default: true,
     deviceActivated: false,
     day: " active-filter",
@@ -69,16 +67,14 @@ class MyDevice extends Component {
     });
     this.setState({ selectValue: e.target.value });
     let endtime = moment().valueOf();
-    let startTime =
-      moment().valueOf() -
-      moment()
-        .subtract(1, "days")
-        .valueOf();
+    let startTime = moment()
+      .subtract(1, "days")
+      .valueOf();
     axios
       .get(
         `https://cors-anywhere.herokuapp.com/http://portal.uniqgridcloud.com:8080/api/plugins/telemetry/DEVICE/${
           this.state.deviceId
-        }/values/timeseries?limit=100&agg=NONE&keys=${
+        }/values/timeseries?limit=10000&interval=900000&agg=MAX&keys=${
           e.target.value
         }&startTs=${startTime}&endTs=${endtime}`
       )
@@ -169,17 +165,9 @@ class MyDevice extends Component {
   };
 
   filterWeek = () => {
-    console.log(
-      moment().valueOf() -
-        moment()
-          .subtract("1", "weeks")
-          .valueOf()
-    );
-    let startTime =
-      moment().valueOf() -
-      moment()
-        .subtract("1", "weeks")
-        .valueOf();
+    let startTime = moment()
+      .subtract(1, "weeks")
+      .valueOf();
     this.setState({
       startTime
     });
@@ -191,11 +179,12 @@ class MyDevice extends Component {
       .get(
         `https://cors-anywhere.herokuapp.com/http://portal.uniqgridcloud.com:8080/api/plugins/telemetry/DEVICE/${
           this.state.deviceId
-        }/values/timeseries?limit=1000&interval=3600000&agg=MIN&keys=${
+        }/values/timeseries?limit=10000&interval=10800000&agg=MAX&keys=${
           this.state.selectValue
         }&startTs=${startTime}&endTs=${endtime}`
       )
       .then(res => {
+        console.log(res);
         let a = res.data;
         let s = a[Object.keys(a)[0]];
         this.setState({
@@ -218,11 +207,9 @@ class MyDevice extends Component {
   };
 
   filterMonth = () => {
-    let startTime =
-      moment().valueOf() -
-      moment()
-        .subtract(1, "months")
-        .valueOf();
+    let startTime = moment()
+      .subtract(1, "months")
+      .valueOf();
     this.setState({
       startTime
     });
@@ -234,7 +221,7 @@ class MyDevice extends Component {
       .get(
         `https://cors-anywhere.herokuapp.com/http://portal.uniqgridcloud.com:8080/api/plugins/telemetry/DEVICE/${
           this.state.deviceId
-        }/values/timeseries?limit=100&agg=NONE&keys=${
+        }/values/timeseries?limit=10000&interval=86400000&agg=MAX&keys=${
           this.state.selectValue
         }&startTs=${startTime}&endTs=${endtime}`
       )
@@ -261,11 +248,9 @@ class MyDevice extends Component {
   };
 
   filterYear = () => {
-    let startTime =
-      moment().valueOf() -
-      moment()
-        .subtract(1, "years")
-        .valueOf();
+    let startTime = moment()
+      .subtract(1, "years")
+      .valueOf();
     this.setState({
       startTime
     });
@@ -277,7 +262,7 @@ class MyDevice extends Component {
       .get(
         `https://cors-anywhere.herokuapp.com/http://portal.uniqgridcloud.com:8080/api/plugins/telemetry/DEVICE/${
           this.state.deviceId
-        }/values/timeseries?limit=100&agg=NONE&keys=${
+        }/values/timeseries?limit=10000&interval=86400000&agg=MAX&keys=${
           this.state.selectValue
         }&startTs=${startTime}&endTs=${endtime}`
       )
@@ -305,16 +290,13 @@ class MyDevice extends Component {
 
   filterDay = () => {
     console.log(
-      moment().valueOf() -
-        moment()
-          .subtract("1", "days")
-          .valueOf()
-    );
-    let startTime =
-      moment().valueOf() -
       moment()
         .subtract("1", "days")
-        .valueOf();
+        .valueOf()
+    );
+    let startTime = moment()
+      .subtract(1, "days")
+      .valueOf();
     this.setState({
       startTime
     });
@@ -326,7 +308,7 @@ class MyDevice extends Component {
       .get(
         `https://cors-anywhere.herokuapp.com/http://portal.uniqgridcloud.com:8080/api/plugins/telemetry/DEVICE/${
           this.state.deviceId
-        }/values/timeseries?limit=100&agg=NONE&keys=${
+        }/values/timeseries?limit=10000&interval=900000&agg=MAX&keys=${
           this.state.selectValue
         }&startTs=${this.state.startTime}&endTs=${endtime}`
       )
@@ -422,9 +404,39 @@ class MyDevice extends Component {
                 >
                   Year
                 </button>
+                <div className="row">
+                  <div className="col-sm-12 col flex">
+                    <div style={{ width: "50%" }}>
+                      <button
+                        style={{
+                          position: "absolute",
+                          left: "0",
+                          fontSize: "200%",
+                          backgroundColor: "white"
+                        }}
+                      >
+                        <i class="fas fa-arrow-left" />
+                      </button>
+                    </div>
+                    <div style={{ width: "50%", position: "relative" }}>
+                      <button
+                        style={{
+                          position: "absolute",
+                          right: "0",
+                          fontSize: "200%",
+                          backgroundColor: "white"
+                        }}
+                      >
+                        <i class="fas fa-arrow-right" />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <br />
+                <br />
                 {/* <p>{this.state.graphData}</p> */}
                 <div>
-                  {!this.state.graphData && (
+                  {!this.state.graphData && !this.state.isLoading && (
                     <CanvasJSChart
                       options={this.noDataSetOptions()}
                       /* onRef = {ref => this.chart = ref} */
@@ -436,6 +448,7 @@ class MyDevice extends Component {
                     </div>
                   )}
                   {this.state.graphData &&
+                    !this.state.isLoading &&
                     this.state.graphData.length > 1 &&
                     !this.state.isLoading && (
                       <CanvasJSChart
