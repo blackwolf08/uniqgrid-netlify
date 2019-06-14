@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import axios from "axios";
 
 class DeviceList extends Component {
   state = {
@@ -14,9 +15,27 @@ class DeviceList extends Component {
     });
     this.props.handleMethod(e.id.id, e.name);
   };
+  componentDidMount() {
+    // const jwt = localStorage.jwtToken;
+    // const header = `X-Authorization: Bearer ${jwt}`;
+    // axios
+    //   .get(
+    //     `http://portal.uniqgridcloud.com:8080/api/v1/${
+    //       this.props.id
+    //     }/attributes`,
+    //     { headers: { header } }
+    //   )
+    //   .then(res => {
+    //     console.log(res);
+    //   });
+  }
 
   render() {
     const deviceList = this.state.devices.map(device => {
+      let power = 0;
+      if (device.additionalInfo) {
+        power = device.additionalInfo.description;
+      }
       return (
         <div
           key={device.id.id}
@@ -38,10 +57,10 @@ class DeviceList extends Component {
             <p>{device.createdAt}</p>
           </div>
           <div className="my-col ">
-            <p>2000 Watts</p>
+            <p>{power}</p>
           </div>
           <div className="my-col ">
-            <p>Monitor</p>
+            <p>{this.props.type || "Monitor"}</p>
           </div>
         </div>
       );

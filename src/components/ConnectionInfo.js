@@ -7,6 +7,7 @@ import SolarPvGenerator from "./SolarPvGenerator";
 import InstalledDevices from "./InstalledDevices";
 import { fetchConnetionInfo } from "../actions/fetchConnectionInfo";
 import { connect } from "react-redux";
+import MysiteMap from "./MysiteMap";
 import Spinner from "../images/index";
 
 class ConnectionInfo extends Component {
@@ -204,9 +205,16 @@ class ConnectionInfo extends Component {
         <Helmet>
           <title>{`${this.state.name || this.state.defaultName}`}</title>
         </Helmet>
-        <h1 className="mysites-heading">
+        <h1 className="mysites-heading1">
           {this.state.name || this.state.defaultName}
         </h1>
+        <div style={{ height: "300px" }}>
+          <MysiteMap
+            className="flex"
+            style={{ width: "80%", height: "300px", margin: "0 auto" }}
+            data={this.state.data}
+          />
+        </div>
         <div className="connection-info-hero">
           <div className="connection-info-tabs" style={{ cursor: "pointer" }}>
             <div
@@ -257,14 +265,20 @@ class ConnectionInfo extends Component {
                 update={this.update}
                 data={this.props.info}
               />
-              <button
-                className="update-button"
-                onClick={() => {
-                  this.handleUpdateButtonClick(1);
-                }}
-              >
-                Next
-              </button>
+              <div className="row">
+                <div className="col">
+                  <button
+                    className="update-button"
+                    onClick={() => {
+                      this.handleUpdateButtonClick(1);
+                    }}
+                  >
+                    Next
+                  </button>
+                  <br />
+                  <br />
+                </div>
+              </div>
             </>
           )}
           {this.state.active === 2 && (
@@ -274,14 +288,20 @@ class ConnectionInfo extends Component {
                 update={this.update}
                 data={this.props.info}
               />
-              <button
-                className="update-button"
-                onClick={() => {
-                  this.handleUpdateButtonClick(2);
-                }}
-              >
-                Next
-              </button>
+              <div className="row">
+                <div className="col">
+                  <button
+                    className="update-button"
+                    onClick={() => {
+                      this.handleUpdateButtonClick(2);
+                    }}
+                  >
+                    Next
+                  </button>
+                  <br />
+                  <br />
+                </div>
+              </div>
             </>
           )}
           {this.state.active === 3 && (
@@ -291,14 +311,20 @@ class ConnectionInfo extends Component {
                 update={this.update}
                 data={this.props.info}
               />
-              <button
-                className="update-button"
-                onClick={() => {
-                  this.handleUpdateButtonClick(3);
-                }}
-              >
-                Next
-              </button>
+              <div className="row">
+                <div className="col">
+                  <button
+                    className="update-button"
+                    onClick={() => {
+                      this.handleUpdateButtonClick(3);
+                    }}
+                  >
+                    Next
+                  </button>
+                  <br />
+                  <br />
+                </div>
+              </div>
             </>
           )}
           {this.state.active === 4 && (
@@ -308,14 +334,20 @@ class ConnectionInfo extends Component {
                 update={this.update}
                 data={this.props.info}
               />
-              <button
-                className="update-button"
-                onClick={() => {
-                  this.handleUpdateButtonClick(4);
-                }}
-              >
-                Next
-              </button>
+              <div className="row">
+                <div className="col">
+                  <button
+                    className="update-button"
+                    onClick={() => {
+                      this.handleUpdateButtonClick(4);
+                    }}
+                  >
+                    Next
+                  </button>
+                  <br />
+                  <br />
+                </div>
+              </div>
             </>
           )}
           {this.state.active === 5 && (
@@ -327,14 +359,20 @@ class ConnectionInfo extends Component {
                     update={this.update}
                     data={this.props.info}
                   />
-                  <button
-                    className="update-button"
-                    onClick={() => {
-                      this.handleUpdateButtonClick(5);
-                    }}
-                  >
-                    Update
-                  </button>
+                  <div className="row">
+                    <div className="col">
+                      <button
+                        className="update-button"
+                        onClick={() => {
+                          this.handleUpdateButtonClick(5);
+                        }}
+                      >
+                        Update
+                      </button>
+                      <br />
+                      <br />
+                    </div>
+                  </div>
                 </>
               )}
             </>

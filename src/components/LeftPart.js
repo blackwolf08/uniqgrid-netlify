@@ -52,6 +52,7 @@ class LeftPart extends Component {
     let shortName = "";
     if (typeof this.props.data !== "undefined") {
       let nameArr = this.props.data.name.split(" ");
+      nameArr.splice(0, 1);
       nameArr.forEach(e => {
         shortName += e[0].toUpperCase();
       });

@@ -15,6 +15,7 @@ class MyDevice extends Component {
       //JSON response from uniqgrid server
     ],
     deviceId: "",
+    devicesArr: [],
     isLoading: false,
     keys: [],
     selectValue: "Select Device",
@@ -66,7 +67,8 @@ class MyDevice extends Component {
   handleChange = e => {
     this.setState({
       isLoading: true,
-      default: false
+      default: false,
+      back: 1
     });
     this.setState({ selectValue: e.target.value });
     let endtime = moment().valueOf();
@@ -114,13 +116,13 @@ class MyDevice extends Component {
       typeOfGraph = "area";
     }
     if (this.state.selectedFilter === "week") {
-      typeOfGraph = "area";
+      typeOfGraph = "column";
     }
     if (this.state.selectedFilter === "month") {
-      typeOfGraph = "area";
+      typeOfGraph = "column";
     }
     if (this.state.selectedFilter === "year") {
-      typeOfGraph = "area";
+      typeOfGraph = "column";
     }
     let heading = this.state.selectValue.split("_");
     heading = heading.join(" ");
@@ -134,6 +136,7 @@ class MyDevice extends Component {
       data: [
         {
           type: typeOfGraph,
+          color: "orange",
           dataPoints: [...s]
         }
       ]
@@ -183,6 +186,15 @@ class MyDevice extends Component {
       });
       return s;
     }
+    if (this.state.selectedFilter === "year") {
+      let s = this.state.graphData.map(e => {
+        return {
+          label: moment(e.ts).format("MMM"),
+          y: e.value * 1
+        };
+      });
+      return s;
+    }
     let s = this.state.graphData.map(e => {
       return {
         label: moment(e.ts).format("MMM Do YY"),
@@ -194,10 +206,11 @@ class MyDevice extends Component {
 
   filterWeek = () => {
     this.setState({
-      selectedFilter: "week"
+      selectedFilter: "week",
+      back: 1
     });
     let startTime = moment()
-      .subtract(1, "weeks")
+      .startOf("isoWeek")
       .valueOf();
     this.setState({
       startTime
@@ -239,10 +252,11 @@ class MyDevice extends Component {
 
   filterMonth = () => {
     this.setState({
-      selectedFilter: "month"
+      selectedFilter: "month",
+      back: 1
     });
     let startTime = moment()
-      .subtract(1, "months")
+      .startOf("month")
       .valueOf();
     this.setState({
       startTime
@@ -287,7 +301,7 @@ class MyDevice extends Component {
       back: 1
     });
     let startTime = moment()
-      .subtract(1, "years")
+      .startOf("year")
       .valueOf();
     this.setState({
       startTime
@@ -420,7 +434,7 @@ class MyDevice extends Component {
           if (this.state.back === 1) {
             start_time = moment()
               .subtract(1, "week")
-              .startOf("week")
+              .startOf("isoWeek")
               .valueOf();
             end_time = start_time + 604800000;
             this.handleGraphChange(start_time, end_time, interval);
@@ -428,7 +442,7 @@ class MyDevice extends Component {
           if (this.state.back === 2) {
             start_time = moment()
               .subtract(2, "week")
-              .startOf("week")
+              .startOf("isoWeek")
               .valueOf();
             end_time = start_time + 604800000;
             this.handleGraphChange(start_time, end_time, interval);
@@ -436,7 +450,7 @@ class MyDevice extends Component {
           if (this.state.back === 3) {
             start_time = moment()
               .subtract(3, "week")
-              .startOf("week")
+              .startOf("isoWeek")
               .valueOf();
             end_time = start_time + 604800000;
             this.handleGraphChange(start_time, end_time, interval);
@@ -444,7 +458,7 @@ class MyDevice extends Component {
           if (this.state.back === 4) {
             start_time = moment()
               .subtract(4, "week")
-              .startOf("week")
+              .startOf("isoWeek")
               .valueOf();
             end_time = start_time + 604800000;
             this.handleGraphChange(start_time, end_time, interval);
@@ -586,7 +600,7 @@ class MyDevice extends Component {
         } else if (this.state.selectedFilter === "week") {
           if (this.state.back === 1) {
             start_time = moment()
-              .startOf("week")
+              .startOf("isoWeek")
               .valueOf();
             end_time = start_time + 604800000;
             this.handleGraphChange(start_time, end_time, interval);
@@ -594,7 +608,7 @@ class MyDevice extends Component {
           if (this.state.back === 2) {
             start_time = moment()
               .subtract(1, "week")
-              .startOf("week")
+              .startOf("isoWeek")
               .valueOf();
             end_time = start_time + 604800000;
             this.handleGraphChange(start_time, end_time, interval);
@@ -602,7 +616,7 @@ class MyDevice extends Component {
           if (this.state.back === 3) {
             start_time = moment()
               .subtract(2, "week")
-              .startOf("week")
+              .startOf("isoWeek")
               .valueOf();
             end_time = start_time + 604800000;
             this.handleGraphChange(start_time, end_time, interval);
@@ -610,7 +624,7 @@ class MyDevice extends Component {
           if (this.state.back === 4) {
             start_time = moment()
               .subtract(3, "week")
-              .startOf("week")
+              .startOf("isoWeek")
               .valueOf();
             end_time = start_time + 604800000;
             this.handleGraphChange(start_time, end_time, interval);
@@ -733,17 +747,19 @@ class MyDevice extends Component {
     });
   };
 
+  componentDidMount() {
+    this.setState({
+      devicesArr: this.props.devices
+    });
+  }
+
+  getConnectionList = () => {
+    return <DeviceList handleMethod={this.handleClick} key={uuid.v4()} />;
+  };
+
   render() {
     let CanvasJSChart = CanvasJSReact.CanvasJSChart;
-    const listOfConnections = this.state.connections.map(connection => {
-      return (
-        <DeviceList
-          handleMethod={this.handleClick}
-          key={uuid.v4()}
-          name={connection}
-        />
-      );
-    });
+    console.log(this.state.devicesArr);
 
     const listOfKeys = this.state.keys.map(key => {
       let keyValue = key;
@@ -764,7 +780,35 @@ class MyDevice extends Component {
           <h1 style={{ marginBottom: "20px" }} className="mysite-heading">
             My Devices
           </h1>
-          {listOfConnections}
+
+          <div className="mydevice-list">
+            <div
+              style={{
+                display: "flex",
+                paddingLeft: "10px",
+                paddingTop: "10px",
+                cursor: "pointer",
+                fontSize: "120%",
+                color: "#111111",
+                borderBottom: "2px solid #d3d3d3"
+              }}
+              className={"device-list " + this.state.selected}
+            >
+              <div className="my-col">
+                <p>Device Id</p>
+              </div>
+              <div className="my-col">
+                <p> </p>
+              </div>
+              <div className="my-col">
+                <p>Rated Capacity (kW)</p>
+              </div>
+              <div className="my-col">
+                <p>Device Type</p>
+              </div>
+            </div>
+          </div>
+          {this.getConnectionList()}
           <div className="my-device-graph">
             {this.state.deviceActivated && (
               <div className="filter">

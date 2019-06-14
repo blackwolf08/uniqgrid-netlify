@@ -12,6 +12,7 @@ export const fetchUserData = () => dispatch => {
     axios
       .get(URL, { headers: { header } })
       .then(res => {
+        console.log(res);
         dispatch({
           type: USERDATA,
           payload: res.data.data
@@ -21,6 +22,7 @@ export const fetchUserData = () => dispatch => {
             `https://cors-anywhere.herokuapp.com/http://portal.uniqgridcloud.com:8080/api/customer/${userId}`
           )
           .then(res => {
+            console.log(res);
             dispatch({
               type: CUSTOMERINFO,
               payload: res

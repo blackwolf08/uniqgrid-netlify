@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import logo from "../images/logo.png";
+import logo from "../images/logo.svg";
 import { logout } from "../actions/auth";
 import { fetchUserData } from "../actions/userData";
 import { connect } from "react-redux";
@@ -28,7 +28,7 @@ const style = {
   root: {
     height: "60px",
     width: "100%",
-    backgroundColor: "#f1f1f1",
+    backgroundColor: "rgb(38, 50, 56)",
     position: "fixed",
     top: 0
   }

@@ -5,6 +5,7 @@
   padding: 0;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
+  color: white;
 }
 
 .view::-webkit-scrollbar-track {
@@ -115,14 +116,17 @@ button {
 
 .navbar-logo-div {
   height: 100%;
+  background-color: rgb(38, 50, 56);
   width: 50%;
 }
 
 .navbar-logo {
   height: 100%;
-  width: 200px;
+  width: 250px;
 }
-
+.navbar-responsive-1 {
+  background-color: rgb(38, 50, 56);
+}
 .navbar-logout {
   padding-right: 20px;
   margin-top: 15px;
@@ -132,13 +136,15 @@ button {
 
 .navbar-logout p {
   float: right;
+  color: white;
 }
 
 .left-part {
   position: fixed;
   top: 60px;
+  box-shadow: 0 0 10px rgb(38, 50, 56);
   height: calc(100% - 60px);
-  background-color: #67809f;
+  background-color: rgb(38, 50, 56);
   width: 250px;
   -webkit-box-pack: start;
   -ms-flex-pack: start;
@@ -158,7 +164,7 @@ button {
   -ms-flex-align: center;
   align-items: center;
   width: 100%;
-  background-color: #67809f;
+  background-color: rgb(38, 50, 56);
   color: white;
   font-weight: 400;
   -webkit-transition: background-color 0.2s !important;
@@ -167,10 +173,10 @@ button {
 }
 
 .leftpart-menu:hover {
-  background-color: #34495e8a;
+  background-color: hsla(0, 0%, 100%, 0.15);
 }
 .leftpart-menu:active {
-  background-color: #34495e;
+  background-color: hsla(0, 0%, 100%, 0.15);
 }
 
 .circle {
@@ -194,17 +200,17 @@ button {
 
 .circle p {
   font-size: 200%;
-  color: #67809f;
+  color: rgb(38, 50, 56);
   margin-bottom: 0 !important;
 }
 
 .bg-active {
-  background-color: #34495e;
+  background-color: hsla(0, 0%, 100%, 0.15);
 }
 
 .view {
   position: fixed;
-  top: 80px;
+  top: 60px;
   left: 250px;
   width: calc(100% - 250px);
   height: calc(100% - 60px);
@@ -224,6 +230,13 @@ button {
   cursor: pointer;
 }
 
+.mysites-heading1 {
+  padding: 20px;
+  left: 30px;
+  top: -10px;
+  position: absolute;
+  z-index: 10000000;
+}
 .mysites-heading {
   padding: 20px;
 }
@@ -259,7 +272,7 @@ a {
 .feedback-form {
   height: 400px;
   width: 500px;
-  background-color: #34495e;
+  background-color: rgb(38, 50, 56);
   padding: 10px;
   border-radius: 10px;
   margin-top: -100px;
@@ -347,6 +360,7 @@ h4 {
 .connection-info-tabs {
   display: -webkit-box;
   display: -ms-flexbox;
+  margin-top: 20px;
   display: flex;
   -webkit-box-align: center;
   -ms-flex-align: center;
@@ -375,7 +389,7 @@ h4 {
 .connection-details,
 .local-generation,
 .solar-pv-generator {
-  padding: 50px;
+  padding: 20px;
 }
 
 .solar-pv-generator > p {
@@ -592,31 +606,38 @@ input:focus {
   background-color: #eee;
 }
 
+.mysites-connections {
+  margin-top: 10px;
+}
+
 .mysite-icons1 {
   height: 50px;
   width: 50px;
-  margin-left: 30px;
-  margin-top: -15px;
+  margin-top: -10px;
 }
 
 .mysite-icons2 {
   height: 50px;
-  width: 80px;
-  margin-left: 10px;
+  width: 50px;
   margin-top: -10px;
 }
 
 .update-button {
   padding: 1rem;
+  background-color: rgb(38, 50, 56);
+  color: white;
+  border-radius: 0.5rem;
   width: 100px;
-  position: absolute;
-  right: 0;
-  bottom: 100px;
-  transform: translate(-50%, 0);
+  margin-right: 0px;
+  transform: translate(-150%, 0);
+  margin-left: 100%;
+}
+.MuiButtonBase-root.MuiButton-root.MuiButton-contained.MuiButton-containedPrimary {
+  background-color: rgb(38, 50, 56) !important;
 }
 
 .circle-myprofile {
-  background-color: #67809f;
+  background-color: rgb(38, 50, 56);
   margin-left: calc(100% - 50%);
   transform: translate(-50%, 0);
 }
@@ -632,7 +653,6 @@ input:focus {
   display: none;
 }
 
-
 /* Extra small devices (portrait phones, less than 576px) */
 @media (max-width: 575.98px) {
   .left-part {
@@ -644,7 +664,15 @@ input:focus {
   }
   .connection-info-tabs {
     font-size: 0.72rem;
+    overflow: scroll;
+    width: 100vw;
   }
+  .connection-info-hero {
+    font-size: 0.72rem;
+    overflow: scroll;
+    width: 100vw;
+  }
+
   .address-details-input {
     min-width: 150px !important;
     max-width: 150px !important;
@@ -665,8 +693,7 @@ input:focus {
   }
 
   .update-button {
-    bottom: 50px;
-    right: 0px;
+    margin-left: 80%;
   }
 
   .solar-pv-generator > p {
@@ -681,18 +708,14 @@ input:focus {
     width: 90%;
   }
 
-  img.mysite-icons1{
-    margin: 0;
-    margin-top: -5px;
+  img.mysite-icons1 {
   }
-  img.mysite-icons2{
-    margin: 0;
-    margin-left: -20px;
+  img.mysite-icons2 {
   }
-  .mysites-heading{
+  .mysites-heading {
     font-size: 2rem;
   }
-  .filter-button{
+  .filter-button {
     width: 50vw;
     margin: 10px;
     margin-left: 60px;
@@ -704,11 +727,10 @@ input:focus {
     display: block;
     height: 60px;
   }
-  .navbar{
+  .navbar {
     height: 60px !important;
   }
-  .mr-auto.navbar-brand
-  {
+  .mr-auto.navbar-brand {
     height: 60px !important;
     width: 100px !important;
   }
@@ -724,7 +746,7 @@ input:focus {
   .collapse {
     z-index: 100000;
   }
-  .collapse > ul{
+  .collapse > ul {
     background-color: #eee;
     opacity: 1;
     z-index: 10000;
@@ -735,11 +757,11 @@ input:focus {
     padding-top: 30px;
     padding-bottom: 10px;
   }
-  .feedback-form{
+  .feedback-form {
     width: 80vw;
     height: 40vh;
   }
-  .feedback-form-heading{
+  .feedback-form-heading {
     font-size: 2rem;
   }
 }

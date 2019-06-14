@@ -2,8 +2,8 @@ import React, { Component } from "react";
 import Connection from "./Connection";
 import { Helmet } from "react-helmet";
 import axios from "axios";
-import icon1 from "../images/icon1.png";
-import icon2 from "../images/icon2.png";
+import icon1 from "../images/icon1.svg";
+import icon2 from "../images/icon2.svg";
 import jwtDecode from "jwt-decode";
 import { Link } from "react-router-dom";
 
@@ -205,7 +205,7 @@ const styles = {
     right: "20px",
     padding: "20px",
     borderRadius: "50%",
-    backgroundColor: "#67809f",
+    backgroundColor: "rgb(38, 50, 56)",
     width: "50px",
     height: "50px",
     display: "flex",
