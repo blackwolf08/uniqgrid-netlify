@@ -1,5 +1,6 @@
 import { apiCall, setTokenHeader } from "../services/api";
 import { SET_CURRENT_USER, ERROR } from "../actions/types";
+import { fetchUserData } from "./userData";
 export function setCurrentUser(user) {
   return {
     type: SET_CURRENT_USER,
@@ -15,6 +16,7 @@ export function logout() {
   return dispatch => {
     localStorage.clear();
     setAuthorizationToken(false);
+    //window.location.reload();
     dispatch(setCurrentUser({}));
   };
 }
@@ -34,6 +36,7 @@ export function authUser(type, userData) {
           localStorage.setItem("refreshToken", res.refreshToken);
           setAuthorizationToken(res.token);
           dispatch(setCurrentUser(res.token));
+          fetchUserData();
           resolve();
         })
         .catch(err => {

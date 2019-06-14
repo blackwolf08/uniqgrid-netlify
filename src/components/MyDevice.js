@@ -7,6 +7,7 @@ import { connect } from "react-redux";
 import Spinner from "../images";
 import CanvasJSReact from "../lib/canvasjs.react";
 import moment from "moment";
+import { fetchUserData } from "../actions/userData";
 
 class MyDevice extends Component {
   state = {
@@ -751,6 +752,7 @@ class MyDevice extends Component {
     this.setState({
       devicesArr: this.props.devices
     });
+    //this.props.fetchUserData();
   }
 
   getConnectionList = () => {
@@ -930,4 +932,7 @@ const mapSateToProps = state => ({
   connectionName: state.connectionInfo.data
 });
 
-export default connect(mapSateToProps)(MyDevice);
+export default connect(
+  mapSateToProps,
+  { fetchUserData }
+)(MyDevice);

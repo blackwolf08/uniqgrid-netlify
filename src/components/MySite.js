@@ -6,8 +6,10 @@ import icon1 from "../images/icon1.svg";
 import icon2 from "../images/icon2.svg";
 import jwtDecode from "jwt-decode";
 import { Link } from "react-router-dom";
+import { fetchUserData } from "../actions/userData";
+import { connect } from "react-redux";
 
-export default class MySite extends Component {
+class MySite extends Component {
   state = {
     maxConnections: 0,
     kWASite: {},
@@ -20,6 +22,7 @@ export default class MySite extends Component {
   componentWillMount() {
     // this full piece of code executes to get the keys from te object we get from the API and processes the raw data into a more feature rich text
     if (typeof localStorage.jwtToken !== "undefined") {
+      this.props.fetchUserData();
       let jwt = localStorage.jwtToken;
       jwt = jwtDecode(jwt);
       const URL = `https://cors-anywhere.herokuapp.com/https://api.hubapi.com/contacts/v1/contact/email/${
@@ -218,3 +221,8 @@ const styles = {
     justifyContent: "center"
   }
 };
+
+export default connect(
+  null,
+  { fetchUserData }
+)(MySite);
