@@ -5,7 +5,6 @@
   padding: 0;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
-  color: white;
 }
 
 .view::-webkit-scrollbar-track {
@@ -126,6 +125,7 @@ button {
 }
 .navbar-responsive-1 {
   background-color: rgb(38, 50, 56);
+  box-shadow: 0 0 10px black;
 }
 .navbar-logout {
   padding-right: 20px;
@@ -159,7 +159,8 @@ button {
   display: flex;
   -webkit-box-pack: center;
   -ms-flex-pack: center;
-  justify-content: center;
+  justify-content: flex-start;
+  padding-left: 10px;
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
@@ -634,6 +635,7 @@ input:focus {
 }
 .MuiButtonBase-root.MuiButton-root.MuiButton-contained.MuiButton-containedPrimary {
   background-color: rgb(38, 50, 56) !important;
+  color: white;
 }
 
 .circle-myprofile {
@@ -651,6 +653,12 @@ input:focus {
 
 .navbar-responsive-2 {
   display: none;
+}
+
+i {
+  color: white;
+  padding-right: 10px;
+  width: 40px;
 }
 
 /* Extra small devices (portrait phones, less than 576px) */

@@ -67,28 +67,36 @@ class LeftPart extends Component {
           className="link-p"
           to="/dashboard/my-sites"
         >
-          <button className={this.state.mysite}>My Site</button>
+          <button className={this.state.mysite}>
+            <i class="fas fa-house-damage" /> My Site
+          </button>
         </Link>
         <Link
           style={{ width: "100%" }}
           className="link-p"
           to="/dashboard/my-device"
         >
-          <button className={this.state.mydevice}>My Device</button>
+          <button className={this.state.mydevice}>
+            <i class="fas fa-mobile-alt" /> My Device
+          </button>
         </Link>
         <Link
           style={{ width: "100%" }}
           className="link-p"
           to="/dashboard/my-requests"
         >
-          <button className={this.state.myrequests}>My Requests</button>
+          <button className={this.state.myrequests}>
+            <i class="fas fa-ticket-alt" /> My Requests
+          </button>
         </Link>
         <Link
           style={{ width: "100%" }}
           className="link-p"
           to="/dashboard/feedback"
         >
-          <button className={this.state.feedback}>FeedBack</button>
+          <button className={this.state.feedback}>
+            <i class="fas fa-star" /> FeedBack
+          </button>
         </Link>
 
         <Link
@@ -96,7 +104,9 @@ class LeftPart extends Component {
           className="link-p"
           to="/dashboard/my-profile"
         >
-          <button className={this.state.myprofile}>My Profile</button>
+          <button className={this.state.myprofile}>
+            <i class="fas fa-user" /> My Profile
+          </button>
         </Link>
       </div>
     );

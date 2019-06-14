@@ -74,7 +74,6 @@ class MyRequests extends Component {
           arrayOfStrings.sort();
           // name of sites are stored in the array
           arrayOfStrings.forEach(site => {
-            console.log(site);
             if (
               site.search("electricity_connection_name") >= 0 &&
               properties[site].value !== ""
@@ -116,7 +115,6 @@ class MyRequests extends Component {
     this.setState({
       [e.target.name]: e.target.value
     });
-    console.log(e.target.id, e.target);
     this.setState({
       nameOfSite: e.target.id
     });
@@ -166,7 +164,6 @@ class MyRequests extends Component {
         } else {
           ticketToCheck = `tickets_site${id}_`;
         }
-        console.log(ticketToCheck);
         Object.keys(properties).forEach(key => {
           if (key.search(ticketToCheck) >= 0) {
             this.setState({
@@ -201,12 +198,7 @@ class MyRequests extends Component {
     this.setState({
       spinner: true
     });
-    console.log(
-      this.state.email,
-      this.state.site,
-      this.state.device,
-      this.state.content
-    );
+
     //obj is the object created to be sent to API and in response we get back a ticket number
     let obj = [
       { name: "email", value: `${this.state.email}` },
@@ -236,7 +228,6 @@ class MyRequests extends Component {
         //redirecting to my-requests page
 
         let objToSend = {};
-        console.log(res.data);
         objToSend["objectId"] = res.data.objectId;
         objToSend["content"] = res.data.properties.content.value;
         objToSend["createdAt"] = res.data.properties.createdate.value;
@@ -260,7 +251,6 @@ class MyRequests extends Component {
               vid: res.data.vid
             });
             const properties = res.data.properties;
-            console.log(properties);
             let site = this.state.site;
             let id = site.charAt(site.length - 1);
             let nanCheck = isNaN(parseInt(id, 10));
@@ -270,7 +260,6 @@ class MyRequests extends Component {
             } else {
               ticketToCheck = `tickets_site${id}_`;
             }
-            console.log(ticketToCheck, properties);
             Object.keys(properties).forEach(key => {
               if (key.search(ticketToCheck) >= 0) {
                 this.setState({
@@ -286,14 +275,11 @@ class MyRequests extends Component {
             }
 
             let objRec = this.state.recievedObj;
-            console.log("before1", objRec);
 
             objRec = JSON.parse(objRec);
-            console.log("before", objRec);
             if (!Array.isArray(objRec)) {
               objRec = [];
             }
-            console.log("after", objRec);
 
             let ticketArray = [];
             objRec.forEach(ticket => {
@@ -303,7 +289,6 @@ class MyRequests extends Component {
             ticketArray.forEach(ticket => {
               arrToSend.push(ticket);
             });
-            console.log("arr", arrToSend);
 
             axios({
               url: `https://cors-anywhere.herokuapp.com/https://api.hubapi.com/contacts/v1/contact/vid/${

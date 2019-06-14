@@ -855,12 +855,12 @@ class MyDevice extends Component {
                         style={{
                           position: "absolute",
                           left: "0",
-                          fontSize: "200%",
+                          fontSize: "150%",
                           backgroundColor: "white"
                         }}
                       >
                         <i className="fas fa-arrow-left" />
-                        <span style={{ fontSize: "100%" }}>
+                        <span style={{}}>
                           {" "}
                           Previos {this.state.selectedFilter}
                         </span>
@@ -872,11 +872,11 @@ class MyDevice extends Component {
                         style={{
                           position: "absolute",
                           right: "0",
-                          fontSize: "200%",
+                          fontSize: "150%",
                           backgroundColor: "white"
                         }}
                       >
-                        <span style={{ fontSize: "100%" }}>
+                        <span style={{}}>
                           Next {this.state.selectedFilter}{" "}
                         </span>
                         <i className="fas fa-arrow-right" />
