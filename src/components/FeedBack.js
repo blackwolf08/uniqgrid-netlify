@@ -103,12 +103,11 @@ class FeedBack extends Component {
           isSubmitted: !this.state.isSubmitted
         });
       })
-      .catch(res=>{
-        if(res.status === 401)
-                {
-                  localStorage.clear();
-                window.location.href = "/login";
-                }
+      .catch(res => {
+        if (res.status === 401) {
+          localStorage.clear();
+          window.location.href = "/login";
+        }
       });
   };
 
@@ -118,7 +117,9 @@ class FeedBack extends Component {
         <Helmet>
           <title>FeedBack</title>
         </Helmet>
-        <h1 className="mysites-heading">FeedBack</h1>
+        <h1 className="mysites-heading">
+          <i className="fas fa-star icon-heading" /> FeedBack
+        </h1>
         <div className="feedback-hero flex">
           <div className="feedback-form">
             {!this.state.isSubmitted && (

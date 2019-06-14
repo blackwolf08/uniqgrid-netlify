@@ -403,7 +403,9 @@ class MyRequests extends Component {
           {this.state.ready && (
             // this section is basically the table with tickets
             <>
-              <h1 className="mysites-heading">My Requests</h1>
+              <h1 className="mysites-heading">
+                <i className="fas fa-ticket-alt icon-heading" /> My Requests
+              </h1>
               <div className="myrequest-hero">
                 {!this.state.newTicket && (
                   <>

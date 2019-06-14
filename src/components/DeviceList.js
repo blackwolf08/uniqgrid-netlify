@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import axios from "axios";
 
 class DeviceList extends Component {
   state = {
@@ -60,7 +59,7 @@ class DeviceList extends Component {
             <p>{power}</p>
           </div>
           <div className="my-col ">
-            <p>{this.props.type || "Monitor"}</p>
+            <p>{device.type || "Monitor"}</p>
           </div>
         </div>
       );

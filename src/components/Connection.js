@@ -19,7 +19,10 @@ export default class Connection extends Component {
       <Link to={redirect}>
         <div className="mysites-connections" onClick={this.handleClick}>
           <div className="my-col">
-            <p>{name}</p>
+            <p>
+              <i style={{ color: "black" }} className="fas fa-warehouse" />{" "}
+              {name}
+            </p>
           </div>
           <div className="my-col">
             <p>
@@ -37,7 +40,8 @@ export default class Connection extends Component {
             className="my-col mysites-icons"
             style={{ display: "flex", justifyContent: "space-around" }}
           >
-            <i className="far fa-chart-bar" /> <i className="fas fa-cog" />
+            <i className="far fa-chart-bar" style={{ color: "black" }} />{" "}
+            <i style={{ color: "black" }} className="fas fa-cog" />
           </div>
         </div>
       </Link>

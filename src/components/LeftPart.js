@@ -68,7 +68,7 @@ class LeftPart extends Component {
           to="/dashboard/my-sites"
         >
           <button className={this.state.mysite}>
-            <i class="fas fa-house-damage" /> My Site
+            <i className="fas fa-house-damage" /> My Site
           </button>
         </Link>
         <Link
@@ -77,7 +77,7 @@ class LeftPart extends Component {
           to="/dashboard/my-device"
         >
           <button className={this.state.mydevice}>
-            <i class="fas fa-mobile-alt" /> My Device
+            <i className="fas fa-mobile-alt" /> My Device
           </button>
         </Link>
         <Link
@@ -86,7 +86,7 @@ class LeftPart extends Component {
           to="/dashboard/my-requests"
         >
           <button className={this.state.myrequests}>
-            <i class="fas fa-ticket-alt" /> My Requests
+            <i className="fas fa-ticket-alt" /> My Requests
           </button>
         </Link>
         <Link
@@ -95,7 +95,7 @@ class LeftPart extends Component {
           to="/dashboard/feedback"
         >
           <button className={this.state.feedback}>
-            <i class="fas fa-star" /> FeedBack
+            <i className="fas fa-star" /> FeedBack
           </button>
         </Link>
 
@@ -105,7 +105,7 @@ class LeftPart extends Component {
           to="/dashboard/my-profile"
         >
           <button className={this.state.myprofile}>
-            <i class="fas fa-user" /> My Profile
+            <i className="fas fa-user" /> My Profile
           </button>
         </Link>
       </div>

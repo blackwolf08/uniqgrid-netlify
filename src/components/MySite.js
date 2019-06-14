@@ -167,7 +167,9 @@ export default class MySite extends Component {
         <Helmet>
           <title>My Site</title>
         </Helmet>
-        <h1 className="mysites-heading">My Sites</h1>
+        <h1 className="mysites-heading">
+          <i className="fas fa-house-damage icon-heading" /> My Sites
+        </h1>
         {this.state.ready && (
           <div className="mysites-connection-list">
             <div className="mysites-connections" onClick={this.handleClick}>
@@ -191,7 +193,10 @@ export default class MySite extends Component {
           </div>
         )}
         <Link to="/dashboard/new-connection" style={styles.buttonAdd}>
-          <i style={{ color: "white" }} className="fas fa-plus" />
+          <i
+            style={{ color: "white", margin: "0", padding: "0" }}
+            className="fas fa-plus"
+          />
         </Link>
       </div>
     );

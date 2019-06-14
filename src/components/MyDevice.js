@@ -778,7 +778,7 @@ class MyDevice extends Component {
         </Helmet>
         <div className="mydevice-hero">
           <h1 style={{ marginBottom: "20px" }} className="mysite-heading">
-            My Devices
+            <i className="fas fa-mobile-alt icon-heading" /> My Devices
           </h1>
 
           <div className="mydevice-list">
@@ -847,7 +847,8 @@ class MyDevice extends Component {
                 >
                   Year
                 </button>
-                <div className="row">
+                <br />
+                <div className="row" style={{ marginTop: "10px" }}>
                   <div className="col-sm-12 col flex">
                     <div style={{ width: "50%" }}>
                       <button
@@ -855,11 +856,14 @@ class MyDevice extends Component {
                         style={{
                           position: "absolute",
                           left: "0",
-                          fontSize: "150%",
+                          fontSize: "130%",
                           backgroundColor: "white"
                         }}
                       >
-                        <i className="fas fa-arrow-left" />
+                        <i
+                          style={{ color: "black" }}
+                          className="fas fa-arrow-left"
+                        />
                         <span style={{}}>
                           {" "}
                           Previos {this.state.selectedFilter}
@@ -872,14 +876,17 @@ class MyDevice extends Component {
                         style={{
                           position: "absolute",
                           right: "0",
-                          fontSize: "150%",
+                          fontSize: "130%",
                           backgroundColor: "white"
                         }}
                       >
                         <span style={{}}>
                           Next {this.state.selectedFilter}{" "}
                         </span>
-                        <i className="fas fa-arrow-right" />
+                        <i
+                          style={{ color: "black" }}
+                          className="fas fa-arrow-right"
+                        />
                       </button>
                     </div>
                   </div>
