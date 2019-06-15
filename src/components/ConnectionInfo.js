@@ -149,13 +149,11 @@ class ConnectionInfo extends Component {
         properties.push({ [key]: obj[key] });
         toSend.push({ property: key, value: obj[key] });
       });
-      console.log();
 
       this.setState({
         finalArray: toSend
       });
-      console.log(`{  "properties": ${JSON.stringify(toSend)}
-    }`);
+
       fetch(
         `https://cors-anywhere.herokuapp.com/https://api.hubapi.com/contacts/v1/contact/vid/${
           this.props.vid
@@ -184,7 +182,6 @@ class ConnectionInfo extends Component {
         let regex = new RegExp("^" + key, "i");
         if (key2.match(regex)) {
           let objToBePushed = { [key2]: value[key] };
-          console.log(objToBePushed);
           this.setState({
             bodyArray: [...this.state.bodyArray, objToBePushed]
           });

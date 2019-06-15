@@ -6,21 +6,25 @@ class MysiteMap extends Component {
   state = {
     lat: 28.41344,
     lng: 77.04237,
-    zoom: 17
+    zoom: 17,
+    data: {}
   };
 
-  componentDidMount() {
-    console.log(this.props.info);
-    if (this.props.keys) {
-      Object.keys(this.props.info).forEach(key => {
-        if (key.includes("gps")) {
-          console.log(this.props.info[key].value);
+  componentWillReceiveProps() {
+    this.setState({
+      data: this.props.data
+    });
+    if (this.state.data) {
+      Object.keys(this.state.data).forEach(key => {
+        if (key.match(/^gps.*$/)) {
           let data = this.props.info[key].value;
           data = data.split("/");
-          this.setState({
-            lng: data[1],
-            lat: data[0]
-          });
+          if (this.props.info[key].value.length >= 2) {
+            this.setState({
+              lng: data[1],
+              lat: data[0]
+            });
+          }
         }
       });
     }

@@ -273,9 +273,12 @@ a {
 .feedback-form {
   height: 400px;
   width: 500px;
-  background-color: rgb(38, 50, 56);
   padding: 10px;
   border-radius: 10px;
+  background-image: url("./images/feedback.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center center;
   margin-top: -100px;
   color: white;
   display: -webkit-box;
@@ -291,10 +294,15 @@ a {
   -webkit-box-pack: center;
   -ms-flex-pack: center;
   justify-content: center;
+  position: relative;
 }
 
 .feedback-form-heading {
+  position: absolute;
   padding: 20px 0;
+  top: -100px;
+  color: black;
+  display: none;
 }
 
 .feedback-form-stars {
@@ -302,6 +310,15 @@ a {
   margin-bottom: 20px;
   font-size: 200%;
   cursor: pointer;
+  position: absolute;
+  border-radius: 10px;
+  bottom: -100px;
+}
+.fas.fa-star {
+  color: #eee;
+}
+.fas.fa-star:hover {
+  color: gold;
 }
 
 .feedback-form-button {
@@ -311,6 +328,10 @@ a {
   color: #34495e;
   cursor: pointer;
   font-size: 110%;
+  position: absolute;
+  bottom: -130px;
+  background-color: rgb(38, 50, 56);
+  color: white;
 }
 
 .star-active {
@@ -612,15 +633,15 @@ input:focus {
 }
 
 .mysite-icons1 {
-  height: 50px;
-  width: 50px;
-  margin-top: -10px;
+  height: 30px;
+  width: 30px;
+  margin-top: 0px;
 }
 
 .mysite-icons2 {
-  height: 50px;
-  width: 50px;
-  margin-top: -10px;
+  height: 30px;
+  width: 30px;
+  margin-top: 0px;
 }
 
 .update-button {
@@ -664,6 +685,18 @@ i {
 .icon-heading {
   color: black;
   margin-right: 10px;
+}
+
+table,
+thead,
+tbody,
+tr,
+td {
+  border: none;
+}
+
+tr {
+  border-bottom: 1px solid #999999;
 }
 /* Extra small devices (portrait phones, less than 576px) */
 @media (max-width: 575.98px) {

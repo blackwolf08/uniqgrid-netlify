@@ -868,7 +868,7 @@ class MyDevice extends Component {
                         />
                         <span style={{}}>
                           {" "}
-                          Previos {this.state.selectedFilter}
+                          Previous {this.state.selectedFilter}
                         </span>
                       </button>
                     </div>

@@ -5,8 +5,8 @@ import Container from "@material-ui/core/Container";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import Spinner from "../images";
-import jwtDecode from 'jwt-decode'
-import axios from 'axios'
+import jwtDecode from "jwt-decode";
+import axios from "axios";
 
 class MyProfile extends Component {
   state = {
@@ -18,33 +18,35 @@ class MyProfile extends Component {
     spinner: false
   };
 
-  componentDidMount()
-  {
+  componentDidMount() {
     this.setState({
       spinner: true
-    })
-    if(localStorage.jwtToken)
-    {
-      let jwtToken = jwtDecode(localStorage.jwtToken)
-      axios.get(`https://cors-anywhere.herokuapp.com/https://api.hubapi.com/contacts/v1/contact/email/${jwtToken.sub}/profile?hapikey= bdcec428-e806-47ec-b7fd-ece8b03a870b`)
-      .then(res=>{
-        console.log(res)
-        this.setState({
-          firstname: res.data.properties.firstname.value,
-          email: res.data.properties.email.value,
-          mobilephone: res.data.properties.mobilephone.value,
-          spinner: false,
-          vid:  res.data.vid
+    });
+    if (localStorage.jwtToken) {
+      let jwtToken = jwtDecode(localStorage.jwtToken);
+      axios
+        .get(
+          `https://cors-anywhere.herokuapp.com/https://api.hubapi.com/contacts/v1/contact/email/${
+            jwtToken.sub
+          }/profile?hapikey= bdcec428-e806-47ec-b7fd-ece8b03a870b`
+        )
+        .then(res => {
+          console.log(res);
+          this.setState({
+            firstname: res.data.properties.firstname.value,
+            email: res.data.properties.email.value,
+            mobilephone: res.data.properties.mobilephone.value,
+            spinner: false,
+            vid: res.data.vid
+          });
         })
-      })
-      .catch(res=>{
-        if (res.status === 401) {
-          localStorage.clear();
-          window.location.href = "/login";
-        }
-      })
+        .catch(res => {
+          if (res.status === 401) {
+            localStorage.clear();
+            window.location.href = "/login";
+          }
+        });
     }
-    
   }
 
   handleSubmit = e => {
@@ -74,16 +76,16 @@ class MyProfile extends Component {
         this.state.vid
       }/profile?hapikey=bdcec428-e806-47ec-b7fd-ece8b03a870b`,
       method: "POST",
-      config: { 
+      config: {
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json"
         }
       },
-      data : obj
+      data: obj
     })
       .then(res => {
         //redirecting to my-requests page
-       window.location.reload();
+        window.location.reload();
       })
       .catch(res => {
         if (res.status === 401) {
@@ -110,6 +112,7 @@ class MyProfile extends Component {
     let shortName = "";
     if (typeof this.props.data !== "undefined") {
       let nameArr = this.props.data.name.split(" ");
+      nameArr.splice(0, 1);
       nameArr.forEach(e => {
         shortName += e[0].toUpperCase();
       });

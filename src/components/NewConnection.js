@@ -7,6 +7,7 @@ import csc from "country-state-city";
 import uuid from "uuid";
 import axios from "axios";
 import jwtDecode from "jwt-decode";
+import NewConnectionMap from "./NewConnectionMap";
 
 class NewConnection extends Component {
   state = {
@@ -28,7 +29,9 @@ class NewConnection extends Component {
     electricity_connection_name: "",
     segment: "",
     sub_segment: "",
-    vid: ""
+    vid: "",
+    lat: "",
+    lon: ""
   };
 
   handleTabChange = tab => {
@@ -134,6 +137,18 @@ class NewConnection extends Component {
         ready: true
       });
     }
+    if (navigator.geolocation) {
+      let lat, lon;
+      let pos = res => {
+        lat = res.coords.latitude;
+        lon = res.coords.longitude;
+        this.setState({
+          lat,
+          lon
+        });
+      };
+      navigator.geolocation.getCurrentPosition(pos);
+    }
   }
   handleSelectChange = e => {
     this.setState({
@@ -198,6 +213,10 @@ class NewConnection extends Component {
           {
             property: `zip`,
             value: `${this.state.postal}`
+          },
+          {
+            property: "gps_coordinate",
+            value: `${this.state.lat}/${this.state.lon}`
           }
         ];
 
@@ -212,7 +231,7 @@ class NewConnection extends Component {
           }
         )
           .then(res => {
-            window.location.reload();
+            window.location.href = "/dashboard/my-sites";
           })
           .catch(res => {
             if (res.status === 401) {
@@ -254,6 +273,10 @@ class NewConnection extends Component {
           {
             property: `postal_code_site_${newId}_`,
             value: `${this.state.postal}`
+          },
+          {
+            property: `gps_coordinate_site${newId}_`,
+            value: `${this.state.lat}/${this.state.lon}`
           }
         ];
 
@@ -268,7 +291,7 @@ class NewConnection extends Component {
           }
         )
           .then(res => {
-            window.location.reload();
+            window.location.href = "/dashboard/my-sites";
           })
           .catch(res => {
             if (res.status === 401) {
@@ -311,9 +334,14 @@ class NewConnection extends Component {
         <Helmet>
           <title>{`New Connection`}</title>
         </Helmet>
-        <h1 className="mysites-heading">
-          {this.state.name || this.state.defaultName}
-        </h1>
+        {this.state.lon && this.state.lat && (
+          <NewConnectionMap
+            className="flex"
+            style={{ width: "80%", height: "300px", margin: "0 auto" }}
+            lat={this.state.lat}
+            lon={this.state.lon}
+          />
+        )}
         <div className="connection-info-hero">
           <div className="connection-info-tabs" style={{ cursor: "pointer" }}>
             <div

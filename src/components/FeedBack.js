@@ -115,10 +115,11 @@ class FeedBack extends Component {
     return (
       <div className="feedback-root">
         <Helmet>
-          <title>FeedBack</title>
+          <title>Feedback</title>
         </Helmet>
         <h1 className="mysites-heading">
-          <i className="fas fa-star icon-heading" /> FeedBack
+          <i style={{ color: "black" }} className="fas fa-star icon-heading" />{" "}
+          Feedback
         </h1>
         <div className="feedback-hero flex">
           <div className="feedback-form">
