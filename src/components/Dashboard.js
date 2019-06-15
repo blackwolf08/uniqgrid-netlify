@@ -14,6 +14,7 @@ import Spinner from "../images/index";
 import { refreshUser } from "../actions/auth";
 import NavBarResponsive from "./NavBarResponsive";
 import NewConnection from "./NewConnection";
+import Charts from "./Charts";
 
 //this is the parent component of all the logged in stuff
 
@@ -83,6 +84,11 @@ class Dashboard extends Component {
               key="my-sites/:id"
               path="/dashboard/my-sites/:id"
               render={props => <ConnectionInfo {...props} />}
+            />
+            <Route
+              key="my-sites/:id"
+              path="/dashboard/my-sites/:id"
+              render={props => <Charts {...props} />}
             />
           </Switch>
         </div>

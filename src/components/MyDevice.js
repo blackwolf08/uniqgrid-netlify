@@ -442,7 +442,7 @@ class MyDevice extends Component {
           }
           if (this.state.back === 2) {
             start_time = moment()
-              .subtract(2, "week")
+              .subtract(1, "week")
               .startOf("isoWeek")
               .valueOf();
             end_time = start_time + 604800000;
@@ -450,7 +450,7 @@ class MyDevice extends Component {
           }
           if (this.state.back === 3) {
             start_time = moment()
-              .subtract(3, "week")
+              .subtract(2, "week")
               .startOf("isoWeek")
               .valueOf();
             end_time = start_time + 604800000;
@@ -458,7 +458,7 @@ class MyDevice extends Component {
           }
           if (this.state.back === 4) {
             start_time = moment()
-              .subtract(4, "week")
+              .subtract(3, "week")
               .startOf("isoWeek")
               .valueOf();
             end_time = start_time + 604800000;
@@ -545,162 +545,164 @@ class MyDevice extends Component {
     this.setState({
       back: this.state.back - 1
     });
-    if (this.state.back >= 0 && this.state.back <= 4) {
-      if (this.state.back <= 1) {
-        this.setState({
-          back: 1
-        });
-      }
+    setTimeout(() => {
       if (this.state.back >= 0 && this.state.back <= 4) {
-        let start_time, end_time, interval;
-
-        if (this.state.selectedFilter === "day") {
-          interval = 900000;
-        }
-        if (this.state.selectedFilter === "week") {
-          interval = 10800000;
-        }
-        if (this.state.selectedFilter === "month") {
-          interval = 86400000;
-        }
-        if (this.state.selectedFilter === "year") {
-          interval = 86400000;
-        }
-        if (this.state.selectedFilter === "day") {
-          if (this.state.back === 1) {
-            start_time = moment()
-              .startOf("day")
-              .valueOf();
-            end_time = moment().valueOf();
-            this.handleGraphChange(start_time, end_time, interval);
-          }
-          if (this.state.back === 2) {
-            start_time = moment()
-              .subtract(1, "days")
-              .startOf("day")
-              .valueOf();
-            end_time = start_time + 86400000;
-            this.handleGraphChange(start_time, end_time, interval);
-          }
-          if (this.state.back === 3) {
-            start_time = moment()
-              .subtract(2, "days")
-              .startOf("day")
-              .valueOf();
-            end_time = start_time + 86400000;
-            this.handleGraphChange(start_time, end_time, interval);
-          }
-          if (this.state.back === 4) {
-            start_time = moment()
-              .subtract(3, "days")
-              .startOf("day")
-              .valueOf();
-            end_time = start_time + 86400000;
-            this.handleGraphChange(start_time, end_time, interval);
-          }
-        } else if (this.state.selectedFilter === "week") {
-          if (this.state.back === 1) {
-            start_time = moment()
-              .startOf("isoWeek")
-              .valueOf();
-            end_time = start_time + 604800000;
-            this.handleGraphChange(start_time, end_time, interval);
-          }
-          if (this.state.back === 2) {
-            start_time = moment()
-              .subtract(1, "week")
-              .startOf("isoWeek")
-              .valueOf();
-            end_time = start_time + 604800000;
-            this.handleGraphChange(start_time, end_time, interval);
-          }
-          if (this.state.back === 3) {
-            start_time = moment()
-              .subtract(2, "week")
-              .startOf("isoWeek")
-              .valueOf();
-            end_time = start_time + 604800000;
-            this.handleGraphChange(start_time, end_time, interval);
-          }
-          if (this.state.back === 4) {
-            start_time = moment()
-              .subtract(3, "week")
-              .startOf("isoWeek")
-              .valueOf();
-            end_time = start_time + 604800000;
-            this.handleGraphChange(start_time, end_time, interval);
-          }
-        } else if (this.state.selectedFilter === "month") {
-          if (this.state.back === 1) {
-            start_time = moment()
-              .startOf("month")
-              .valueOf();
-            end_time = start_time + 2628000000;
-            this.handleGraphChange(start_time, end_time, interval);
-          }
-          if (this.state.back === 2) {
-            start_time = moment()
-              .subtract(1, "month")
-              .startOf("month")
-              .valueOf();
-            end_time = start_time + 2628000000;
-            this.handleGraphChange(start_time, end_time, interval);
-          }
-          if (this.state.back === 3) {
-            start_time = moment()
-              .subtract(2, "month")
-              .startOf("month")
-              .valueOf();
-            end_time = start_time + 2628000000;
-            this.handleGraphChange(start_time, end_time, interval);
-          }
-          if (this.state.back === 4) {
-            start_time = moment()
-              .subtract(3, "month")
-              .startOf("month")
-              .valueOf();
-            end_time = start_time + 2628000000;
-            this.handleGraphChange(start_time, end_time, interval);
-          }
-        } else if (this.state.selectedFilter === "year") {
-          if (this.state.back === 1) {
-            start_time = moment()
-              .startOf("year")
-              .valueOf();
-            end_time = start_time + 31536000000;
-            this.handleGraphChange(start_time, end_time, interval);
-          }
-          if (this.state.back === 2) {
-            start_time = moment()
-              .subtract(1, "year")
-              .startOf("year")
-              .valueOf();
-            end_time = start_time + 31536000000;
-            this.handleGraphChange(start_time, end_time, interval);
-          }
-          if (this.state.back === 3) {
-            start_time = moment()
-              .subtract(2, "year")
-              .startOf("year")
-              .valueOf();
-            end_time = start_time + 31536000000;
-            this.handleGraphChange(start_time, end_time, interval);
-          }
-          if (this.state.back === 4) {
-            start_time = moment()
-              .subtract(3, "year")
-              .startOf("year")
-              .valueOf();
-            end_time = start_time + 31536000000;
-            this.handleGraphChange(start_time, end_time, interval);
-          }
-        } else {
+        if (this.state.back <= 1) {
           this.setState({
             back: 1
           });
         }
+        if (this.state.back >= 0 && this.state.back <= 4) {
+          let start_time, end_time, interval;
+          console.log(this.state.back);
+          if (this.state.selectedFilter === "day") {
+            interval = 900000;
+          }
+          if (this.state.selectedFilter === "week") {
+            interval = 10800000;
+          }
+          if (this.state.selectedFilter === "month") {
+            interval = 86400000;
+          }
+          if (this.state.selectedFilter === "year") {
+            interval = 86400000;
+          }
+          if (this.state.selectedFilter === "day") {
+            if (this.state.back === 1) {
+              start_time = moment()
+                .startOf("day")
+                .valueOf();
+              end_time = moment().valueOf();
+              this.handleGraphChange(start_time, end_time, interval);
+            }
+            if (this.state.back === 2) {
+              start_time = moment()
+                .subtract(1, "days")
+                .startOf("day")
+                .valueOf();
+              end_time = start_time + 86400000;
+              this.handleGraphChange(start_time, end_time, interval);
+            }
+            if (this.state.back === 3) {
+              start_time = moment()
+                .subtract(2, "days")
+                .startOf("day")
+                .valueOf();
+              end_time = start_time + 86400000;
+              this.handleGraphChange(start_time, end_time, interval);
+            }
+            if (this.state.back === 4) {
+              start_time = moment()
+                .subtract(3, "days")
+                .startOf("day")
+                .valueOf();
+              end_time = start_time + 86400000;
+              this.handleGraphChange(start_time, end_time, interval);
+            }
+          } else if (this.state.selectedFilter === "week") {
+            if (this.state.back === 1) {
+              start_time = moment()
+                .startOf("isoWeek")
+                .valueOf();
+              end_time = start_time + 604800000;
+              this.handleGraphChange(start_time, end_time, interval);
+            }
+            if (this.state.back === 2) {
+              start_time = moment()
+                .subtract(1, "week")
+                .startOf("isoWeek")
+                .valueOf();
+              end_time = start_time + 604800000;
+              this.handleGraphChange(start_time, end_time, interval);
+            }
+            if (this.state.back === 3) {
+              start_time = moment()
+                .subtract(2, "week")
+                .startOf("isoWeek")
+                .valueOf();
+              end_time = start_time + 604800000;
+              this.handleGraphChange(start_time, end_time, interval);
+            }
+            if (this.state.back === 4) {
+              start_time = moment()
+                .subtract(3, "week")
+                .startOf("isoWeek")
+                .valueOf();
+              end_time = start_time + 604800000;
+              this.handleGraphChange(start_time, end_time, interval);
+            }
+          } else if (this.state.selectedFilter === "month") {
+            if (this.state.back === 1) {
+              start_time = moment()
+                .startOf("month")
+                .valueOf();
+              end_time = start_time + 2628000000;
+              this.handleGraphChange(start_time, end_time, interval);
+            }
+            if (this.state.back === 2) {
+              start_time = moment()
+                .subtract(1, "month")
+                .startOf("month")
+                .valueOf();
+              end_time = start_time + 2628000000;
+              this.handleGraphChange(start_time, end_time, interval);
+            }
+            if (this.state.back === 3) {
+              start_time = moment()
+                .subtract(2, "month")
+                .startOf("month")
+                .valueOf();
+              end_time = start_time + 2628000000;
+              this.handleGraphChange(start_time, end_time, interval);
+            }
+            if (this.state.back === 4) {
+              start_time = moment()
+                .subtract(3, "month")
+                .startOf("month")
+                .valueOf();
+              end_time = start_time + 2628000000;
+              this.handleGraphChange(start_time, end_time, interval);
+            }
+          } else if (this.state.selectedFilter === "year") {
+            if (this.state.back === 1) {
+              start_time = moment()
+                .startOf("year")
+                .valueOf();
+              end_time = start_time + 31536000000;
+              this.handleGraphChange(start_time, end_time, interval);
+            }
+            if (this.state.back === 2) {
+              start_time = moment()
+                .subtract(1, "year")
+                .startOf("year")
+                .valueOf();
+              end_time = start_time + 31536000000;
+              this.handleGraphChange(start_time, end_time, interval);
+            }
+            if (this.state.back === 3) {
+              start_time = moment()
+                .subtract(2, "year")
+                .startOf("year")
+                .valueOf();
+              end_time = start_time + 31536000000;
+              this.handleGraphChange(start_time, end_time, interval);
+            }
+            if (this.state.back === 4) {
+              start_time = moment()
+                .subtract(3, "year")
+                .startOf("year")
+                .valueOf();
+              end_time = start_time + 31536000000;
+              this.handleGraphChange(start_time, end_time, interval);
+            }
+          } else {
+            this.setState({
+              back: 1
+            });
+          }
+        }
       }
-    }
+    }, 200);
   };
 
   filterDay = () => {
