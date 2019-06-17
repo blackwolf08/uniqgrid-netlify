@@ -815,6 +815,13 @@ tr {
   .res-nav.nav-item {
     background-color: rgb(38, 50, 56);
   }
+  .fas.fa-warehouse {
+    display: none;
+  }
+  .my-col {
+    overflow: auto;
+    width: 22%;
+  }
 }
 
 /* // Small devices (landscape phones, 576px and up) */
