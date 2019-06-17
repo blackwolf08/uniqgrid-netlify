@@ -15,6 +15,8 @@ class ConnectionDetails extends Component {
     this.setState({
       isLoading: true
     });
+
+    //check for different feilds in the keys of response
     Object.keys(this.props.data).forEach(key => {
       if (key.indexOf("connected") === 0) {
         this.setState({

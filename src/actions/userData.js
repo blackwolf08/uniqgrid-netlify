@@ -7,15 +7,18 @@ export const fetchUserData = () => dispatch => {
     const jwt = localStorage.jwtToken;
     const user = jwtDecode(localStorage.jwtToken);
     const userId = user.customerId;
+    //get device data from uniqgrid cloud
     const URL = `https://cors-anywhere.herokuapp.com/http://portal.uniqgridcloud.com:8080/api/customer/${userId}/devices?limit=10&textSearch=`;
     const header = `X-Authorization: Bearer ${jwt}`;
     axios
       .get(URL, { headers: { header } })
       .then(res => {
+        //save user/device data on redux store
         dispatch({
           type: USERDATA,
           payload: res.data.data
         });
+        //get user INFO
         axios
           .get(
             `https://cors-anywhere.herokuapp.com/http://portal.uniqgridcloud.com:8080/api/customer/${userId}`
@@ -25,6 +28,7 @@ export const fetchUserData = () => dispatch => {
               type: CUSTOMERINFO,
               payload: res
             });
+            //device types not required as of now
             axios
               .get(
                 `https://cors-anywhere.herokuapp.com/http://portal.uniqgridcloud.com:8080/api/device/types`

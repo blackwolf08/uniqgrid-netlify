@@ -16,6 +16,8 @@ class InstalledDevices extends Component {
     Object.keys(this.props.data).forEach(key => {
       if (key.match(/list/)) {
         if (this.props.data[key].value !== "") {
+          // replace any single quotes with double quotes for proper json parse
+          //get data from device_pool key in API
           let name = this.props.data[key].value.replace(/'/g, '"');
           JSON.parse(name);
           this.setState({
@@ -29,7 +31,6 @@ class InstalledDevices extends Component {
   handleChange = () => {};
 
   render() {
-    console.log(this.props.device_pool);
     let listOfDevices;
     let listOfPool;
 

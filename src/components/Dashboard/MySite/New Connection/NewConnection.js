@@ -34,6 +34,7 @@ class NewConnection extends Component {
     lon: ""
   };
 
+  //this method determines the border-bottom of the tabs
   handleTabChange = tab => {
     if (tab === "connection-details") {
       this.setState({
@@ -60,6 +61,7 @@ class NewConnection extends Component {
     if (typeof localStorage.jwtToken !== "undefined") {
       let jwt = localStorage.jwtToken;
       jwt = jwtDecode(jwt);
+      //get ViD id customer
       const URL = `https://cors-anywhere.herokuapp.com/https://api.hubapi.com/contacts/v1/contact/email/${
         jwt.sub
       }/profile?hapikey=bdcec428-e806-47ec-b7fd-ece8b03a870b`;
@@ -68,6 +70,7 @@ class NewConnection extends Component {
         .get(URL)
         .then(res => {
           const properties = res.data.properties;
+          //set vid
           this.setState({
             vid: res.data.vid
           });
@@ -137,7 +140,9 @@ class NewConnection extends Component {
         ready: true
       });
     }
+    //check if geoLocation is avaliable in device
     if (navigator.geolocation) {
+      //get the LAT, LONG of current position
       let lat, lon;
       let pos = res => {
         lat = res.coords.latitude;
@@ -147,9 +152,12 @@ class NewConnection extends Component {
           lon
         });
       };
+      //pos is function defined above
       navigator.geolocation.getCurrentPosition(pos);
     }
   }
+
+  //handle dropdown changes
   handleSelectChange = e => {
     this.setState({
       [e.target.name]: e.target.value
@@ -162,11 +170,15 @@ class NewConnection extends Component {
       cityReady: true
     });
   };
+
+  //handle country change and set states accordingly
   handleSelectChangeCity = e => {
     this.setState({
       [e.target.name]: e.target.value
     });
   };
+
+  //change on input feilds
   handleChange = e => {
     this.setState({
       [e.target.name]: e.target.value
@@ -180,11 +192,12 @@ class NewConnection extends Component {
     if (value === 2) {
       let objToSend;
 
+      //if the user has no sites, then run this code
       if (this.state.maxConnections === 0) {
         this.setState({
           enableSpinner: true
         });
-
+        //objToSend is the object to send
         objToSend = [
           {
             property: `electricity_connection_name`,
@@ -239,12 +252,16 @@ class NewConnection extends Component {
               window.location.href = "/login";
             }
           });
-      } else {
+      }
+
+      //if user has atleast one site, run this, get max connections and set new connection id to be max conn + 1
+      else {
         let newId = parseInt(this.state.maxConnections) + 1;
         this.setState({
           enableSpinner: true
         });
 
+        //define key values dynamically
         objToSend = [
           {
             property: `electricity_connection_name_site_${newId}_`,
@@ -280,6 +297,7 @@ class NewConnection extends Component {
           }
         ];
 
+        //send the object to server
         fetch(
           `https://cors-anywhere.herokuapp.com/https://api.hubapi.com/contacts/v1/contact/vid/${
             this.state.vid
@@ -304,12 +322,15 @@ class NewConnection extends Component {
   };
 
   render() {
+    //if loding then sipnners
     if (this.state.enableSpinner) {
       return <Spinner />;
     }
     if (this.state.isLoading) {
       return <Spinner />;
     }
+
+    //lists of states and sites returned as an option for select respectively
     const listOfStatesToRender = [];
     const listOfCitiesToRender = [];
     const listOfStates = csc.getStatesOfCountry("101");

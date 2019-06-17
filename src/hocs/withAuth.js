@@ -2,7 +2,9 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 
 export default function withAuth(ComponentToBeRendered) {
+  // Component to be rendered inputs Component
   class Authenticate extends Component {
+    // All the components and methods are self intutive
     componentWillMount() {
       if (!this.props.isAuthenticated) {
         this.props.history.push("/login");

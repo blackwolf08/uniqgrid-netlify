@@ -812,6 +812,9 @@ tr {
   .feedback-form-heading {
     font-size: 2rem;
   }
+  .res-nav.nav-item {
+    background-color: rgb(38, 50, 56);
+  }
 }
 
 /* // Small devices (landscape phones, 576px and up) */

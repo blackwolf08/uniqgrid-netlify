@@ -3,6 +3,7 @@ import { Map, TileLayer, Marker, Popup } from "react-leaflet";
 import { connect } from "react-redux";
 
 class MysiteMap extends Component {
+  // Default Lat & Long is Spaze i-Tech park, change here if you want to set diff location default
   state = {
     lat: 28.41344,
     lng: 77.04237,
@@ -33,6 +34,7 @@ class MysiteMap extends Component {
   render() {
     const position = [this.state.lat, this.state.lng];
     return (
+      // set custom height and with of map
       <div style={{ margin: "0 auto", width: "100%", height: "300px" }}>
         <Map
           style={{ margin: "0 auto", width: "100%", height: "300px" }}
@@ -41,7 +43,7 @@ class MysiteMap extends Component {
         >
           <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
           <Marker position={position}>
-            <Popup>Your Location.</Popup>
+            <Popup>Your Location</Popup>
           </Marker>
         </Map>
       </div>

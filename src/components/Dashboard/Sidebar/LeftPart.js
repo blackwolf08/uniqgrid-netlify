@@ -16,6 +16,7 @@ class LeftPart extends Component {
     this.changeHighlighted();
   }
 
+  //change according to the highlighted component
   changeHighlighted = () => {
     let url = window.location.href;
     url = url.split("/");

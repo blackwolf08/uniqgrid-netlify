@@ -7,7 +7,7 @@ import {
   Nav,
   NavItem
 } from "reactstrap";
-import logo from "../../../images/logo.png";
+import logo from "../../../images/logo.svg";
 import { Link } from "react-router-dom";
 import { logout } from "../../../actions/auth";
 import { connect } from "react-redux";
@@ -36,7 +36,12 @@ class NavBarResponsive extends React.Component {
       <div className="navbar-responsive-2" style={{ zIndex: "1000" }}>
         <Navbar
           color="faded"
-          style={{ backgroundColor: "rgb(241,241,241)" }}
+          style={{
+            backgroundColor: "rgb(38, 50, 56)",
+            color: "white",
+            position: "absolute",
+            width: "100%"
+          }}
           light
         >
           <NavbarBrand href="/dashboard/my-sites" className="mr-auto">
@@ -46,7 +51,12 @@ class NavBarResponsive extends React.Component {
             onClick={this.toggleNavbar}
             className="mr-2 ham-burger"
           />
-          <Collapse className="collapse" isOpen={!this.state.collapsed} navbar>
+          <Collapse
+            style={{ color: "white", backgroundColor: "rgb(38, 50, 56)" }}
+            className="collapse"
+            isOpen={!this.state.collapsed}
+            navbar
+          >
             <Nav navbar>
               <Link to="/dashboard/my-sites">
                 <NavItem className="res-nav">My Sites</NavItem>

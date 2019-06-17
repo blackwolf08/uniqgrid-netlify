@@ -31,6 +31,8 @@ class AddressDetails extends Component {
       data: this.props.info
     });
     let name = "";
+
+    //get name of connection from keys
     Object.keys(this.state.data).forEach(key => {
       if (key.indexOf("connection") === 12) {
         name = this.state.data[key].value.toString();
@@ -39,6 +41,7 @@ class AddressDetails extends Component {
     this.setState({
       name
     });
+    //get city street state from the keys
     Object.keys(this.props.data).forEach(key => {
       if (key.indexOf("city") === 0) {
         // if (this.props.data[key].value.toString() === this.state.city) {
@@ -81,6 +84,8 @@ class AddressDetails extends Component {
     }, 100);
   }
 
+  //handle select change and handleChange() are same for all components
+
   handleChange = e => {
     this.setState({
       [e.target.name]: e.target.value
@@ -105,6 +110,8 @@ class AddressDetails extends Component {
       cityReady: true
     });
   };
+
+  //same as handle city change in NewConnections.js
   handleSelectChangeCity = e => {
     this.setState({
       [e.target.name]: e.target.value

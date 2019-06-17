@@ -1,5 +1,7 @@
 import { ERROR } from "../actions/types";
 
+// error reducer
+
 const DEFAULT_STATE = {
   err: ""
 };

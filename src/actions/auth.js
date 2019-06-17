@@ -21,6 +21,20 @@ export function logout() {
   };
 }
 
+//authUser is a redux function, takes dispatch as argument
+//userData is the Object which contains username and password that needs to be sent to backend for auth
+
+/*
+
+        !!!! --------- IMPORTANT ---------- !!!!
+
+        We are storing password for the user in LOCAL STORAGE beacuse of the issue with refresh tokens
+        this email and password are used to prevent user from logging out and sends req to server for new token
+        every 10 mins
+
+        
+      */
+
 export function authUser(type, userData) {
   return dispatch => {
     return new Promise((resolve, reject) => {
@@ -30,6 +44,8 @@ export function authUser(type, userData) {
         userData
       )
         .then(async res => {
+          //if successfull login set localstorages,
+          //we are stroing
           localStorage.setItem("email", userData.username);
           localStorage.setItem("password", userData.password);
           localStorage.setItem("jwtToken", res.token);
@@ -62,6 +78,7 @@ export const refreshUser = () => {
 };
 
 const ff = () => {
+  //apiCall is the function from /src/services/api.js which uses axios with proper headers
   apiCall(
     "post",
     "https://cors-anywhere.herokuapp.com/http://portal.uniqgridcloud.com:8080/api/auth/login",

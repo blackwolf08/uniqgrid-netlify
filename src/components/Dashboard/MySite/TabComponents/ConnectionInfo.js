@@ -10,6 +10,8 @@ import { connect } from "react-redux";
 import MysiteMap from "../MySite Maps/MysiteMap";
 import Spinner from "../../../../images/index";
 
+// this componets gets keys for a particular site based upon the site id we recieve from /dashboard/mysite/:id
+
 class ConnectionInfo extends Component {
   state = {
     id: 0,
@@ -39,17 +41,22 @@ class ConnectionInfo extends Component {
   };
 
   componentDidMount() {
+    //get dynaic id from site
     const {
       match: { params }
     } = this.props;
     const id = params.id;
+    //setter for id in state
     this.setState({
       id
     });
     this.props
       .fetchConnetionInfo(id)
       .then(res => {
+        //fetch connection info based upon the given id
         if (res) {
+          //if there is a response
+          //get data
           this.setState({
             data: this.props.info
           });
@@ -75,6 +82,7 @@ class ConnectionInfo extends Component {
       });
   }
 
+  //handle borders in te tabs
   handleTabChange = tab => {
     if (tab === "connection-details") {
       this.setState({
@@ -124,6 +132,8 @@ class ConnectionInfo extends Component {
     }
   };
 
+  //handle component mounting
+
   handleUpdateButtonClick = value => {
     if (value === 1) {
       this.handleTabChange("connection-details");
@@ -134,12 +144,14 @@ class ConnectionInfo extends Component {
     } else if (value === 4) {
       this.handleTabChange("installed-devices");
     } else if (value === 5) {
+      //this get called when the user clicks submit button
       this.setState({
         enableSpinner: true
       });
       let obj = {};
       let properties = [];
       let toSend = [];
+      //prepare the array we need to send to backend
       this.state.bodyArray.forEach(object => {
         Object.keys(object).forEach(key => {
           obj[key] = object[key];
@@ -149,11 +161,12 @@ class ConnectionInfo extends Component {
         properties.push({ [key]: obj[key] });
         toSend.push({ property: key, value: obj[key] });
       });
-
+      //console log finalArr to see the list of properties we need to update
       this.setState({
         finalArray: toSend
       });
 
+      //POST the JSON object
       fetch(
         `https://cors-anywhere.herokuapp.com/https://api.hubapi.com/contacts/v1/contact/vid/${
           this.props.vid
@@ -165,7 +178,8 @@ class ConnectionInfo extends Component {
         }
       )
         .then(res => {
-          window.location.reload();
+          //reload and refresh
+          window.location.href = `/dashboard/my-sites/${this.state.id}`;
         })
         .catch(res => {
           if (res.status === 401) {
@@ -179,6 +193,7 @@ class ConnectionInfo extends Component {
   handleChildrenChange = value => {
     Object.keys(value).forEach(key => {
       Object.keys(this.props.rawdatamapping).forEach(key2 => {
+        //mapping processed data from raw data, eg, mapping connection name with connection_name_site_:id_
         let regex = new RegExp("^" + key, "i");
         if (key2.match(regex)) {
           let objToBePushed = { [key2]: value[key] };
@@ -257,6 +272,7 @@ class ConnectionInfo extends Component {
           </div>
           {this.state.active === 1 && (
             <>
+              {/* address details component */}
               <AddressDetails
                 handleChildrenChange={this.handleChildrenChange}
                 update={this.update}
@@ -280,6 +296,7 @@ class ConnectionInfo extends Component {
           )}
           {this.state.active === 2 && (
             <>
+              {/* connection details component */}
               <ConnectionDetails
                 handleChildrenChange={this.handleChildrenChange}
                 update={this.update}
@@ -303,6 +320,7 @@ class ConnectionInfo extends Component {
           )}
           {this.state.active === 3 && (
             <>
+              {/* local generation component */}
               <LocalGeneration
                 handleChildrenChange={this.handleChildrenChange}
                 update={this.update}
@@ -326,6 +344,7 @@ class ConnectionInfo extends Component {
           )}
           {this.state.active === 4 && (
             <>
+              {/* solar power component */}
               <SolarPvGenerator
                 handleChildrenChange={this.handleChildrenChange}
                 update={this.update}
@@ -351,6 +370,7 @@ class ConnectionInfo extends Component {
             <>
               {!this.state.enableSpinner && (
                 <>
+                  {/* installed devices component */}
                   <InstalledDevices
                     handleChildrenChange={this.handleChildrenChange}
                     update={this.update}
