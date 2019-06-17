@@ -820,7 +820,16 @@ tr {
   }
   .my-col {
     overflow: auto;
-    width: 22%;
+  }
+  .mycol-5 {
+    overflow: auto;
+    width: 200px;
+  }
+  .connection-info-tabs {
+    width: 700px;
+  }
+  .update-button {
+    margin-left: 110%;
   }
 }
 

@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import { authUser } from "../actions/auth";
 import AuthLogin from "./Auth/AuthLogin";
 import Dashboard from "./Dashboard/Dashboard";
-import Check from "./Dashboard/Test/check";
+// import Check from "./Dashboard/Test/check";
 import ResetPassword from "./Auth/ResetPassword";
 
 // this components defines our routes and based upon the routes renders component
@@ -27,7 +27,7 @@ class RouteController extends Component {
         {/* Dashboard component */}
         <Route path="/dashboard" component={withAuth(Dashboard)} />
         {/* this check route is for development purposes only */}
-        <Route path="/check" component={Check} />
+        {/* <Route path="/check" component={Check} /> */}
       </Switch>
     );
   }

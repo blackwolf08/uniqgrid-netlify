@@ -85,6 +85,14 @@ class ConnectionInfo extends Component {
   //handle borders in te tabs
   handleTabChange = tab => {
     if (tab === "connection-details") {
+      if (window.innerWidth < 400) {
+        styles = {
+          tabs: {
+            cursor: "pointer",
+            transform: "translate(-60px,0)"
+          }
+        };
+      }
       this.setState({
         tab1: "",
         tab2: " connection-info-border",
@@ -94,6 +102,14 @@ class ConnectionInfo extends Component {
         active: 2
       });
     } else if (tab === "address-details") {
+      if (window.innerWidth < 400) {
+        styles = {
+          tabs: {
+            cursor: "pointer",
+            transform: "translate(0,0)"
+          }
+        };
+      }
       this.setState({
         tab1: " connection-info-border",
         tab2: "",
@@ -103,6 +119,14 @@ class ConnectionInfo extends Component {
         active: 1
       });
     } else if (tab === "local-generation") {
+      if (window.innerWidth < 400) {
+        styles = {
+          tabs: {
+            cursor: "pointer",
+            transform: "translate(-190px,0)"
+          }
+        };
+      }
       this.setState({
         tab1: "",
         tab2: "",
@@ -112,6 +136,14 @@ class ConnectionInfo extends Component {
         active: 3
       });
     } else if (tab === "solar-pv-generator") {
+      if (window.innerWidth < 400) {
+        styles = {
+          tabs: {
+            cursor: "pointer",
+            transform: "translate(-330px,0)"
+          }
+        };
+      }
       this.setState({
         tab1: "",
         tab2: "",
@@ -121,6 +153,14 @@ class ConnectionInfo extends Component {
         active: 4
       });
     } else if (tab === "installed-devices") {
+      if (window.innerWidth < 400) {
+        styles = {
+          tabs: {
+            cursor: "pointer",
+            transform: "translate(-470px,0)"
+          }
+        };
+      }
       this.setState({
         tab1: "",
         tab2: "",
@@ -212,6 +252,13 @@ class ConnectionInfo extends Component {
     if (this.state.enableSpinner) {
       return <Spinner />;
     }
+    if (window.innerWidth > 400) {
+      styles = {
+        tabs: {
+          cursor: "pointer"
+        }
+      };
+    }
     return (
       <div className="view">
         <Helmet>
@@ -228,7 +275,7 @@ class ConnectionInfo extends Component {
           />
         </div>
         <div className="connection-info-hero">
-          <div className="connection-info-tabs" style={{ cursor: "pointer" }}>
+          <div className="connection-info-tabs" style={styles.tabs}>
             <div
               onClick={() => {
                 this.handleTabChange("address-details");
@@ -406,6 +453,12 @@ const mapStateToProps = state => ({
   rawdatamapping: state.userdata.rawdatamapping,
   vid: state.userdata.vid
 });
+
+let styles = {
+  tabs: {
+    cursor: "pointer"
+  }
+};
 
 export default connect(
   mapStateToProps,
