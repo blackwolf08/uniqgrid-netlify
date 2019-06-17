@@ -33,7 +33,10 @@ class NavBarResponsive extends React.Component {
   }
   render() {
     return (
-      <div className="navbar-responsive-2" style={{ zIndex: "1000" }}>
+      <div
+        className="navbar-responsive-2 navbar-dark"
+        style={{ zIndex: "1000" }}
+      >
         <Navbar
           color="faded"
           style={{
@@ -50,7 +53,7 @@ class NavBarResponsive extends React.Component {
           </NavbarBrand>
           <NavbarToggler
             onClick={this.toggleNavbar}
-            className="mr-2 ham-burger"
+            className="mr-2 navbar-dark ham-burger"
           />
           <Collapse
             style={{ color: "white", backgroundColor: "rgb(38, 50, 56)" }}
