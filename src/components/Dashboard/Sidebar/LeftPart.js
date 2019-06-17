@@ -96,7 +96,7 @@ class LeftPart extends Component {
           to="/dashboard/feedback"
         >
           <button className={this.state.feedback}>
-            <i className="fas fa-star" /> FeedBack
+            <i className="fas fa-star" /> Feedback
           </button>
         </Link>
 
