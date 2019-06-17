@@ -40,6 +40,7 @@ class NavBarResponsive extends React.Component {
             backgroundColor: "rgb(38, 50, 56)",
             color: "white",
             position: "absolute",
+            top: "0",
             width: "100%"
           }}
           light
