@@ -1,12 +1,12 @@
 import React, { Component } from "react";
-import Connection from "./Connection";
+import Connection from "./ConnectionList/Connection";
 import { Helmet } from "react-helmet";
 import axios from "axios";
-import icon1 from "../images/icon1.svg";
-import icon2 from "../images/icon2.svg";
+import icon1 from "../../../images/icon1.svg";
+import icon2 from "../../../images/icon2.svg";
 import jwtDecode from "jwt-decode";
 import { Link } from "react-router-dom";
-import { fetchUserData } from "../actions/userData";
+import { fetchUserData } from "../../../actions/userData";
 import { connect } from "react-redux";
 
 class MySite extends Component {
@@ -63,7 +63,8 @@ class MySite extends Component {
           this.setState({
             nameOfSites: nameOfSites
           });
-
+          //Following will tell the max no of sites
+          //If there is only one site
           if (noOfSites.length === 0) {
             noOfSites.push(1);
           }
@@ -82,6 +83,7 @@ class MySite extends Component {
               kWASite.push(site);
             }
           });
+          //Solar power displayed on MySite Page
           let solarPower = [];
           arrayOfStrings.forEach(site => {
             if (site.search("solar_capacity_kwp_site") >= 0) {
@@ -164,7 +166,7 @@ class MySite extends Component {
         );
       }
     }
-
+    // Views for MySite
     return (
       <div className="mysites-root">
         <Helmet>

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import Spinner from "../images/index";
+import Spinner from "../../images/index";
 import { connect } from "react-redux";
-import logo from "../images/logo.png";
+import logo from "../../images/logo.png";
 import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
 
@@ -70,6 +70,7 @@ class AuthLogin extends Component {
   };
 
   render() {
+    // if loading then return spinner
     if (this.state.isLoading) {
       if (this.props.error.length) {
         this.setState({
@@ -83,6 +84,7 @@ class AuthLogin extends Component {
 
     return (
       <div className="flex h-w-100 auth-root">
+        {/* Helmet changes the title of the Tab */}
         <Helmet>
           <title>Uniqgrid | Login</title>
         </Helmet>
@@ -126,6 +128,7 @@ class AuthLogin extends Component {
   }
 }
 
+//Showing error logged by server
 const mapStateToProps = state => ({
   error: state.error.err
 });

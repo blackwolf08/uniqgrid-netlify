@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import Container from "@material-ui/core/Container";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
-import Spinner from "../images";
+import Spinner from "../../../images";
 import jwtDecode from "jwt-decode";
 import axios from "axios";
 
@@ -24,6 +24,7 @@ class MyProfile extends Component {
     });
     if (localStorage.jwtToken) {
       let jwtToken = jwtDecode(localStorage.jwtToken);
+      //getting customer info
       axios
         .get(
           `https://cors-anywhere.herokuapp.com/https://api.hubapi.com/contacts/v1/contact/email/${
@@ -31,7 +32,7 @@ class MyProfile extends Component {
           }/profile?hapikey= bdcec428-e806-47ec-b7fd-ece8b03a870b`
         )
         .then(res => {
-          console.log(res);
+          //setter for customer info
           this.setState({
             firstname: res.data.properties.firstname.value,
             email: res.data.properties.email.value,
@@ -50,10 +51,12 @@ class MyProfile extends Component {
   }
 
   handleSubmit = e => {
+    // when user submits the form
     e.preventDefault();
     this.setState({
       spinner: true
     });
+    //this obj is the Object we have to send to backend after JSON.stringify it
     let obj = {
       properties: [
         {
@@ -95,6 +98,7 @@ class MyProfile extends Component {
       });
   };
 
+  //handle edit button click
   handleClick = () => {
     this.setState({
       isSubmitButtonDisabled: false,
@@ -102,6 +106,7 @@ class MyProfile extends Component {
     });
   };
 
+  //handle changes to input feilds
   handleChange = e => {
     this.setState({
       [e.target.id]: e.target.value
@@ -110,6 +115,7 @@ class MyProfile extends Component {
 
   render() {
     let shortName = "";
+    //getting customer initials
     if (typeof this.props.data !== "undefined") {
       let nameArr = this.props.data.name.split(" ");
       nameArr.splice(0, 1);
@@ -117,6 +123,8 @@ class MyProfile extends Component {
         shortName += e[0].toUpperCase();
       });
     }
+
+    //if loading return spinner
     if (this.state.spinner) return <Spinner />;
 
     return (

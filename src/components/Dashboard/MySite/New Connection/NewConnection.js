@@ -1,13 +1,13 @@
 import React, { Component } from "react";
 import { Helmet } from "react-helmet";
-import { fetchConnetionInfo } from "../actions/fetchConnectionInfo";
+import { fetchConnetionInfo } from "../../../../actions/fetchConnectionInfo";
 import { connect } from "react-redux";
-import Spinner from "../images/index";
+import Spinner from "../../../../images/index";
 import csc from "country-state-city";
 import uuid from "uuid";
 import axios from "axios";
 import jwtDecode from "jwt-decode";
-import NewConnectionMap from "./NewConnectionMap";
+import NewConnectionMap from "../MySite Maps/NewConnectionMap";
 
 class NewConnection extends Component {
   state = {

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import logo from "../images/logo.svg";
-import { logout } from "../actions/auth";
-import { fetchUserData } from "../actions/userData";
+import logo from "../../../images/logo.svg";
+import { logout } from "../../../actions/auth";
+import { fetchUserData } from "../../../actions/userData";
 import { connect } from "react-redux";
 
 class NavBar extends Component {

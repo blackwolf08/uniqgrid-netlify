@@ -1,20 +1,20 @@
 import React, { Component } from "react";
-import NavBar from "./NavBar";
-import LeftPart from "./LeftPart";
+import NavBar from "./Navbar/NavBar";
+import LeftPart from "./Sidebar/LeftPart";
 import { Route, Switch } from "react-router-dom";
-import MySite from "./MySite";
-import MyDevice from "./MyDevice";
-import MyRequests from "./MyRequests";
-import MyProfile from "./MyProfile";
-import FeedBack from "./FeedBack";
-import ConnectionInfo from "./ConnectionInfo";
-import { fetchUserData } from "../actions/userData";
+import MySite from "./MySite/MySite";
+import MyDevice from "./MyDevices/MyDevice";
+import MyRequests from "./MyRequests/MyRequests";
+import MyProfile from "./MyProfile/MyProfile";
+import FeedBack from "./Feedback/FeedBack";
+import ConnectionInfo from "./MySite/TabComponents/ConnectionInfo";
+import { fetchUserData } from "../../actions/userData";
 import { connect } from "react-redux";
-import Spinner from "../images/index";
-import { refreshUser } from "../actions/auth";
-import NavBarResponsive from "./NavBarResponsive";
-import NewConnection from "./NewConnection";
-import Charts from "./Charts";
+import Spinner from "../../images/index";
+import { refreshUser } from "../../actions/auth";
+import NavBarResponsive from "./Navbar/NavBarResponsive";
+import NewConnection from "./MySite/New Connection/NewConnection";
+import Charts from "./MySite/HotCharts/Charts";
 
 //this is the parent component of all the logged in stuff
 
@@ -26,19 +26,21 @@ class Dashboard extends Component {
     }, 100000);
   }
   render() {
+    // if lodading then return spinner navbar and sidebar
     if (this.props.isLoading) {
       this.props.fetchUserData();
       return (
         <div>
           <NavBar />
-          <LeftPart />
           <NavBarResponsive />
+          <LeftPart />
           <div className="view">
             <Spinner />
           </div>
         </div>
       );
     }
+    // this code would be executed when the content is loaded
     return (
       <div>
         <NavBar />
@@ -80,6 +82,7 @@ class Dashboard extends Component {
               path="/dashboard/my-profile"
               render={props => <MyProfile {...props} />}
             />
+            {/* :id is a dymaic parameter that's why ':' with id */}
             <Route
               key="my-sites/:id"
               path="/dashboard/my-sites/:id"

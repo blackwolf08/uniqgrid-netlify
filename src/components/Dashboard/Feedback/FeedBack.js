@@ -4,14 +4,18 @@ import { connect } from "react-redux";
 
 class FeedBack extends Component {
   state = {
+    //Dynamic class to add to star array
     onestar: "fas fa-star",
     twostar: "fas fa-star",
     threestar: "fas fa-star",
     fourstar: "fas fa-star",
     fivestar: "fas fa-star",
+    //number of stars to send to backend
     numberOfStars: 0,
     isSubmitted: false
   };
+
+  //functions that set 1/2/3/4/5 stars
 
   oneStar = () => {
     this.setState({
@@ -99,6 +103,7 @@ class FeedBack extends Component {
       }
     )
       .then(() => {
+        //Do someting after successfull submitting
         this.setState({
           isSubmitted: !this.state.isSubmitted
         });
@@ -167,13 +172,7 @@ class FeedBack extends Component {
               </>
             )}
             {this.state.isSubmitted && (
-              <>
-                <h1>Thanks for your Feedback!</h1>
-                <h4>
-                  Your rating for us is {this.state.numberOfStars}{" "}
-                  <i className="fas fa-star star-active" /> !
-                </h4>
-              </>
+              <>{/* If we want to display another view after submitting */}</>
             )}
           </div>
         </div>
@@ -181,6 +180,8 @@ class FeedBack extends Component {
     );
   }
 }
+
+//To get vid from redux store
 
 const mapStateToProps = state => ({
   vid: state.userdata.vid

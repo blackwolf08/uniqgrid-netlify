@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { fetchConnetionInfo } from "../actions/fetchConnectionInfo";
-import Spinner from "../images";
+import { fetchConnetionInfo } from "../../../../../actions/fetchConnectionInfo";
+import Spinner from "../../../../../images";
 import csc from "country-state-city";
 import uuid from "uuid";
 

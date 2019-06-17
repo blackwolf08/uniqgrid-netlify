@@ -4,16 +4,20 @@ import DeviceList from "./DeviceList";
 import uuid from "uuid";
 import axios from "axios";
 import { connect } from "react-redux";
-import Spinner from "../images";
-import CanvasJSReact from "../lib/canvasjs.react";
+import Spinner from "../../../images";
+import CanvasJSReact from "../../../lib/canvasjs.react";
 import moment from "moment";
-import { fetchUserData } from "../actions/userData";
+import { fetchUserData } from "../../../actions/userData";
+
+//Info about tampering with momentJS is in MyDevice.md (same folder)
 
 class MyDevice extends Component {
   state = {
     connections: [
+      //DO NOT CHANGE THIS!!
       1
       //JSON response from uniqgrid server
+      // STATIC STUFF, DO NOT TAMPER
     ],
     deviceId: "",
     devicesArr: [],
@@ -21,6 +25,7 @@ class MyDevice extends Component {
     keys: [],
     selectValue: "Select Device",
     graphData: "",
+    //Default start time
     startTime: moment()
       .startOf("day")
       .valueOf(),
@@ -28,15 +33,27 @@ class MyDevice extends Component {
     default: true,
     deviceActivated: false,
     day: " active-filter",
+    //used to add selected highlight to day/week/month/year component
     week: "",
     month: "",
     year: "",
+    //id of device
     id: "",
     selectedFilter: "day",
+    //back values handles LEFT and RIGHT changes to graph
     back: 1
   };
 
+  componentDidMount() {
+    //Getter and setter for device array for the current state form props
+    this.setState({
+      devicesArr: this.props.devices
+    });
+    //this.props.fetchUserData();
+  }
+
   handleClick = (deviceId, name) => {
+    //function executed when user clicks on one of the devices
     this.setState({
       deviceId,
       isLoading: true,
@@ -46,12 +63,15 @@ class MyDevice extends Component {
       graphData: ""
     });
     const URL = `https://cors-anywhere.herokuapp.com/http://portal.uniqgridcloud.com:8080/api/device/${deviceId}`;
+    //grab device details
     axios.get(URL).then(res => {
+      //get device keys for dropdown
       axios
         .get(
           `https://cors-anywhere.herokuapp.com/http://portal.uniqgridcloud.com:8080/api/plugins/telemetry/DEVICE/${deviceId}/keys/timeseries`
         )
         .then(res => {
+          //storing keys to display in dropdown, E.g. keys array === [current, ac power, ...]
           this.setState({
             keys: res.data,
             isLoading: false
@@ -66,12 +86,15 @@ class MyDevice extends Component {
     });
   };
   handleChange = e => {
+    //handle keys dropdown change
     this.setState({
       isLoading: true,
       default: false,
       back: 1
     });
+    //setting select value to store selected key
     this.setState({ selectValue: e.target.value });
+    //Default EndTime and StartTime is DAY
     let endtime = moment().valueOf();
     let startTime = moment()
       .startOf("day")
@@ -79,6 +102,7 @@ class MyDevice extends Component {
     this.setState({
       selectedFilter: "day"
     });
+    //get the timeseries data for graph
     axios
       .get(
         `https://cors-anywhere.herokuapp.com/http://portal.uniqgridcloud.com:8080/api/plugins/telemetry/DEVICE/${
@@ -88,12 +112,15 @@ class MyDevice extends Component {
         }&startTs=${startTime}&endTs=${endtime}`
       )
       .then(res => {
+        //extract data from response
         let a = res.data;
         let s = a[Object.keys(a)[0]];
+        //store data in state
         this.setState({
           isLoading: false,
           graphData: s
         });
+        //if no data
         if (typeof a[Object.keys(a)[0]] === "undefined") {
           console.log(s);
           this.setState({
@@ -109,34 +136,33 @@ class MyDevice extends Component {
         }
       });
   };
-
+  //this function sets options for the graph
   setOptions = () => {
+    //Get the datapoints for graph
     let s = this.dataPoints();
     let typeOfGraph;
+    //Set type of graphs for different filters
     if (this.state.selectedFilter === "day") {
       typeOfGraph = "area";
-    }
-    if (this.state.selectedFilter === "week") {
+    } else {
       typeOfGraph = "column";
     }
-    if (this.state.selectedFilter === "month") {
-      typeOfGraph = "column";
-    }
-    if (this.state.selectedFilter === "year") {
-      typeOfGraph = "column";
-    }
+    //Make heading from ac_power, to ac power
     let heading = this.state.selectValue.split("_");
     heading = heading.join(" ");
+    //custom options for graphs
     const options = {
       title: {
         text: `${heading} Analysis`
       },
       animationEnabled: true,
+      //Downloadable ? true : false
       exportEnabled: true,
       theme: "light2",
       data: [
         {
           type: typeOfGraph,
+          //change color of graph
           color: "orange",
           dataPoints: [...s]
         }
@@ -147,6 +173,7 @@ class MyDevice extends Component {
   };
 
   noDataSetOptions = () => {
+    // if there are no data points then return empty graph
     let s = this.noDataPoints();
     let heading = this.state.selectValue.split("_");
     heading = heading.join(" ");
@@ -169,6 +196,7 @@ class MyDevice extends Component {
   };
 
   noDataPoints = () => {
+    //set options for no data points
     return [
       {
         label: moment().format("MMM Do YY"),
@@ -179,6 +207,7 @@ class MyDevice extends Component {
 
   dataPoints = () => {
     if (this.state.selectedFilter === "day") {
+      //change formatting for day filter on X axis and also scale the data on the y-axis
       let s = this.state.graphData.map(e => {
         return {
           label: moment(e.ts).format("hh a"),
@@ -188,6 +217,7 @@ class MyDevice extends Component {
       return s;
     }
     if (this.state.selectedFilter === "year") {
+      //formatting for year
       let s = this.state.graphData.map(e => {
         return {
           label: moment(e.ts).format("MMM"),
@@ -196,6 +226,7 @@ class MyDevice extends Component {
       });
       return s;
     }
+    //for all others
     let s = this.state.graphData.map(e => {
       return {
         label: moment(e.ts).format("MMM Do YY"),
@@ -210,8 +241,58 @@ class MyDevice extends Component {
       selectedFilter: "week",
       back: 1
     });
+    //for more details on isoWeek refer to MyDevice.md on same directory
     let startTime = moment()
       .startOf("isoWeek")
+      .valueOf();
+    this.setState({
+      startTime
+    });
+    this.setState({
+      isLoading: true
+    });
+    //get current time in UNIX
+    let endtime = moment().valueOf();
+    axios
+      .get(
+        `https://cors-anywhere.herokuapp.com/http://portal.uniqgridcloud.com:8080/api/plugins/telemetry/DEVICE/${
+          this.state.deviceId
+        }/values/timeseries?limit=10000&interval=10800000&agg=MAX&keys=${
+          this.state.selectValue
+        }&startTs=${startTime}&endTs=${endtime}`
+      )
+      .then(res => {
+        let a = res.data;
+        let s = a[Object.keys(a)[0]];
+        //getter and setter for graph data
+        this.setState({
+          isLoading: false,
+          graphData: s
+        });
+      })
+      .catch(res => {
+        if (res.status === 401) {
+          localStorage.clear();
+          window.location.href = "/login";
+        }
+      });
+    //apply CSS to selected filter
+    this.setState({
+      day: "",
+      week: " active-filter",
+      month: "",
+      year: ""
+    });
+  };
+  // Following all the filters provide the same basic usage as filter Week
+
+  filterDay = () => {
+    this.setState({
+      selectedFilter: "day",
+      back: 1
+    });
+    let startTime = moment()
+      .startOf("day")
       .valueOf();
     this.setState({
       startTime
@@ -224,12 +305,11 @@ class MyDevice extends Component {
       .get(
         `https://cors-anywhere.herokuapp.com/http://portal.uniqgridcloud.com:8080/api/plugins/telemetry/DEVICE/${
           this.state.deviceId
-        }/values/timeseries?limit=10000&interval=10800000&agg=MAX&keys=${
+        }/values/timeseries?limit=10000&interval=900000&agg=MAX&keys=${
           this.state.selectValue
         }&startTs=${startTime}&endTs=${endtime}`
       )
       .then(res => {
-        console.log(res);
         let a = res.data;
         let s = a[Object.keys(a)[0]];
         this.setState({
@@ -244,8 +324,8 @@ class MyDevice extends Component {
         }
       });
     this.setState({
-      day: "",
-      week: " active-filter",
+      day: " active-filter",
+      week: "",
       month: "",
       year: ""
     });
@@ -341,6 +421,8 @@ class MyDevice extends Component {
     });
   };
 
+  //Change the graph data on any of the following interactions
+  // takes three inputs that are quite intutive
   handleGraphChange = (start_time, end_time, interval) => {
     this.setState({
       startTime: start_time
@@ -348,6 +430,7 @@ class MyDevice extends Component {
     this.setState({
       isLoading: true
     });
+    //get values form given start time, endtime & interval
     axios
       .get(
         `https://cors-anywhere.herokuapp.com/http://portal.uniqgridcloud.com:8080/api/plugins/telemetry/DEVICE/${
@@ -357,6 +440,7 @@ class MyDevice extends Component {
         }&startTs=${start_time}&endTs=${end_time}`
       )
       .then(res => {
+        //getter and setter for graph data
         let a = res.data;
         let s = a[Object.keys(a)[0]];
         this.setState({
@@ -372,7 +456,10 @@ class MyDevice extends Component {
       });
   };
 
+  // Method to handle left button for device filter
+  // Refer to MyDevice.md before editing handleLeft() and handleRight() methods
   handleLeft = () => {
+    //change back's value
     this.setState({
       back: this.state.back + 1
     });
@@ -381,24 +468,31 @@ class MyDevice extends Component {
         back: 4
       });
     }
+    //set-timeout used to ensure that we are working on latest state change as setState takes some time
     setTimeout(() => {
+      //this ensures to set the limit on no. of backs performed
       if (this.state.back >= 0 && this.state.back <= 4) {
         let start_time, end_time, interval;
+        //set interval timings for the day/week/month/year
 
         if (this.state.selectedFilter === "day") {
+          // 15 mins
           interval = 900000;
         }
         if (this.state.selectedFilter === "week") {
+          // 1 hour
           interval = 10800000;
         }
         if (this.state.selectedFilter === "month") {
+          // 1 day
           interval = 86400000;
         }
         if (this.state.selectedFilter === "year") {
+          // 1 day
           interval = 86400000;
         }
-        console.log(this.state.back);
         if (this.state.selectedFilter === "day") {
+          // This whole logic is explained in MyDevice.md
           if (this.state.back === 1) {
             start_time = moment()
               .subtract(1, "days")
@@ -541,6 +635,7 @@ class MyDevice extends Component {
     }, 200);
   };
 
+  //Refer Mydevice.md
   handleRight = () => {
     this.setState({
       back: this.state.back - 1
@@ -705,66 +800,16 @@ class MyDevice extends Component {
     }, 200);
   };
 
-  filterDay = () => {
-    this.setState({
-      selectedFilter: "day",
-      back: 1
-    });
-    let startTime = moment()
-      .startOf("day")
-      .valueOf();
-    this.setState({
-      startTime
-    });
-    this.setState({
-      isLoading: true
-    });
-    let endtime = moment().valueOf();
-    axios
-      .get(
-        `https://cors-anywhere.herokuapp.com/http://portal.uniqgridcloud.com:8080/api/plugins/telemetry/DEVICE/${
-          this.state.deviceId
-        }/values/timeseries?limit=10000&interval=900000&agg=MAX&keys=${
-          this.state.selectValue
-        }&startTs=${startTime}&endTs=${endtime}`
-      )
-      .then(res => {
-        let a = res.data;
-        let s = a[Object.keys(a)[0]];
-        this.setState({
-          isLoading: false,
-          graphData: s
-        });
-      })
-      .catch(res => {
-        if (res.status === 401) {
-          localStorage.clear();
-          window.location.href = "/login";
-        }
-      });
-    this.setState({
-      day: " active-filter",
-      week: "",
-      month: "",
-      year: ""
-    });
-  };
-
-  componentDidMount() {
-    this.setState({
-      devicesArr: this.props.devices
-    });
-    //this.props.fetchUserData();
-  }
-
+  //Render list of devices using component DeviceList for eac individual component
   getConnectionList = () => {
     return <DeviceList handleMethod={this.handleClick} key={uuid.v4()} />;
   };
 
   render() {
+    //inintialize graph
     let CanvasJSChart = CanvasJSReact.CanvasJSChart;
-    console.log(this.state.devicesArr);
 
+    //options for selection of keys
     const listOfKeys = this.state.keys.map(key => {
       let keyValue = key;
       let keyArray = keyValue.split("_");
@@ -929,6 +974,7 @@ class MyDevice extends Component {
   }
 }
 
+//mapping redux
 const mapSateToProps = state => ({
   devices: state.userdata.data,
   connectionName: state.connectionInfo.data

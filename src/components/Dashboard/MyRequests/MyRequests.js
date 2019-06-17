@@ -12,8 +12,8 @@ import TextField from "@material-ui/core/TextField";
 import Select from "@material-ui/core/Select";
 import uuid from "uuid";
 import { Redirect } from "react-router-dom";
-import { fetchConnetionInfo } from "../actions/fetchConnectionInfo";
-import Spinner from "../images/index";
+import { fetchConnetionInfo } from "../../../actions/fetchConnectionInfo";
+import Spinner from "../../../images/index";
 import moment from "moment";
 class MyRequests extends Component {
   state = {

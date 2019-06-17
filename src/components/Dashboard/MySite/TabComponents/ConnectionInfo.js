@@ -1,14 +1,14 @@
 import React, { Component } from "react";
 import { Helmet } from "react-helmet";
-import AddressDetails from "./AddressDetails";
-import ConnectionDetails from "./ConnectionDetails";
-import LocalGeneration from "./LocalGeneration";
-import SolarPvGenerator from "./SolarPvGenerator";
-import InstalledDevices from "./InstalledDevices";
-import { fetchConnetionInfo } from "../actions/fetchConnectionInfo";
+import AddressDetails from "./AddressDetails/AddressDetails";
+import ConnectionDetails from "./ConnectionDetails/ConnectionDetails";
+import LocalGeneration from "./LocalGeneration/LocalGeneration";
+import SolarPvGenerator from "./SolarPvGenerator/SolarPvGenerator";
+import InstalledDevices from "./InstalledDevices/InstalledDevices";
+import { fetchConnetionInfo } from "../../../../actions/fetchConnectionInfo";
 import { connect } from "react-redux";
-import MysiteMap from "./MysiteMap";
-import Spinner from "../images/index";
+import MysiteMap from "../MySite Maps/MysiteMap";
+import Spinner from "../../../../images/index";
 
 class ConnectionInfo extends Component {
   state = {

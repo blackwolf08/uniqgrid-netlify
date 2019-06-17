@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import Spinner from "../images/index";
+import Spinner from "../../images/index";
 import { connect } from "react-redux";
-import logo from "../images/logo.png";
+import logo from "../../images/logo.png";
 import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
 

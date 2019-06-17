@@ -3,14 +3,14 @@ import { Route, Switch, withRouter } from "react-router-dom";
 import withAuth from "../hocs/withAuth";
 import { connect } from "react-redux";
 import { authUser } from "../actions/auth";
-import AuthLogin from "./AuthLogin";
-import Dashboard from "./Dashboard";
-import Check from "./check";
-import ResetPassword from "./ResetPassword";
+import AuthLogin from "./Auth/AuthLogin";
+import Dashboard from "./Dashboard/Dashboard";
+import Check from "./Dashboard/Test/check";
+import ResetPassword from "./Auth/ResetPassword";
 
 // this components defines our routes and based upon the routes renders component
 
-class Login extends Component {
+class RouteController extends Component {
   render() {
     const { authUser } = this.props;
     //
@@ -43,5 +43,5 @@ export default withRouter(
   connect(
     mapStateToProps,
     { authUser }
-  )(Login)
+  )(RouteController)
 );

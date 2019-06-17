@@ -7,9 +7,9 @@ import {
   Nav,
   NavItem
 } from "reactstrap";
-import logo from "../images/logo.png";
+import logo from "../../../images/logo.png";
 import { Link } from "react-router-dom";
-import { logout } from "../actions/auth";
+import { logout } from "../../../actions/auth";
 import { connect } from "react-redux";
 
 class NavBarResponsive extends React.Component {

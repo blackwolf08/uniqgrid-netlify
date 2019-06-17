@@ -4,7 +4,7 @@ import store from "./store";
 import { Provider } from "react-redux";
 import jwtDecode from "jwt-decode";
 import { setAuthorizationToken, setCurrentUser } from "./actions/auth";
-import Login from "./components/Login";
+import RouteController from "./components/RouteController";
 
 //this is the parent element of all the components
 
@@ -24,8 +24,8 @@ function App() {
   return (
     <Provider store={store}>
       <Router>
-        {/* Login would be the second component in out component tree */}
-        <Login />
+        {/* RouteController would be the second component in out component tree */}
+        <RouteController />
       </Router>
     </Provider>
   );
