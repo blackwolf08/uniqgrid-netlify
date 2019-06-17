@@ -14,20 +14,6 @@ class DeviceList extends Component {
     });
     this.props.handleMethod(e.id.id, e.name);
   };
-  componentDidMount() {
-    // const jwt = localStorage.jwtToken;
-    // const header = `X-Authorization: Bearer ${jwt}`;
-    // axios
-    //   .get(
-    //     `http://portal.uniqgridcloud.com:8080/api/v1/${
-    //       this.props.id
-    //     }/attributes`,
-    //     { headers: { header } }
-    //   )
-    //   .then(res => {
-    //     console.log(res);
-    //   });
-  }
 
   render() {
     const deviceList = this.state.devices.map(device => {

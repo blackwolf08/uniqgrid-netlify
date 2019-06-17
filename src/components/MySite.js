@@ -33,6 +33,7 @@ class MySite extends Component {
         .get(URL)
         .then(res => {
           const properties = res.data.properties;
+          console.log(properties);
           let arrayOfStrings = [];
           let noOfSites = [];
           //get the keys of data returned eg, connection_name_site_1_, energy_site_1 etc

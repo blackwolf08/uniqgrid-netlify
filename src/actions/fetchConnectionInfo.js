@@ -2,7 +2,8 @@ import axios from "axios";
 import {
   FETCH_CONNECTION_INFO,
   MAP_RAW_DATA_TO_MODIFIED_DATA,
-  SET_VID
+  SET_VID,
+  DEVICE_POOL
 } from "./types";
 import jwtDecode from "jwt-decode";
 
@@ -21,10 +22,19 @@ export const fetchConnetionInfo = id => dispatch => {
           .get(URL)
           .then(res => {
             const properties = res.data.properties;
+            let pool;
             const vid = res.data.vid;
             let arrayOfStrings = [];
             Object.keys(properties).forEach(key => {
               arrayOfStrings.push(key);
+              if (key === "device_pool") {
+                pool = properties[key].value;
+                if (properties[key].value !== "") {
+                  let name = properties[key].value.replace(/'/g, '"');
+                  pool = JSON.parse(name);
+                  pool = pool.device_list;
+                }
+              }
             });
             let result = [];
             let resultObject = {};
@@ -53,6 +63,10 @@ export const fetchConnetionInfo = id => dispatch => {
             dispatch({
               type: SET_VID,
               payload: vid
+            });
+            dispatch({
+              type: DEVICE_POOL,
+              payload: pool
             });
             resolve(true);
           })
