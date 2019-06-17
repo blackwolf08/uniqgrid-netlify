@@ -267,10 +267,10 @@ class ConnectionInfo extends Component {
         <h1 className="mysites-heading1">
           {this.state.name || this.state.defaultName}
         </h1>
-        <div style={{ height: "300px" }}>
+        <div style={{ height: "500px" }}>
           <MysiteMap
             className="flex"
-            style={{ width: "80%", height: "300px", margin: "0 auto" }}
+            style={{ width: "80%", height: "500px", margin: "0 auto" }}
             data={this.state.data}
           />
         </div>

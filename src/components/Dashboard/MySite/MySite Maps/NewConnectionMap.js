@@ -6,7 +6,7 @@ class MysiteMap extends Component {
   state = {
     lat: "",
     lng: "",
-    zoom: 17
+    zoom: 19
   };
 
   componentWillMount() {

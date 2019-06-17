@@ -33,6 +33,7 @@ body {
   font-family: "Roboto", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  zoom: 87%;
 }
 
 #root {
@@ -71,6 +72,10 @@ button {
 
 .auth-root {
   background-color: #f1f1f1;
+}
+
+.mysites-connection-list {
+  font-weight: 500 !important;
 }
 
 .auth-container {
@@ -703,6 +708,10 @@ tr {
 }
 /* Extra small devices (portrait phones, less than 576px) */
 @media (max-width: 575.98px) {
+  html,
+  body {
+    zoom: 1;
+  }
   .left-part {
     display: none;
   }

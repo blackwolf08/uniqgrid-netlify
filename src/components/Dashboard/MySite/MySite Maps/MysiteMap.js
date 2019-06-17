@@ -7,7 +7,7 @@ class MysiteMap extends Component {
   state = {
     lat: 28.41344,
     lng: 77.04237,
-    zoom: 17,
+    zoom: 18,
     data: {}
   };
 
@@ -35,9 +35,9 @@ class MysiteMap extends Component {
     const position = [this.state.lat, this.state.lng];
     return (
       // set custom height and with of map
-      <div style={{ margin: "0 auto", width: "100%", height: "300px" }}>
+      <div style={{ margin: "0 auto", width: "100%", height: "500px" }}>
         <Map
-          style={{ margin: "0 auto", width: "100%", height: "300px" }}
+          style={{ margin: "0 auto", width: "100%", height: "500px" }}
           center={position}
           zoom={this.state.zoom}
         >
