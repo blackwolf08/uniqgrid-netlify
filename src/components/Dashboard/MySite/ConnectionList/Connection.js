@@ -1,5 +1,5 @@
-import React, { Component } from "react";
-import { Link } from "react-router-dom";
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 
 export default class Connection extends Component {
   handleClick = () => {};
@@ -15,34 +15,34 @@ export default class Connection extends Component {
     } = this.props;
 
     const redirect = `/dashboard/my-sites/${id}`;
-    const redirectSmallChart = `/dashboard/charts/${id}`;
+    const redirectSmallChart = `/dashboard/hot-charts/${id}`;
     return (
-      <div className="mysites-connections" onClick={this.handleClick}>
-        <div className="my-col">
+      <div className='mysites-connections' onClick={this.handleClick}>
+        <div className='my-col'>
           <p>
-            <i style={{ color: "black" }} className="fas fa-warehouse" /> {name}
+            <i style={{ color: 'black' }} className='fas fa-warehouse' /> {name}
           </p>
         </div>
-        <div className="my-col">
+        <div className='my-col'>
           <p>
             {power} {/*<span style={{ color: "green" }}>({powerPer}) </span>*/}
           </p>
         </div>
-        <div className="my-col">
+        <div className='my-col'>
           <p>
-            {consumption}{" "}
+            {consumption}{' '}
             {/*<span style={{ color: "red" }}>({consumptionPer})</span>*/}
           </p>
         </div>
         <div
-          className="my-col mysites-icons"
-          style={{ display: "flex", justifyContent: "space-around" }}
+          className='my-col mysites-icons'
+          style={{ display: 'flex', justifyContent: 'space-around' }}
         >
           <Link to={redirectSmallChart}>
-            <i className="far fa-chart-bar" style={{ color: "black" }} />{" "}
+            <i className='far fa-chart-bar' style={{ color: 'black' }} />{' '}
           </Link>
           <Link to={redirect}>
-            <i style={{ color: "black" }} className="fas fa-cog" />{" "}
+            <i style={{ color: 'black' }} className='fas fa-cog' />{' '}
           </Link>
         </div>
       </div>

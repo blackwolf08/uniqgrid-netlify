@@ -1,17 +1,17 @@
-import axios from "axios";
+import axios from 'axios';
 import {
   FETCH_CONNECTION_INFO,
   MAP_RAW_DATA_TO_MODIFIED_DATA,
   SET_VID,
   DEVICE_POOL
-} from "./types";
-import jwtDecode from "jwt-decode";
+} from './types';
+import jwtDecode from 'jwt-decode';
 
 export const fetchConnetionInfo = id => dispatch => {
   return new Promise((resolve, reject) => {
     //if its not the first connection
     if (id > 1) {
-      if (typeof localStorage.jwtToken !== "undefined") {
+      if (typeof localStorage.jwtToken !== 'undefined') {
         let jwt = localStorage.jwtToken;
         jwt = jwtDecode(jwt);
 
@@ -29,14 +29,13 @@ export const fetchConnetionInfo = id => dispatch => {
             let arrayOfStrings = [];
             Object.keys(properties).forEach(key => {
               arrayOfStrings.push(key);
-              if (key === "device_pool") {
+              if (key === 'device_pool') {
                 //get device_pool key and save it in Redux storage
                 pool = properties[key].value;
-                if (properties[key].value !== "") {
+                if (properties[key].value !== '') {
                   //validaion check for any ', replaced with "
                   let name = properties[key].value.replace(/'/g, '"');
                   pool = JSON.parse(name);
-                  pool = pool.device_list;
                 }
               }
             });
@@ -52,8 +51,8 @@ export const fetchConnetionInfo = id => dispatch => {
             let temp;
             //remove _ from the keys
             result.forEach(key => {
-              temp = key.split("_");
-              temp = temp.join(" ");
+              temp = key.split('_');
+              temp = temp.join(' ');
               resultObject[temp] = properties[key];
               output[key] = temp;
             });
@@ -80,14 +79,14 @@ export const fetchConnetionInfo = id => dispatch => {
           .catch(res => {
             if (res.status === 401) {
               localStorage.clear();
-              window.location.href = "/login";
+              window.location.href = '/login';
               resolve(false);
             }
           });
       }
     } else {
       //if its the first connection
-      if (typeof localStorage.jwtToken !== "undefined") {
+      if (typeof localStorage.jwtToken !== 'undefined') {
         let jwt = localStorage.jwtToken;
 
         jwt = jwtDecode(jwt);
@@ -101,6 +100,7 @@ export const fetchConnetionInfo = id => dispatch => {
             //get keys and properties of 1st site
             const properties = res.data.properties;
             let arrayOfStrings = [];
+            let pool;
             Object.keys(properties).forEach(key => {
               arrayOfStrings.push(key);
             });
@@ -112,11 +112,23 @@ export const fetchConnetionInfo = id => dispatch => {
                 result.push(subString);
               }
             });
+            Object.keys(properties).forEach(key => {
+              arrayOfStrings.push(key);
+              if (key === 'device_pool') {
+                //get device_pool key and save it in Redux storage
+                pool = properties[key].value;
+                if (properties[key].value !== '') {
+                  //validaion check for any ', replaced with "
+                  let name = properties[key].value.replace(/'/g, '"');
+                  pool = JSON.parse(name);
+                }
+              }
+            });
             let output = {};
             let temp;
             result.forEach(key => {
-              temp = key.split("_");
-              temp = temp.join(" ");
+              temp = key.split('_');
+              temp = temp.join(' ');
               resultObject[temp] = properties[key];
               output[key] = temp;
             });
@@ -132,16 +144,25 @@ export const fetchConnetionInfo = id => dispatch => {
               type: SET_VID,
               payload: vid
             });
+            dispatch({
+              type: DEVICE_POOL,
+              payload: pool
+            });
             resolve(true);
           })
           .catch(res => {
             if (res.status === 401) {
               localStorage.clear();
-              window.location.href = "/login";
+              window.location.href = '/login';
               resolve(false);
             }
           });
       }
     }
+  });
+};
+export const updatePool = id => dispatch => {
+  return new Promise((resolve, reject) => {
+    //if its not the first connection
   });
 };

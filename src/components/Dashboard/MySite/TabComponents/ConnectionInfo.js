@@ -1,40 +1,40 @@
-import React, { Component } from "react";
-import { Helmet } from "react-helmet";
-import AddressDetails from "./AddressDetails/AddressDetails";
-import ConnectionDetails from "./ConnectionDetails/ConnectionDetails";
-import LocalGeneration from "./LocalGeneration/LocalGeneration";
-import SolarPvGenerator from "./SolarPvGenerator/SolarPvGenerator";
-import InstalledDevices from "./InstalledDevices/InstalledDevices";
-import { fetchConnetionInfo } from "../../../../actions/fetchConnectionInfo";
-import { connect } from "react-redux";
-import MysiteMap from "../MySite Maps/MysiteMap";
-import Spinner from "../../../../images/index";
+import React, { Component } from 'react';
+import { Helmet } from 'react-helmet';
+import AddressDetails from './AddressDetails/AddressDetails';
+import ConnectionDetails from './ConnectionDetails/ConnectionDetails';
+import LocalGeneration from './LocalGeneration/LocalGeneration';
+import SolarPvGenerator from './SolarPvGenerator/SolarPvGenerator';
+import InstalledDevices from './InstalledDevices/InstalledDevices';
+import { fetchConnetionInfo } from '../../../../actions/fetchConnectionInfo';
+import { connect } from 'react-redux';
+import MysiteMap from '../MySite Maps/MysiteMap';
+import Spinner from '../../../../images/index';
 
 // this componets gets keys for a particular site based upon the site id we recieve from /dashboard/mysite/:id
 
 class ConnectionInfo extends Component {
   state = {
     id: 0,
-    tab1: " connection-info-border",
-    tab2: "",
-    tab3: "",
-    tab4: "",
-    tab5: "",
+    tab1: ' connection-info-border',
+    tab2: '',
+    tab3: '',
+    tab4: '',
+    tab5: '',
     data: {},
-    name: "",
+    name: '',
     update: false,
-    defaultName: "Connection Name",
+    defaultName: 'Connection Name',
     active: 0,
-    city: "-",
-    postal: "-",
-    state: "-",
-    street: "-",
-    electricity_connection_name: "-",
-    connected_load_kw: "-",
-    segment: "",
-    sub_segment: "",
-    average_monthly_energy_cost: "",
-    electricity_quality: "",
+    city: '-',
+    postal: '-',
+    state: '-',
+    street: '-',
+    electricity_connection_name: '-',
+    connected_load_kw: '-',
+    segment: '',
+    sub_segment: '',
+    average_monthly_energy_cost: '',
+    electricity_quality: '',
     bodyArray: [],
     finalArray: [],
     enableSpinner: false
@@ -60,9 +60,9 @@ class ConnectionInfo extends Component {
           this.setState({
             data: this.props.info
           });
-          let name = "";
+          let name = '';
           Object.keys(this.state.data).forEach(key => {
-            if (key.indexOf("connection") === 12) {
+            if (key.indexOf('connection') === 12) {
               name = this.state.data[key].value.toString();
             }
           });
@@ -77,96 +77,96 @@ class ConnectionInfo extends Component {
       .catch(res => {
         if (res.status === 401) {
           localStorage.clear();
-          window.location.href = "/login";
+          window.location.href = '/login';
         }
       });
   }
 
   //handle borders in te tabs
   handleTabChange = tab => {
-    if (tab === "connection-details") {
+    if (tab === 'connection-details') {
       if (window.innerWidth < 400) {
         styles = {
           tabs: {
-            cursor: "pointer",
-            transform: "translate(-60px,0)"
+            cursor: 'pointer',
+            transform: 'translate(-60px,0)'
           }
         };
       }
       this.setState({
-        tab1: "",
-        tab2: " connection-info-border",
-        tab3: "",
-        tab4: "",
-        tab5: "",
+        tab1: '',
+        tab2: ' connection-info-border',
+        tab3: '',
+        tab4: '',
+        tab5: '',
         active: 2
       });
-    } else if (tab === "address-details") {
+    } else if (tab === 'address-details') {
       if (window.innerWidth < 400) {
         styles = {
           tabs: {
-            cursor: "pointer",
-            transform: "translate(0,0)"
+            cursor: 'pointer',
+            transform: 'translate(0,0)'
           }
         };
       }
       this.setState({
-        tab1: " connection-info-border",
-        tab2: "",
-        tab3: "",
-        tab4: "",
-        tab5: "",
+        tab1: ' connection-info-border',
+        tab2: '',
+        tab3: '',
+        tab4: '',
+        tab5: '',
         active: 1
       });
-    } else if (tab === "local-generation") {
+    } else if (tab === 'local-generation') {
       if (window.innerWidth < 400) {
         styles = {
           tabs: {
-            cursor: "pointer",
-            transform: "translate(-190px,0)"
+            cursor: 'pointer',
+            transform: 'translate(-190px,0)'
           }
         };
       }
       this.setState({
-        tab1: "",
-        tab2: "",
-        tab3: " connection-info-border",
-        tab4: "",
-        tab5: "",
+        tab1: '',
+        tab2: '',
+        tab3: ' connection-info-border',
+        tab4: '',
+        tab5: '',
         active: 3
       });
-    } else if (tab === "solar-pv-generator") {
+    } else if (tab === 'solar-pv-generator') {
       if (window.innerWidth < 400) {
         styles = {
           tabs: {
-            cursor: "pointer",
-            transform: "translate(-330px,0)"
+            cursor: 'pointer',
+            transform: 'translate(-330px,0)'
           }
         };
       }
       this.setState({
-        tab1: "",
-        tab2: "",
-        tab3: "",
-        tab4: " connection-info-border",
-        tab5: "",
+        tab1: '',
+        tab2: '',
+        tab3: '',
+        tab4: ' connection-info-border',
+        tab5: '',
         active: 4
       });
-    } else if (tab === "installed-devices") {
+    } else if (tab === 'installed-devices') {
       if (window.innerWidth < 400) {
         styles = {
           tabs: {
-            cursor: "pointer",
-            transform: "translate(-470px,0)"
+            cursor: 'pointer',
+            transform: 'translate(-470px,0)'
           }
         };
       }
       this.setState({
-        tab1: "",
-        tab2: "",
-        tab3: "",
-        tab4: "",
-        tab5: " connection-info-border",
+        tab1: '',
+        tab2: '',
+        tab3: '',
+        tab4: '',
+        tab5: ' connection-info-border',
         active: 5
       });
     }
@@ -176,13 +176,13 @@ class ConnectionInfo extends Component {
 
   handleUpdateButtonClick = value => {
     if (value === 1) {
-      this.handleTabChange("connection-details");
+      this.handleTabChange('connection-details');
     } else if (value === 2) {
-      this.handleTabChange("local-generation");
+      this.handleTabChange('local-generation');
     } else if (value === 3) {
-      this.handleTabChange("solar-pv-generator");
+      this.handleTabChange('solar-pv-generator');
     } else if (value === 4) {
-      this.handleTabChange("installed-devices");
+      this.handleTabChange('installed-devices');
     } else if (value === 5) {
       //this get called when the user clicks submit button
       this.setState({
@@ -212,7 +212,7 @@ class ConnectionInfo extends Component {
           this.props.vid
         }/profile?hapikey=bdcec428-e806-47ec-b7fd-ece8b03a870b`,
         {
-          method: "POST",
+          method: 'POST',
           body: `{  "properties": ${JSON.stringify(toSend)}
                 }`
         }
@@ -224,7 +224,7 @@ class ConnectionInfo extends Component {
         .catch(res => {
           if (res.status === 401) {
             localStorage.clear();
-            window.location.href = "/login";
+            window.location.href = '/login';
           }
         });
     }
@@ -234,7 +234,7 @@ class ConnectionInfo extends Component {
     Object.keys(value).forEach(key => {
       Object.keys(this.props.rawdatamapping).forEach(key2 => {
         //mapping processed data from raw data, eg, mapping connection name with connection_name_site_:id_
-        let regex = new RegExp("^" + key, "i");
+        let regex = new RegExp('^' + key, 'i');
         if (key2.match(regex)) {
           let objToBePushed = { [key2]: value[key] };
           this.setState({
@@ -255,66 +255,66 @@ class ConnectionInfo extends Component {
     if (window.innerWidth > 400) {
       styles = {
         tabs: {
-          cursor: "pointer"
+          cursor: 'pointer'
         }
       };
     }
     return (
-      <div className="view">
+      <div className='view'>
         <Helmet>
           <title>{`${this.state.name || this.state.defaultName}`}</title>
         </Helmet>
-        <h1 className="mysites-heading1">
+        <h1 className='mysites-heading1'>
           {this.state.name || this.state.defaultName}
         </h1>
-        <div style={{ height: "500px" }}>
+        <div style={{ height: '500px' }}>
           <MysiteMap
-            className="flex"
-            style={{ width: "80%", height: "500px", margin: "0 auto" }}
+            className='flex'
+            style={{ width: '80%', height: '500px', margin: '0 auto' }}
             data={this.state.data}
           />
         </div>
-        <div className="connection-info-hero">
-          <div className="connection-info-tabs" style={styles.tabs}>
+        <div className='connection-info-hero'>
+          <div className='connection-info-tabs' style={styles.tabs}>
             <div
               onClick={() => {
-                this.handleTabChange("address-details");
+                this.handleTabChange('address-details');
               }}
-              className={"mycol-5" + this.state.tab1}
+              className={'mycol-5' + this.state.tab1}
             >
-              <p className="connection-info-p">Address Details</p>
+              <p className='connection-info-p'>Address Details</p>
             </div>
             <div
               onClick={() => {
-                this.handleTabChange("connection-details");
+                this.handleTabChange('connection-details');
               }}
-              className={"mycol-5" + this.state.tab2}
+              className={'mycol-5' + this.state.tab2}
             >
-              <p className="connection-info-p">Connection Details</p>
+              <p className='connection-info-p'>Connection Details</p>
             </div>
             <div
               onClick={() => {
-                this.handleTabChange("local-generation");
+                this.handleTabChange('local-generation');
               }}
-              className={"mycol-5" + this.state.tab3}
+              className={'mycol-5' + this.state.tab3}
             >
-              <p className="connection-info-p">Local Generation</p>
+              <p className='connection-info-p'>Local Generation</p>
             </div>
             <div
               onClick={() => {
-                this.handleTabChange("solar-pv-generator");
+                this.handleTabChange('solar-pv-generator');
               }}
-              className={"mycol-5" + this.state.tab4}
+              className={'mycol-5' + this.state.tab4}
             >
-              <p className="connection-info-p">Solar PV Generator</p>
+              <p className='connection-info-p'>Solar PV Generator</p>
             </div>
             <div
               onClick={() => {
-                this.handleTabChange("installed-devices");
+                this.handleTabChange('installed-devices');
               }}
-              className={"mycol-5" + this.state.tab5}
+              className={'mycol-5' + this.state.tab5}
             >
-              <p className="connection-info-p">Installed Devices</p>
+              <p className='connection-info-p'>Installed Devices</p>
             </div>
           </div>
           {this.state.active === 1 && (
@@ -325,10 +325,10 @@ class ConnectionInfo extends Component {
                 update={this.update}
                 data={this.props.info}
               />
-              <div className="row">
-                <div className="col">
+              <div className='row'>
+                <div className='col'>
                   <button
-                    className="update-button"
+                    className='update-button'
                     onClick={() => {
                       this.handleUpdateButtonClick(1);
                     }}
@@ -349,10 +349,10 @@ class ConnectionInfo extends Component {
                 update={this.update}
                 data={this.props.info}
               />
-              <div className="row">
-                <div className="col">
+              <div className='row'>
+                <div className='col'>
                   <button
-                    className="update-button"
+                    className='update-button'
                     onClick={() => {
                       this.handleUpdateButtonClick(2);
                     }}
@@ -373,10 +373,10 @@ class ConnectionInfo extends Component {
                 update={this.update}
                 data={this.props.info}
               />
-              <div className="row">
-                <div className="col">
+              <div className='row'>
+                <div className='col'>
                   <button
-                    className="update-button"
+                    className='update-button'
                     onClick={() => {
                       this.handleUpdateButtonClick(3);
                     }}
@@ -397,10 +397,10 @@ class ConnectionInfo extends Component {
                 update={this.update}
                 data={this.props.info}
               />
-              <div className="row">
-                <div className="col">
+              <div className='row'>
+                <div className='col'>
                   <button
-                    className="update-button"
+                    className='update-button'
                     onClick={() => {
                       this.handleUpdateButtonClick(4);
                     }}
@@ -422,26 +422,15 @@ class ConnectionInfo extends Component {
                     handleChildrenChange={this.handleChildrenChange}
                     update={this.update}
                     data={this.props.info}
+                    id={this.state.id}
+                    handleUpdateButtonClick={() => {
+                      this.handleUpdateButtonClick(5);
+                    }}
                   />
-                  <div className="row">
-                    <div className="col">
-                      <button
-                        className="update-button"
-                        onClick={() => {
-                          this.handleUpdateButtonClick(5);
-                        }}
-                      >
-                        Update
-                      </button>
-                      <br />
-                      <br />
-                    </div>
-                  </div>
                 </>
               )}
             </>
           )}
-          {this.state.update && <button className="edit-button">Update</button>}
         </div>
       </div>
     );
@@ -456,7 +445,7 @@ const mapStateToProps = state => ({
 
 let styles = {
   tabs: {
-    cursor: "pointer"
+    cursor: 'pointer'
   }
 };
 
