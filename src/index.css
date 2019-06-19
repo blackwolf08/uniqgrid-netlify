@@ -889,6 +889,7 @@ input:checked + .slider:before {
   .auth-container {
     width: 90%;
     max-width: 400px;
+    margin-left: 0;
   }
 
   img.mysite-icons1 {
@@ -971,6 +972,18 @@ input:checked + .slider:before {
   }
   .root_right {
     width: 100%;
+  }
+  .auth-root,
+  #root {
+    width: 100%;
+  }
+  html,
+  body {
+    width: 100%;
+  }
+  .auth-logo {
+    height: 100px;
+    margin-left: -10px;
   }
 }
 
