@@ -15,7 +15,7 @@
   ],
   "start_url": "/login",
   "display": "fullscreen",
-  "orientation": "potrait",
+  "orientation": "portrait",
   "theme_color": "rgb(38, 50, 56)",
   "background_color": "#ffffff"
 }

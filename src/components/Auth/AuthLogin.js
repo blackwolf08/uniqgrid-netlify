@@ -1,14 +1,15 @@
-import React, { Component } from "react";
-import Spinner from "../../images/index";
-import { connect } from "react-redux";
-import logo from "../../images/logo.png";
-import { Helmet } from "react-helmet";
-import { Link } from "react-router-dom";
+import React, { Component } from 'react';
+import Spinner from '../../images/index';
+import { connect } from 'react-redux';
+import logo from '../../images/logo.png';
+import { Helmet } from 'react-helmet';
+import { Link } from 'react-router-dom';
+import root_gif from '../../images/root.gif';
 
 class AuthLogin extends Component {
   state = {
-    username: "",
-    password: "",
+    username: '',
+    password: '',
     isLoading: false,
     emailNotValid: false
   };
@@ -30,8 +31,8 @@ class AuthLogin extends Component {
   }
 
   componentWillMount() {
-    if (typeof localStorage.jwtToken !== "undefined") {
-      window.location.href = "/dashboard/my-sites";
+    if (typeof localStorage.jwtToken !== 'undefined') {
+      window.location.href = '/dashboard/my-sites';
     }
   }
 
@@ -44,19 +45,19 @@ class AuthLogin extends Component {
     this.setState({
       username: this.state.username.toLowerCase
     });
-    const authType = "signin";
+    const authType = 'signin';
     //send email and password to this function from props
     this.props
       .onAuth(authType, this.state)
       .then(() => {
         this.setState({
           isLoading: false,
-          username: "",
-          password: "",
+          username: '',
+          password: '',
           emailNotValid: false
         });
         //if successfully logged in push user to my Dashboard component
-        this.props.history.push("/dashboard/my-sites");
+        this.props.history.push('/dashboard/my-sites');
       })
       .catch(() => {});
   };
@@ -75,53 +76,62 @@ class AuthLogin extends Component {
       if (this.props.error.length) {
         this.setState({
           isLoading: false,
-          username: "",
-          password: ""
+          username: '',
+          password: ''
         });
       }
       return <Spinner />;
     }
 
     return (
-      <div className="flex h-w-100 auth-root">
+      <div className='flex auth-root'>
         {/* Helmet changes the title of the Tab */}
         <Helmet>
           <title>Uniqgrid | Login</title>
         </Helmet>
-        <div className="auth-container flex flex-col">
-          <img src={logo} alt="uniqgrid" className="auth-logo" />
-          <form
-            onSubmit={this.handleSubmit}
-            className="auth-form flex flex-col"
-          >
-            <span style={{ color: "red" }}>
-              {this.props.error && (
-                <>
-                  Email/Password Invalid
-                  <br />
-                </>
-              )}
-              {this.state.emailNotValid && <>Please enter a valid email</>}
-            </span>
-            <input
-              type="text"
-              name="username"
-              placeholder="Email"
-              onChange={this.handleChange}
-              className="auth-input"
-            />
-            <input
-              type="password"
-              name="password"
-              placeholder="Password"
-              onChange={this.handleChange}
-              className="auth-input"
-            />
-            <button className="auth-button">Login</button>
-            <Link to="/forgot-password" className="auth-p">
-              Forgot Password?
-            </Link>
-          </form>
+        <div className='root_left'>
+          <img
+            src={root_gif}
+            alt='Uniqgrid IOT Solutions'
+            className='root_gif'
+          />
+        </div>
+        <div className='root_right flex-col'>
+          <img src={logo} alt='uniqgrid' className='auth-logo' />
+          <div className='auth-container flex flex-col'>
+            <form
+              onSubmit={this.handleSubmit}
+              className='auth-form flex flex-col'
+            >
+              <span style={{ color: 'red' }}>
+                {this.props.error && (
+                  <>
+                    Email/Password Invalid
+                    <br />
+                  </>
+                )}
+                {this.state.emailNotValid && <>Please enter a valid email</>}
+              </span>
+              <input
+                type='text'
+                name='username'
+                placeholder='Email'
+                onChange={this.handleChange}
+                className='auth-input'
+              />
+              <input
+                type='password'
+                name='password'
+                placeholder='Password'
+                onChange={this.handleChange}
+                className='auth-input'
+              />
+              <button className='auth-button'>Login</button>
+              <Link to='/forgot-password' className='auth-p'>
+                Forgot Password?
+              </Link>
+            </form>
+          </div>
         </div>
       </div>
     );

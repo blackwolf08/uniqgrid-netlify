@@ -24,7 +24,10 @@ class InstalledDevices extends Component {
       deviceList: name
     });
     if (parseInt(this.props.id) === 1) {
-      if (this.props.data['device id'].value !== '') {
+      if (
+        this.props.data['device id'] &&
+        this.props.data['device id'].value !== ''
+      ) {
         let name = this.props.data['device id'].value.replace(/'/g, '"');
         JSON.parse(name);
         this.setState({
@@ -67,14 +70,14 @@ class InstalledDevices extends Component {
     let name = e.target.name;
     let new_device_arr = [];
     this.state.deviceList.device_list.forEach(device => {
-      if (device.device.id !== name) {
+      if (device.device.name !== name) {
         new_device_arr.push(device);
       }
     });
     let newDevice = {
       device: {
         additionalInfo: '',
-        id: `${name}`,
+        id: `${e.target.value}`,
         name: `${name}`
       }
     };
@@ -94,13 +97,13 @@ class InstalledDevices extends Component {
     let newDevice = {
       device: {
         additionalInfo: '',
-        id: `${e.target.value}`,
-        name: `${e.target.value}`
+        id: `${e.target.value[0]}`,
+        name: `${e.target.value[1]}`
       }
     };
     let new_pool_arr = [];
     this.state.device_pool.device_list.forEach(device => {
-      if (device.device.id !== e.target.value) {
+      if (device.device.name !== e.target.value[1]) {
         new_pool_arr.push(device);
       }
     });
@@ -170,12 +173,13 @@ class InstalledDevices extends Component {
       listOfDevices = this.state.deviceList.device_list.map(device => {
         return (
           <button
-            name={device.device.id}
+            name={device.device.name}
             onClick={this.handleClick}
             key={uuid.v4()}
             className='installed-device-buttons'
+            value={device.device.id}
           >
-            {device.device.id}{' '}
+            {device.device.name}{' '}
             <i className='fas fa-times' style={{ color: 'grey' }} />
           </button>
         );
@@ -185,8 +189,11 @@ class InstalledDevices extends Component {
     if (this.state.device_pool) {
       listOfPool = this.state.device_pool.device_list.map(device => {
         return (
-          <MenuItem key={uuid.v4()} value={device.device.id}>
-            {device.device.id}
+          <MenuItem
+            key={uuid.v4()}
+            value={[device.device.id, device.device.name]}
+          >
+            {device.device.name}
           </MenuItem>
         );
       });
@@ -198,13 +205,11 @@ class InstalledDevices extends Component {
           <InputLabel htmlFor='age-simple'>Devices</InputLabel>
           <Select
             style={{ height: '50px', width: '250px' }}
-            value='Device'
             onChange={this.handleChange}
             inputProps={{
               name: 'devices',
               id: 'devices'
             }}
-            name='devices'
           >
             {listOfPool}
           </Select>

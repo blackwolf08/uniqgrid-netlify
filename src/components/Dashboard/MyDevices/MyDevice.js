@@ -1,13 +1,13 @@
-import React, { Component } from "react";
-import { Helmet } from "react-helmet";
-import DeviceList from "./DeviceList";
-import uuid from "uuid";
-import axios from "axios";
-import { connect } from "react-redux";
-import Spinner from "../../../images";
-import CanvasJSReact from "../../../lib/canvasjs.react";
-import moment from "moment";
-import { fetchUserData } from "../../../actions/userData";
+import React, { Component } from 'react';
+import { Helmet } from 'react-helmet';
+import DeviceList from './DeviceList';
+import uuid from 'uuid';
+import axios from 'axios';
+import { connect } from 'react-redux';
+import Spinner from '../../../images';
+import CanvasJSReact from '../../../lib/canvasjs.react';
+import moment from 'moment';
+import { fetchUserData } from '../../../actions/userData';
 
 //Info about tampering with momentJS is in MyDevice.md (same folder)
 
@@ -19,27 +19,27 @@ class MyDevice extends Component {
       //JSON response from uniqgrid server
       // STATIC STUFF, DO NOT TAMPER
     ],
-    deviceId: "",
+    deviceId: '',
     devicesArr: [],
     isLoading: false,
     keys: [],
-    selectValue: "Select Device",
-    graphData: "",
+    selectValue: 'Select Device',
+    graphData: '',
     //Default start time
     startTime: moment()
-      .startOf("day")
+      .startOf('day')
       .valueOf(),
-    endtime: "",
+    endtime: '',
     default: true,
     deviceActivated: false,
-    day: " active-filter",
+    day: ' active-filter',
     //used to add selected highlight to day/week/month/year component
-    week: "",
-    month: "",
-    year: "",
+    week: '',
+    month: '',
+    year: '',
     //id of device
-    id: "",
-    selectedFilter: "day",
+    id: '',
+    selectedFilter: 'day',
     //back values handles LEFT and RIGHT changes to graph
     back: 1
   };
@@ -59,8 +59,8 @@ class MyDevice extends Component {
       isLoading: true,
       deviceActivated: true,
       deviceName: name,
-      selectValue: "",
-      graphData: ""
+      selectValue: '',
+      graphData: ''
     });
     const URL = `https://cors-anywhere.herokuapp.com/http://portal.uniqgridcloud.com:8080/api/device/${deviceId}`;
     //grab device details
@@ -80,7 +80,7 @@ class MyDevice extends Component {
         .catch(res => {
           if (res.status === 401) {
             localStorage.clear();
-            window.location.href = "/login";
+            window.location.href = '/login';
           }
         });
     });
@@ -97,10 +97,10 @@ class MyDevice extends Component {
     //Default EndTime and StartTime is DAY
     let endtime = moment().valueOf();
     let startTime = moment()
-      .startOf("day")
+      .startOf('day')
       .valueOf();
     this.setState({
-      selectedFilter: "day"
+      selectedFilter: 'day'
     });
     //get the timeseries data for graph
     axios
@@ -121,18 +121,18 @@ class MyDevice extends Component {
           graphData: s
         });
         //if no data
-        if (typeof a[Object.keys(a)[0]] === "undefined") {
+        if (typeof a[Object.keys(a)[0]] === 'undefined') {
           console.log(s);
           this.setState({
             isLoading: false,
-            graphData: ""
+            graphData: ''
           });
         }
       })
       .catch(res => {
         if (res.status === 401) {
           localStorage.clear();
-          window.location.href = "/login";
+          window.location.href = '/login';
         }
       });
   };
@@ -142,14 +142,14 @@ class MyDevice extends Component {
     let s = this.dataPoints();
     let typeOfGraph;
     //Set type of graphs for different filters
-    if (this.state.selectedFilter === "day") {
-      typeOfGraph = "area";
+    if (this.state.selectedFilter === 'day') {
+      typeOfGraph = 'area';
     } else {
-      typeOfGraph = "column";
+      typeOfGraph = 'column';
     }
     //Make heading from ac_power, to ac power
-    let heading = this.state.selectValue.split("_");
-    heading = heading.join(" ");
+    let heading = this.state.selectValue.split('_');
+    heading = heading.join(' ');
     //custom options for graphs
     const options = {
       title: {
@@ -158,12 +158,12 @@ class MyDevice extends Component {
       animationEnabled: true,
       //Downloadable ? true : false
       exportEnabled: true,
-      theme: "light2",
+      theme: 'light2',
       data: [
         {
           type: typeOfGraph,
           //change color of graph
-          color: "orange",
+          color: 'orange',
           dataPoints: [...s]
         }
       ]
@@ -175,18 +175,18 @@ class MyDevice extends Component {
   noDataSetOptions = () => {
     // if there are no data points then return empty graph
     let s = this.noDataPoints();
-    let heading = this.state.selectValue.split("_");
-    heading = heading.join(" ");
+    let heading = this.state.selectValue.split('_');
+    heading = heading.join(' ');
     const options = {
       title: {
         text: `${heading} Analysis`
       },
       animationEnabled: true,
       exportEnabled: true,
-      theme: "light2",
+      theme: 'light2',
       data: [
         {
-          type: "area",
+          type: 'area',
           dataPoints: [...s]
         }
       ]
@@ -199,28 +199,28 @@ class MyDevice extends Component {
     //set options for no data points
     return [
       {
-        label: moment().format("MMM Do YY"),
+        label: moment().format('MMM Do YY'),
         y: 0
       }
     ];
   };
 
   dataPoints = () => {
-    if (this.state.selectedFilter === "day") {
+    if (this.state.selectedFilter === 'day') {
       //change formatting for day filter on X axis and also scale the data on the y-axis
       let s = this.state.graphData.map(e => {
         return {
-          label: moment(e.ts).format("hh a"),
+          label: moment(e.ts).format('hh a'),
           y: e.value * 1
         };
       });
       return s;
     }
-    if (this.state.selectedFilter === "year") {
+    if (this.state.selectedFilter === 'year') {
       //formatting for year
       let s = this.state.graphData.map(e => {
         return {
-          label: moment(e.ts).format("MMM"),
+          label: moment(e.ts).format('MMM'),
           y: e.value * 1
         };
       });
@@ -229,7 +229,7 @@ class MyDevice extends Component {
     //for all others
     let s = this.state.graphData.map(e => {
       return {
-        label: moment(e.ts).format("MMM Do YY"),
+        label: moment(e.ts).format('MMM Do YY'),
         y: e.value * 1
       };
     });
@@ -238,12 +238,12 @@ class MyDevice extends Component {
 
   filterWeek = () => {
     this.setState({
-      selectedFilter: "week",
+      selectedFilter: 'week',
       back: 1
     });
     //for more details on isoWeek refer to MyDevice.md on same directory
     let startTime = moment()
-      .startOf("isoWeek")
+      .startOf('isoWeek')
       .valueOf();
     this.setState({
       startTime
@@ -273,26 +273,26 @@ class MyDevice extends Component {
       .catch(res => {
         if (res.status === 401) {
           localStorage.clear();
-          window.location.href = "/login";
+          window.location.href = '/login';
         }
       });
     //apply CSS to selected filter
     this.setState({
-      day: "",
-      week: " active-filter",
-      month: "",
-      year: ""
+      day: '',
+      week: ' active-filter',
+      month: '',
+      year: ''
     });
   };
   // Following all the filters provide the same basic usage as filter Week
 
   filterDay = () => {
     this.setState({
-      selectedFilter: "day",
+      selectedFilter: 'day',
       back: 1
     });
     let startTime = moment()
-      .startOf("day")
+      .startOf('day')
       .valueOf();
     this.setState({
       startTime
@@ -320,24 +320,24 @@ class MyDevice extends Component {
       .catch(res => {
         if (res.status === 401) {
           localStorage.clear();
-          window.location.href = "/login";
+          window.location.href = '/login';
         }
       });
     this.setState({
-      day: " active-filter",
-      week: "",
-      month: "",
-      year: ""
+      day: ' active-filter',
+      week: '',
+      month: '',
+      year: ''
     });
   };
 
   filterMonth = () => {
     this.setState({
-      selectedFilter: "month",
+      selectedFilter: 'month',
       back: 1
     });
     let startTime = moment()
-      .startOf("month")
+      .startOf('month')
       .valueOf();
     this.setState({
       startTime
@@ -365,24 +365,24 @@ class MyDevice extends Component {
       .catch(res => {
         if (res.status === 401) {
           localStorage.clear();
-          window.location.href = "/login";
+          window.location.href = '/login';
         }
       });
     this.setState({
-      day: "",
-      week: "",
-      month: " active-filter",
-      year: ""
+      day: '',
+      week: '',
+      month: ' active-filter',
+      year: ''
     });
   };
 
   filterYear = () => {
     this.setState({
-      selectedFilter: "year",
+      selectedFilter: 'year',
       back: 1
     });
     let startTime = moment()
-      .startOf("year")
+      .startOf('year')
       .valueOf();
     this.setState({
       startTime
@@ -410,14 +410,14 @@ class MyDevice extends Component {
       .catch(res => {
         if (res.status === 401) {
           localStorage.clear();
-          window.location.href = "/login";
+          window.location.href = '/login';
         }
       });
     this.setState({
-      day: "",
-      week: "",
-      month: "",
-      year: " active-filter"
+      day: '',
+      week: '',
+      month: '',
+      year: ' active-filter'
     });
   };
 
@@ -451,7 +451,7 @@ class MyDevice extends Component {
       .catch(res => {
         if (res.status === 401) {
           localStorage.clear();
-          window.location.href = "/login";
+          window.location.href = '/login';
         }
       });
   };
@@ -475,151 +475,151 @@ class MyDevice extends Component {
         let start_time, end_time, interval;
         //set interval timings for the day/week/month/year
 
-        if (this.state.selectedFilter === "day") {
+        if (this.state.selectedFilter === 'day') {
           // 15 mins
           interval = 900000;
         }
-        if (this.state.selectedFilter === "week") {
+        if (this.state.selectedFilter === 'week') {
           // 1 hour
           interval = 10800000;
         }
-        if (this.state.selectedFilter === "month") {
+        if (this.state.selectedFilter === 'month') {
           // 1 day
           interval = 86400000;
         }
-        if (this.state.selectedFilter === "year") {
+        if (this.state.selectedFilter === 'year') {
           // 1 day
           interval = 86400000;
         }
-        if (this.state.selectedFilter === "day") {
+        if (this.state.selectedFilter === 'day') {
           // This whole logic is explained in MyDevice.md
           if (this.state.back === 1) {
             start_time = moment()
-              .subtract(1, "days")
-              .startOf("day")
+              .subtract(1, 'days')
+              .startOf('day')
               .valueOf();
             end_time = start_time + 86400000;
             this.handleGraphChange(start_time, end_time, interval);
           }
           if (this.state.back === 2) {
             start_time = moment()
-              .subtract(2, "days")
-              .startOf("day")
+              .subtract(2, 'days')
+              .startOf('day')
               .valueOf();
             end_time = start_time + 86400000;
             this.handleGraphChange(start_time, end_time, interval);
           }
           if (this.state.back === 3) {
             start_time = moment()
-              .subtract(3, "days")
-              .startOf("day")
+              .subtract(3, 'days')
+              .startOf('day')
               .valueOf();
             end_time = start_time + 86400000;
             this.handleGraphChange(start_time, end_time, interval);
           }
           if (this.state.back === 4) {
             start_time = moment()
-              .subtract(4, "days")
-              .startOf("day")
+              .subtract(4, 'days')
+              .startOf('day')
               .valueOf();
             end_time = start_time + 86400000;
             this.handleGraphChange(start_time, end_time, interval);
           }
-        } else if (this.state.selectedFilter === "week") {
+        } else if (this.state.selectedFilter === 'week') {
           if (this.state.back === 1) {
             start_time = moment()
-              .subtract(1, "week")
-              .startOf("isoWeek")
+              .subtract(1, 'week')
+              .startOf('isoWeek')
               .valueOf();
             end_time = start_time + 604800000;
             this.handleGraphChange(start_time, end_time, interval);
           }
           if (this.state.back === 2) {
             start_time = moment()
-              .subtract(1, "week")
-              .startOf("isoWeek")
+              .subtract(1, 'week')
+              .startOf('isoWeek')
               .valueOf();
             end_time = start_time + 604800000;
             this.handleGraphChange(start_time, end_time, interval);
           }
           if (this.state.back === 3) {
             start_time = moment()
-              .subtract(2, "week")
-              .startOf("isoWeek")
+              .subtract(2, 'week')
+              .startOf('isoWeek')
               .valueOf();
             end_time = start_time + 604800000;
             this.handleGraphChange(start_time, end_time, interval);
           }
           if (this.state.back === 4) {
             start_time = moment()
-              .subtract(3, "week")
-              .startOf("isoWeek")
+              .subtract(3, 'week')
+              .startOf('isoWeek')
               .valueOf();
             end_time = start_time + 604800000;
             this.handleGraphChange(start_time, end_time, interval);
           }
-        } else if (this.state.selectedFilter === "month") {
+        } else if (this.state.selectedFilter === 'month') {
           if (this.state.back === 1) {
             start_time = moment()
-              .subtract(1, "month")
-              .startOf("month")
+              .subtract(1, 'month')
+              .startOf('month')
               .valueOf();
             end_time = start_time + 2628000000;
             this.handleGraphChange(start_time, end_time, interval);
           }
           if (this.state.back === 2) {
             start_time = moment()
-              .subtract(2, "month")
-              .startOf("month")
+              .subtract(2, 'month')
+              .startOf('month')
               .valueOf();
             end_time = start_time + 2628000000;
             this.handleGraphChange(start_time, end_time, interval);
           }
           if (this.state.back === 3) {
             start_time = moment()
-              .subtract(3, "month")
-              .startOf("month")
+              .subtract(3, 'month')
+              .startOf('month')
               .valueOf();
             end_time = start_time + 2628000000;
             this.handleGraphChange(start_time, end_time, interval);
           }
           if (this.state.back === 4) {
             start_time = moment()
-              .subtract(4, "month")
-              .startOf("month")
+              .subtract(4, 'month')
+              .startOf('month')
               .valueOf();
             end_time = start_time + 2628000000;
             this.handleGraphChange(start_time, end_time, interval);
           }
-        } else if (this.state.selectedFilter === "year") {
+        } else if (this.state.selectedFilter === 'year') {
           if (this.state.back === 1) {
             start_time = moment()
-              .subtract(1, "year")
-              .startOf("year")
+              .subtract(1, 'year')
+              .startOf('year')
               .valueOf();
             end_time = start_time + 31536000000;
             this.handleGraphChange(start_time, end_time, interval);
           }
           if (this.state.back === 2) {
             start_time = moment()
-              .subtract(2, "year")
-              .startOf("year")
+              .subtract(2, 'year')
+              .startOf('year')
               .valueOf();
             end_time = start_time + 31536000000;
             this.handleGraphChange(start_time, end_time, interval);
           }
           if (this.state.back === 3) {
             start_time = moment()
-              .subtract(3, "year")
-              .startOf("year")
+              .subtract(3, 'year')
+              .startOf('year')
               .valueOf();
             end_time = start_time + 31536000000;
             this.handleGraphChange(start_time, end_time, interval);
           }
           if (this.state.back === 4) {
             start_time = moment()
-              .subtract(4, "year")
-              .startOf("year")
+              .subtract(4, 'year')
+              .startOf('year')
               .valueOf();
             end_time = start_time + 31536000000;
             this.handleGraphChange(start_time, end_time, interval);
@@ -650,142 +650,142 @@ class MyDevice extends Component {
         if (this.state.back >= 0 && this.state.back <= 4) {
           let start_time, end_time, interval;
           console.log(this.state.back);
-          if (this.state.selectedFilter === "day") {
+          if (this.state.selectedFilter === 'day') {
             interval = 900000;
           }
-          if (this.state.selectedFilter === "week") {
+          if (this.state.selectedFilter === 'week') {
             interval = 10800000;
           }
-          if (this.state.selectedFilter === "month") {
+          if (this.state.selectedFilter === 'month') {
             interval = 86400000;
           }
-          if (this.state.selectedFilter === "year") {
+          if (this.state.selectedFilter === 'year') {
             interval = 86400000;
           }
-          if (this.state.selectedFilter === "day") {
+          if (this.state.selectedFilter === 'day') {
             if (this.state.back === 1) {
               start_time = moment()
-                .startOf("day")
+                .startOf('day')
                 .valueOf();
               end_time = moment().valueOf();
               this.handleGraphChange(start_time, end_time, interval);
             }
             if (this.state.back === 2) {
               start_time = moment()
-                .subtract(1, "days")
-                .startOf("day")
+                .subtract(1, 'days')
+                .startOf('day')
                 .valueOf();
               end_time = start_time + 86400000;
               this.handleGraphChange(start_time, end_time, interval);
             }
             if (this.state.back === 3) {
               start_time = moment()
-                .subtract(2, "days")
-                .startOf("day")
+                .subtract(2, 'days')
+                .startOf('day')
                 .valueOf();
               end_time = start_time + 86400000;
               this.handleGraphChange(start_time, end_time, interval);
             }
             if (this.state.back === 4) {
               start_time = moment()
-                .subtract(3, "days")
-                .startOf("day")
+                .subtract(3, 'days')
+                .startOf('day')
                 .valueOf();
               end_time = start_time + 86400000;
               this.handleGraphChange(start_time, end_time, interval);
             }
-          } else if (this.state.selectedFilter === "week") {
+          } else if (this.state.selectedFilter === 'week') {
             if (this.state.back === 1) {
               start_time = moment()
-                .startOf("isoWeek")
+                .startOf('isoWeek')
                 .valueOf();
               end_time = start_time + 604800000;
               this.handleGraphChange(start_time, end_time, interval);
             }
             if (this.state.back === 2) {
               start_time = moment()
-                .subtract(1, "week")
-                .startOf("isoWeek")
+                .subtract(1, 'week')
+                .startOf('isoWeek')
                 .valueOf();
               end_time = start_time + 604800000;
               this.handleGraphChange(start_time, end_time, interval);
             }
             if (this.state.back === 3) {
               start_time = moment()
-                .subtract(2, "week")
-                .startOf("isoWeek")
+                .subtract(2, 'week')
+                .startOf('isoWeek')
                 .valueOf();
               end_time = start_time + 604800000;
               this.handleGraphChange(start_time, end_time, interval);
             }
             if (this.state.back === 4) {
               start_time = moment()
-                .subtract(3, "week")
-                .startOf("isoWeek")
+                .subtract(3, 'week')
+                .startOf('isoWeek')
                 .valueOf();
               end_time = start_time + 604800000;
               this.handleGraphChange(start_time, end_time, interval);
             }
-          } else if (this.state.selectedFilter === "month") {
+          } else if (this.state.selectedFilter === 'month') {
             if (this.state.back === 1) {
               start_time = moment()
-                .startOf("month")
+                .startOf('month')
                 .valueOf();
               end_time = start_time + 2628000000;
               this.handleGraphChange(start_time, end_time, interval);
             }
             if (this.state.back === 2) {
               start_time = moment()
-                .subtract(1, "month")
-                .startOf("month")
+                .subtract(1, 'month')
+                .startOf('month')
                 .valueOf();
               end_time = start_time + 2628000000;
               this.handleGraphChange(start_time, end_time, interval);
             }
             if (this.state.back === 3) {
               start_time = moment()
-                .subtract(2, "month")
-                .startOf("month")
+                .subtract(2, 'month')
+                .startOf('month')
                 .valueOf();
               end_time = start_time + 2628000000;
               this.handleGraphChange(start_time, end_time, interval);
             }
             if (this.state.back === 4) {
               start_time = moment()
-                .subtract(3, "month")
-                .startOf("month")
+                .subtract(3, 'month')
+                .startOf('month')
                 .valueOf();
               end_time = start_time + 2628000000;
               this.handleGraphChange(start_time, end_time, interval);
             }
-          } else if (this.state.selectedFilter === "year") {
+          } else if (this.state.selectedFilter === 'year') {
             if (this.state.back === 1) {
               start_time = moment()
-                .startOf("year")
+                .startOf('year')
                 .valueOf();
               end_time = start_time + 31536000000;
               this.handleGraphChange(start_time, end_time, interval);
             }
             if (this.state.back === 2) {
               start_time = moment()
-                .subtract(1, "year")
-                .startOf("year")
+                .subtract(1, 'year')
+                .startOf('year')
                 .valueOf();
               end_time = start_time + 31536000000;
               this.handleGraphChange(start_time, end_time, interval);
             }
             if (this.state.back === 3) {
               start_time = moment()
-                .subtract(2, "year")
-                .startOf("year")
+                .subtract(2, 'year')
+                .startOf('year')
                 .valueOf();
               end_time = start_time + 31536000000;
               this.handleGraphChange(start_time, end_time, interval);
             }
             if (this.state.back === 4) {
               start_time = moment()
-                .subtract(3, "year")
-                .startOf("year")
+                .subtract(3, 'year')
+                .startOf('year')
                 .valueOf();
               end_time = start_time + 31536000000;
               this.handleGraphChange(start_time, end_time, interval);
@@ -812,8 +812,8 @@ class MyDevice extends Component {
     //options for selection of keys
     const listOfKeys = this.state.keys.map(key => {
       let keyValue = key;
-      let keyArray = keyValue.split("_");
-      keyArray = keyArray.join(" ");
+      let keyArray = keyValue.split('_');
+      keyArray = keyArray.join(' ');
       return (
         <option key={uuid.v4()} value={key}>
           {keyArray}
@@ -825,116 +825,116 @@ class MyDevice extends Component {
         <Helmet>
           <title>My Device</title>
         </Helmet>
-        <div className="mydevice-hero">
-          <h1 style={{ marginBottom: "20px" }} className="mysite-heading">
-            <i className="fas fa-mobile-alt icon-heading" /> My Devices
+        <div className='mydevice-hero'>
+          <h1 style={{ marginBottom: '20px' }} className='mysite-heading'>
+            <i className='fas fa-mobile-alt icon-heading' /> My Devices
           </h1>
 
-          <div className="mydevice-list">
+          <div className='mydevice-list'>
             <div
               style={{
-                display: "flex",
-                paddingLeft: "10px",
-                paddingTop: "10px",
-                cursor: "pointer",
-                fontSize: "120%",
-                color: "#111111",
-                borderBottom: "2px solid #d3d3d3"
+                display: 'flex',
+                paddingLeft: '10px',
+                paddingTop: '10px',
+                cursor: 'pointer',
+                fontSize: '120%',
+                color: '#111111',
+                borderBottom: '2px solid #d3d3d3'
               }}
-              className={"device-list " + this.state.selected}
+              className={'device-list ' + this.state.selected}
             >
-              <div className="my-col">
+              <div className='my-col'>
                 <p>Device Id</p>
               </div>
-              <div className="my-col">
+              <div className='my-col'>
                 <p> </p>
               </div>
-              <div className="my-col">
+              <div className='my-col'>
                 <p>Rated Capacity (kW)</p>
               </div>
-              <div className="my-col">
+              <div className='my-col'>
                 <p>Device Type</p>
               </div>
             </div>
           </div>
           {this.getConnectionList()}
-          <div className="my-device-graph">
+          <div className='my-device-graph'>
             {this.state.deviceActivated && (
-              <div className="filter">
-                <h4 style={{ width: "100%", textAlign: "center" }}>
+              <div className='filter'>
+                <h4 style={{ width: '100%', textAlign: 'center' }}>
                   {this.state.deviceName}
                 </h4>
                 <select
                   value={this.state.selectValue}
                   onChange={this.handleChange}
-                  className="key-select"
+                  className='key-select'
                 >
                   <option defaultValue>Select</option>
                   {listOfKeys}
                 </select>
                 <button
-                  className={"filter-button" + this.state.day}
+                  className={'filter-button' + this.state.day}
                   onClick={this.filterDay}
                 >
                   Day
                 </button>
                 <button
-                  className={"filter-button" + this.state.week}
+                  className={'filter-button' + this.state.week}
                   onClick={this.filterWeek}
                 >
                   Week
                 </button>
                 <button
-                  className={"filter-button" + this.state.month}
+                  className={'filter-button' + this.state.month}
                   onClick={this.filterMonth}
                 >
                   Month
                 </button>
                 <button
-                  className={"filter-button" + this.state.year}
+                  className={'filter-button' + this.state.year}
                   onClick={this.filterYear}
                 >
                   Year
                 </button>
                 <br />
-                <div className="row" style={{ marginTop: "10px" }}>
-                  <div className="col-sm-12 col flex">
-                    <div style={{ width: "50%" }}>
+                <div className='row' style={{ marginTop: '10px' }}>
+                  <div className='col-sm-12 col flex'>
+                    <div style={{ width: '50%' }}>
                       <button
                         onClick={this.handleLeft}
                         style={{
-                          position: "absolute",
-                          left: "0",
-                          fontSize: "130%",
-                          backgroundColor: "white"
+                          position: 'absolute',
+                          left: '0',
+                          fontSize: '130%',
+                          backgroundColor: 'white'
                         }}
                       >
                         <i
-                          style={{ color: "black" }}
-                          className="fas fa-arrow-left"
+                          style={{ color: 'black' }}
+                          className='fas fa-arrow-left'
                         />
                         <span style={{}}>
-                          {" "}
+                          {' '}
                           Previous {this.state.selectedFilter}
                         </span>
                       </button>
                     </div>
-                    <div style={{ width: "50%", position: "relative" }}>
+                    <div style={{ width: '50%', position: 'relative' }}>
                       <button
                         onClick={this.handleRight}
                         style={{
-                          position: "absolute",
-                          right: "0",
-                          fontSize: "130%",
-                          backgroundColor: "white"
+                          position: 'absolute',
+                          right: '0',
+                          fontSize: '130%',
+                          backgroundColor: 'white'
                         }}
                       >
                         <span style={{}}>
-                          Next {this.state.selectedFilter}{" "}
+                          Next {this.state.selectedFilter}{' '}
                         </span>
                         <i
-                          style={{ color: "black" }}
-                          className="fas fa-arrow-right"
+                          style={{ color: 'black' }}
+                          className='fas fa-arrow-right'
                         />
                       </button>
                     </div>
@@ -951,7 +951,7 @@ class MyDevice extends Component {
                     />
                   )}
                   {this.state.isLoading && (
-                    <div style={{ height: "400px" }}>
+                    <div style={{ height: '400px' }}>
                       <Spinner />
                     </div>
                   )}
