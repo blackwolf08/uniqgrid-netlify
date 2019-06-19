@@ -86,16 +86,28 @@ button {
 .root_left {
   height: 100%;
   width: 50%;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
   align-items: center;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
   justify-content: center;
 }
 
 .root_right {
   height: 100%;
   width: 50%;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
   justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
   align-items: center;
 }
 
@@ -163,6 +175,7 @@ button {
 }
 .navbar-responsive-1 {
   background-color: rgb(38, 50, 56);
+  -webkit-box-shadow: 0 0 10px black;
   box-shadow: 0 0 10px black;
 }
 .navbar-logout {
@@ -180,6 +193,7 @@ button {
 .left-part {
   position: fixed;
   top: 60px;
+  -webkit-box-shadow: 0 0 10px rgb(38, 50, 56);
   box-shadow: 0 0 10px rgb(38, 50, 56);
   height: calc(100% - 60px);
   background-color: rgb(38, 50, 56);
@@ -548,6 +562,8 @@ h4 {
   border-radius: 10px;
   position: absolute;
   right: 0;
+  -webkit-transform: translate(-50%, 0);
+  -ms-transform: translate(-50%, 0);
   transform: translate(-50%, 0);
 }
 
@@ -688,6 +704,8 @@ input:focus {
   border-radius: 0.5rem;
   width: 100px;
   margin-right: 0px;
+  -webkit-transform: translate(-150%, 0);
+  -ms-transform: translate(-150%, 0);
   transform: translate(-150%, 0);
   margin-left: 100%;
 }
@@ -699,6 +717,8 @@ input:focus {
 .circle-myprofile {
   background-color: rgb(38, 50, 56);
   margin-left: calc(100% - 50%);
+  -webkit-transform: translate(-50%, 0);
+  -ms-transform: translate(-50%, 0);
   transform: translate(-50%, 0);
 }
 .circle-myprofile p {
@@ -761,6 +781,7 @@ tr {
   bottom: 0;
   background-color: #ccc;
   -webkit-transition: 0.4s;
+  -o-transition: 0.4s;
   transition: 0.4s;
 }
 
@@ -773,6 +794,7 @@ tr {
   bottom: 4px;
   background-color: white;
   -webkit-transition: 0.4s;
+  -o-transition: 0.4s;
   transition: 0.4s;
 }
 
@@ -781,6 +803,7 @@ input:checked + .slider {
 }
 
 input:focus + .slider {
+  -webkit-box-shadow: 0 0 1px #2196f3;
   box-shadow: 0 0 1px #2196f3;
 }
 
