@@ -78,9 +78,18 @@ button {
   height: 100%;
 }
 
+.my_typed {
+  border: none;
+  font-size: 2rem;
+  position: absolute;
+  font-size: 4rem;
+  color: black;
+}
+
 .root_gif {
-  width: 900px;
-  height: 900px;
+  width: 1400px;
+  height: 700px;
+  margin-left: 300px;
 }
 
 .root_left {
@@ -119,15 +128,16 @@ button {
   background-color: #fff;
   -webkit-box-shadow: 0 0 2px gray;
   box-shadow: 0 0 2px gray;
-  height: 40%;
-  width: 70%;
-  max-width: 400px;
+  height: 49%;
+  width: 52%;
   position: relative;
   border-radius: 10px;
+  margin-left: 100px;
 }
 
 .auth-logo {
-  height: 100px;
+  height: 130px;
+  margin-left: 100px;
   margin-bottom: -50px;
   z-index: 100;
   background-color: #fff;
@@ -878,6 +888,7 @@ input:checked + .slider:before {
 
   .auth-container {
     width: 90%;
+    max-width: 400px;
   }
 
   img.mysite-icons1 {
