@@ -1,13 +1,13 @@
-import React, { Component } from "react";
-import Connection from "./ConnectionList/Connection";
-import { Helmet } from "react-helmet";
-import axios from "axios";
-import icon1 from "../../../images/icon1.svg";
-import icon2 from "../../../images/icon2.svg";
-import jwtDecode from "jwt-decode";
-import { Link } from "react-router-dom";
-import { fetchUserData } from "../../../actions/userData";
-import { connect } from "react-redux";
+import React, { Component } from 'react';
+import Connection from './ConnectionList/Connection';
+import { Helmet } from 'react-helmet';
+import axios from 'axios';
+import icon1 from '../../../images/icon1.svg';
+import icon2 from '../../../images/icon2.svg';
+import jwtDecode from 'jwt-decode';
+import { Link } from 'react-router-dom';
+import { fetchUserData } from '../../../actions/userData';
+import { connect } from 'react-redux';
 
 class MySite extends Component {
   state = {
@@ -21,7 +21,7 @@ class MySite extends Component {
 
   componentWillMount() {
     // this full piece of code executes to get the keys from te object we get from the API and processes the raw data into a more feature rich text
-    if (typeof localStorage.jwtToken !== "undefined") {
+    if (typeof localStorage.jwtToken !== 'undefined') {
       this.props.fetchUserData();
       let jwt = localStorage.jwtToken;
       jwt = jwtDecode(jwt);
@@ -45,9 +45,9 @@ class MySite extends Component {
             // according to the struct of API this piece of code gives site number as connection_site_'2'_, outputs 2
             let nanCheck = isNaN(parseInt(site.charAt(site.length - 2), 10));
             if (
-              site.search("electricity_connection_name") >= 0 &&
+              site.search('electricity_connection_name') >= 0 &&
               !nanCheck &&
-              properties[site].value !== ""
+              properties[site].value !== ''
             ) {
               noOfSites.push(parseInt(site.charAt(site.length - 2), 10));
             }
@@ -56,7 +56,7 @@ class MySite extends Component {
           arrayOfStrings.sort();
           //get the names of the sites
           arrayOfStrings.forEach(site => {
-            if (site.search("electricity_connection_name") >= 0) {
+            if (site.search('electricity_connection_name') >= 0) {
               nameOfSites.push(res.data.properties[site].value);
             }
           });
@@ -77,18 +77,18 @@ class MySite extends Component {
           let kWASite = [];
           // gives us the power that are used to render power in my site area
           arrayOfStrings.forEach(site => {
-            if (site.search("connected_load_kw_site") >= 0) {
+            if (site.search('connected_load_kw_site') >= 0) {
               kWASite.push(site);
-            } else if (site.search("connected_load_kw") >= 0) {
+            } else if (site.search('connected_load_kw') >= 0) {
               kWASite.push(site);
             }
           });
           //Solar power displayed on MySite Page
           let solarPower = [];
           arrayOfStrings.forEach(site => {
-            if (site.search("solar_capacity_kwp_site") >= 0) {
+            if (site.search('solar_capacity_kwp_site') >= 0) {
               solarPower.push(site);
-            } else if (site.search("solar_capacity_kwp") >= 0) {
+            } else if (site.search('solar_capacity_kwp') >= 0) {
               solarPower.push(site);
             }
           });
@@ -105,7 +105,7 @@ class MySite extends Component {
         .catch(res => {
           if (res.status === 401) {
             localStorage.clear();
-            window.location.href = "/login";
+            window.location.href = '/login';
           }
         });
       this.setState({
@@ -124,22 +124,22 @@ class MySite extends Component {
         j = this.state.maxConnections - 1;
       }
 
-      if (typeof this.state.properties[this.state.kWASite[j]] === "undefined") {
+      if (typeof this.state.properties[this.state.kWASite[j]] === 'undefined') {
         list.push(
           <Connection
             key={i}
             id={i}
-            name={`${this.state.nameOfSites[i - 1] || "--"}`}
+            name={`${this.state.nameOfSites[i - 1] || '--'}`}
             power={`${
               this.state.properties[this.state.kWASite[j]]
                 ? this.state.properties[this.state.kWASite[j]].value
-                : "--"
+                : '--'
             } kW`}
             powerPer={`55%`}
             consumption={`${
               this.state.properties[this.state.solarPower[j]]
                 ? this.state.properties[this.state.solarPower[j]].value
-                : "--"
+                : '--'
             } kW`}
             consumptionPer={`100%`}
           />
@@ -149,17 +149,17 @@ class MySite extends Component {
           <Connection
             key={i}
             id={i}
-            name={`${this.state.nameOfSites[i - 1] || "--"}`}
+            name={`${this.state.nameOfSites[i - 1] || '--'}`}
             power={`${
               this.state.properties[this.state.kWASite[j]]
                 ? this.state.properties[this.state.kWASite[j]].value
-                : "--"
+                : '--'
             } kW`}
             powerPer={`55%`}
             consumption={`${
               this.state.properties[this.state.solarPower[k]]
                 ? this.state.properties[this.state.solarPower[k]].value
-                : "--"
+                : '--'
             } kW`}
             consumptionPer={`100%`}
           />
@@ -168,39 +168,39 @@ class MySite extends Component {
     }
     // Views for MySite
     return (
-      <div className="mysites-root">
+      <div className='mysites-root'>
         <Helmet>
           <title>My Site</title>
         </Helmet>
-        <h1 className="mysites-heading">
-          <i className="fas fa-house-damage icon-heading" /> My Sites
+        <h1 className='mysites-heading'>
+          <i className='fas fa-house-damage icon-heading' /> My Sites
         </h1>
         {this.state.ready && (
-          <div className="mysites-connection-list">
-            <div className="mysites-connections" onClick={this.handleClick}>
-              <div className="my-col">
+          <div className='mysites-connection-list'>
+            <div className='mysites-connections' onClick={this.handleClick}>
+              <div className='my-col'>
                 <p>{}</p>
               </div>
-              <div className="my-col">
-                <img className="mysite-icons1" src={icon1} alt="power" />
+              <div className='my-col'>
+                <img className='mysite-icons1' src={icon1} alt='power' />
               </div>
-              <div className="my-col">
-                <img className="mysite-icons2" src={icon2} alt="charge" />
+              <div className='my-col'>
+                <img className='mysite-icons2' src={icon2} alt='charge' />
               </div>
               <div
-                className="my-col mysites-icons"
-                style={{ display: "flex", justifyContent: "space-around" }}
+                className='my-col mysites-icons'
+                style={{ display: 'flex', justifyContent: 'space-around' }}
               >
-                <p />
+                <p>Insights / Settings</p>
               </div>
             </div>
             {list}
           </div>
         )}
-        <Link to="/dashboard/new-connection" style={styles.buttonAdd}>
+        <Link to='/dashboard/new-connection' style={styles.buttonAdd}>
           <i
-            style={{ color: "white", margin: "0", padding: "0" }}
-            className="fas fa-plus"
+            style={{ color: 'white', margin: '0', padding: '0' }}
+            className='fas fa-plus'
           />
         </Link>
       </div>
@@ -210,17 +210,17 @@ class MySite extends Component {
 
 const styles = {
   buttonAdd: {
-    position: "fixed",
-    bottom: "20px",
-    right: "20px",
-    padding: "20px",
-    borderRadius: "50%",
-    backgroundColor: "rgb(38, 50, 56)",
-    width: "50px",
-    height: "50px",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center"
+    position: 'fixed',
+    bottom: '20px',
+    right: '20px',
+    padding: '20px',
+    borderRadius: '50%',
+    backgroundColor: 'rgb(38, 50, 56)',
+    width: '50px',
+    height: '50px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center'
   }
 };
 

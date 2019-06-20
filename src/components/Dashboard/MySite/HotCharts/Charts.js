@@ -14,7 +14,7 @@ export default class Charts extends Component {
   state = {
     deviceId: '',
     device_name: '',
-    key: 'ac_current_r_Extruder_3_EB',
+    key: 'import_energy',
     devicesArr: [],
     deviceActivated: false,
     isLoading: false,
@@ -870,105 +870,7 @@ export default class Charts extends Component {
     }
     return (
       <div className='hot_charts'>
-        <div className='my-device-graph'>
-          {this.state.deviceActivated && (
-            <div className='filter'>
-              <h4 style={{ width: '100%', textAlign: 'center' }}>
-                {this.state.deviceName}
-              </h4>
-              <button
-                className={'filter-button' + this.state.day}
-                onClick={this.filterDay}
-              >
-                Day
-              </button>
-              <button
-                className={'filter-button' + this.state.week}
-                onClick={this.filterWeek}
-              >
-                Week
-              </button>
-              <button
-                className={'filter-button' + this.state.month}
-                onClick={this.filterMonth}
-              >
-                Month
-              </button>
-              <button
-                className={'filter-button' + this.state.year}
-                onClick={this.filterYear}
-              >
-                Year
-              </button>
-              <br />
-              <div className='row' style={{ marginTop: '10px' }}>
-                <div className='col-sm-12 col flex'>
-                  <div style={{ width: '50%' }}>
-                    <button
-                      onClick={this.handleLeft}
-                      style={{
-                        position: 'absolute',
-                        left: '0',
-                        fontSize: '130%',
-                        backgroundColor: 'white'
-                      }}
-                    >
-                      <i
-                        style={{ color: 'black' }}
-                        className='fas fa-arrow-left'
-                      />
-                      <span style={{}}>
-                        {' '}
-                        Previous {this.state.selectedFilter}
-                      </span>
-                    </button>
-                  </div>
-                  <div style={{ width: '50%', position: 'relative' }}>
-                    <button
-                      onClick={this.handleRight}
-                      style={{
-                        position: 'absolute',
-                        right: '0',
-                        fontSize: '130%',
-                        backgroundColor: 'white'
-                      }}
-                    >
-                      <span style={{}}>Next {this.state.selectedFilter} </span>
-                      <i
-                        style={{ color: 'black' }}
-                        className='fas fa-arrow-right'
-                      />
-                    </button>
-                  </div>
-                </div>
-              </div>
-              <br />
-              <br />
-              {/* <p>{this.state.graphData}</p> */}
-              <div>
-                {!this.state.graphData && !this.state.isLoading && (
-                  <CanvasJSChart
-                    options={this.noDataSetOptions()}
-                    /* onRef = {ref => this.chart = ref} */
-                  />
-                )}
-                {this.state.isLoading && (
-                  <div style={{ height: '400px' }}>
-                    <Spinner />
-                  </div>
-                )}
-                {this.state.graphData &&
-                  !this.state.isLoading &&
-                  this.state.graphData.length > 1 && (
-                    <CanvasJSChart
-                      options={this.setOptions()}
-                      /* onRef = {ref => this.chart = ref} */
-                    />
-                  )}
-              </div>
-            </div>
-          )}
-        </div>
+        <h3 style={{ marginTop: '100px' }}>Select Device</h3>
         <FormControl className=''>
           <InputLabel htmlFor='devices'>Devices</InputLabel>
           <Select
@@ -983,10 +885,116 @@ export default class Charts extends Component {
             {listOfDevices}
           </Select>
         </FormControl>
-        <label className='switch'>
-          <input type='checkbox' />
-          <span className='slider round' />
-        </label>
+        {this.state.deviceActivated && (
+          <label className='switch'>
+            <input type='checkbox' />
+            <span className='slider round' />
+          </label>
+        )}
+        <div className='my-device-graph'>
+          {this.state.deviceActivated && (
+            <>
+              <h3>{this.state.device_name}</h3>
+              <div className='filter'>
+                <h4 style={{ width: '100%', textAlign: 'center' }}>
+                  {this.state.deviceName}
+                </h4>
+                <button
+                  className={'filter-button' + this.state.day}
+                  onClick={this.filterDay}
+                >
+                  Day
+                </button>
+                <button
+                  className={'filter-button' + this.state.week}
+                  onClick={this.filterWeek}
+                >
+                  Week
+                </button>
+                <button
+                  className={'filter-button' + this.state.month}
+                  onClick={this.filterMonth}
+                >
+                  Month
+                </button>
+                <button
+                  className={'filter-button' + this.state.year}
+                  onClick={this.filterYear}
+                >
+                  Year
+                </button>
+                <br />
+                <div className='row' style={{ marginTop: '10px' }}>
+                  <div className='col-sm-12 col flex'>
+                    <div style={{ width: '50%' }}>
+                      <button
+                        onClick={this.handleLeft}
+                        style={{
+                          position: 'absolute',
+                          left: '0',
+                          fontSize: '130%',
+                          backgroundColor: 'white'
+                        }}
+                      >
+                        <i
+                          style={{ color: 'black' }}
+                          className='fas fa-arrow-left'
+                        />
+                        <span style={{}}>
+                          {' '}
+                          Previous {this.state.selectedFilter}
+                        </span>
+                      </button>
+                    </div>
+                    <div style={{ width: '50%', position: 'relative' }}>
+                      <button
+                        onClick={this.handleRight}
+                        style={{
+                          position: 'absolute',
+                          right: '0',
+                          fontSize: '130%',
+                          backgroundColor: 'white'
+                        }}
+                      >
+                        <span style={{}}>
+                          Next {this.state.selectedFilter}{' '}
+                        </span>
+                        <i
+                          style={{ color: 'black' }}
+                          className='fas fa-arrow-right'
+                        />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <br />
+                <br />
+                {/* <p>{this.state.graphData}</p> */}
+                <div>
+                  {!this.state.graphData && !this.state.isLoading && (
+                    <CanvasJSChart
+                      options={this.noDataSetOptions()}
+                      /* onRef = {ref => this.chart = ref} */
+                    />
+                  )}
+                  {this.state.isLoading && (
+                    <div style={{ height: '400px' }}>
+                      <Spinner />
+                    </div>
+                  )}
+                  {this.state.graphData &&
+                    !this.state.isLoading &&
+                    this.state.graphData.length > 1 && (
+                      <CanvasJSChart
+                        options={this.setOptions()}
+                        /* onRef = {ref => this.chart = ref} */
+                      />
+                    )}
+                </div>
+              </div>
+            </>
+          )}
+        </div>
       </div>
     );
   }

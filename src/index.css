@@ -124,6 +124,10 @@ button {
   font-weight: 500 !important;
 }
 
+.mysites-connections {
+  border-bottom: 1px solid #eee;
+}
+
 .auth-container {
   background-color: #fff;
   -webkit-box-shadow: 0 0 2px gray;
@@ -699,12 +703,14 @@ input:focus {
   height: 30px;
   width: 30px;
   margin-top: 0px;
+  margin-left: 250px;
 }
 
 .mysite-icons2 {
   height: 30px;
   width: 30px;
   margin-top: 0px;
+  margin-left: 250px;
 }
 
 .update-button {
