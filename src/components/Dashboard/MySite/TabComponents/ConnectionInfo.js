@@ -441,7 +441,6 @@ class ConnectionInfo extends Component {
                     handleChildrenChange={this.handleChildrenChange}
                     update={this.update}
                     data={this.props.info}
-                    id={this.state.id}
                     handleUpdateButtonClick={() => {
                       this.handleUpdateButtonClick(5);
                     }}

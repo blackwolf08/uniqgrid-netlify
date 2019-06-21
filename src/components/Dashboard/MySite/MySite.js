@@ -74,24 +74,88 @@ class MySite extends Component {
             properties
           });
 
-          let kWASite = [];
-          // gives us the power that are used to render power in my site area
-          arrayOfStrings.forEach(site => {
-            if (site.search('connected_load_kw_site') >= 0) {
-              kWASite.push(site);
-            } else if (site.search('connected_load_kw') >= 0) {
-              kWASite.push(site);
-            }
-          });
+          let kWASite = {
+            site1: '--',
+            site2: '--',
+            site3: '--',
+            site4: '--',
+            site5: '--',
+            site6: '--',
+            site7: '--',
+            site8: '--',
+            site9: '--'
+          };
           //Solar power displayed on MySite Page
-          let solarPower = [];
-          arrayOfStrings.forEach(site => {
-            if (site.search('solar_capacity_kwp_site') >= 0) {
-              solarPower.push(site);
-            } else if (site.search('solar_capacity_kwp') >= 0) {
-              solarPower.push(site);
+          let solarPower = {
+            site1: '--',
+            site2: '--',
+            site3: '--',
+            site4: '--',
+            site5: '--',
+            site6: '--',
+            site7: '--',
+            site8: '--',
+            site9: '--'
+          };
+          // gives us the power that are used to render power in my site area
+          Object.keys(properties).forEach(site => {
+            if (site.search('connected_load_kw_site_2_') >= 0) {
+              kWASite['site2'] = properties[site].value;
+            }
+            if (site.search('connected_load_kw_site_3_') >= 0) {
+              kWASite['site3'] = properties[site].value;
+            }
+            if (site.search('connected_load_kw_site_4_') >= 0) {
+              kWASite['site4'] = properties[site].value;
+            }
+            if (site.search('connected_load_kw_site_5_') >= 0) {
+              kWASite['site5'] = properties[site].value;
+            }
+            if (site.search('connected_load_kw_site_6_') >= 0) {
+              kWASite['site6'] = properties[site].value;
+            }
+            if (site.search('connected_load_kw_site_7_') >= 0) {
+              kWASite['site7'] = properties[site].value;
+            }
+            if (site.search('connected_load_kw_site_8_') >= 0) {
+              kWASite['site8'] = properties[site].value;
+            }
+            if (site.search('connected_load_kw_site_9_') >= 0) {
+              kWASite['site9'] = properties[site].value;
+            }
+            if (site === 'connected_load_kw_') {
+              kWASite['site1'] = properties[site].value;
+            }
+            if (site.search('solar_capacity_kwp_site_2_') >= 0) {
+              solarPower['site2'] = properties[site].value;
+            }
+            if (site.search('solar_capacity_kwp_site_3_') >= 0) {
+              solarPower['site3'] = properties[site].value;
+            }
+            if (site.search('solar_capacity_kwp_site_4_') >= 0) {
+              solarPower['site4'] = properties[site].value;
+            }
+            if (site.search('solar_capacity_kwp_site_5_') >= 0) {
+              solarPower['site5'] = properties[site].value;
+            }
+            if (site.search('solar_capacity_kwp_site_6_') >= 0) {
+              solarPower['site6'] = properties[site].value;
+            }
+            if (site.search('solar_capacity_kwp_site_7_') >= 0) {
+              solarPower['site7'] = properties[site].value;
+            }
+            if (site.search('solar_capacity_kwp_site_8_') >= 0) {
+              solarPower['site8'] = properties[site].value;
+            }
+            if (site.search('solar_capacity_kwp_site_9_') >= 0) {
+              solarPower['site9'] = properties[site].value;
+            }
+            if (site.search('total_capacity_kwp') >= 0) {
+              solarPower['site1'] = properties[site].value;
             }
           });
+          console.log(kWASite, solarPower);
+
           this.setState({
             kWASite,
             solarPower
@@ -117,55 +181,19 @@ class MySite extends Component {
   render() {
     let list = [];
     for (let i = 1; i <= this.state.maxConnections; i++) {
-      let j = i - 1;
-      let k = i - 2;
-      //this if conditon stat
-      if (j === this.state.maxConnections - 1) {
-        j = this.state.maxConnections - 1;
-      }
-
-      if (typeof this.state.properties[this.state.kWASite[j]] === 'undefined') {
-        list.push(
-          <Connection
-            key={i}
-            id={i}
-            name={`${this.state.nameOfSites[i - 1] || '--'}`}
-            power={`${
-              this.state.properties[this.state.kWASite[j]]
-                ? this.state.properties[this.state.kWASite[j]].value
-                : '--'
-            } kW`}
-            powerPer={`55%`}
-            consumption={`${
-              this.state.properties[this.state.solarPower[j]]
-                ? this.state.properties[this.state.solarPower[j]].value
-                : '--'
-            } kW`}
-            consumptionPer={`100%`}
-          />
-        );
-      } else {
-        list.push(
-          <Connection
-            key={i}
-            id={i}
-            name={`${this.state.nameOfSites[i - 1] || '--'}`}
-            power={`${
-              this.state.properties[this.state.kWASite[j]]
-                ? this.state.properties[this.state.kWASite[j]].value
-                : '--'
-            } kW`}
-            powerPer={`55%`}
-            consumption={`${
-              this.state.properties[this.state.solarPower[k]]
-                ? this.state.properties[this.state.solarPower[k]].value
-                : '--'
-            } kW`}
-            consumptionPer={`100%`}
-          />
-        );
-      }
+      list.push(
+        <Connection
+          key={i}
+          id={i}
+          name={`${this.state.nameOfSites[i - 1] || '--'}`}
+          power={`${this.state.kWASite[`site${i}`]} kW`}
+          powerPer={`55%`}
+          consumption={`${this.state.solarPower[`site${i}`]} kW`}
+          consumptionPer={`100%`}
+        />
+      );
     }
+
     // Views for MySite
     return (
       <div className='mysites-root'>

@@ -38,7 +38,10 @@ class ConnectionDetails extends Component {
           sub_segment: this.props.data[key].value.toString()
         });
       }
-      if (key.indexOf('average') === 0) {
+      if (
+        key.indexOf('monthly_energy_cost') === 0 ||
+        key.indexOf('average') === 0
+      ) {
         this.setState({
           average_monthly_energy_cost: this.props.data[key].value.toString()
         });
