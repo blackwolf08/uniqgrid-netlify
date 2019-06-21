@@ -10,7 +10,9 @@ import Select from '@material-ui/core/Select';
 class InstalledDevices extends Component {
   state = {
     deviceList: [],
-    device_pool: []
+    device_pool: [],
+    masterDevice: '',
+    masterDeviceToSend: {}
   };
 
   componentWillMount() {
@@ -25,10 +27,10 @@ class InstalledDevices extends Component {
     });
     if (parseInt(this.props.id) === 1) {
       if (
-        this.props.data['device id'] &&
-        this.props.data['device id'].value !== ''
+        this.props.data['device_id'] &&
+        this.props.data['device_id'].value !== ''
       ) {
-        let name = this.props.data['device id'].value.replace(/'/g, '"');
+        let name = this.props.data['device_id'].value.replace(/'/g, '"');
         JSON.parse(name);
         this.setState({
           deviceList: JSON.parse(name)
@@ -41,6 +43,18 @@ class InstalledDevices extends Component {
           deviceList: name
         });
       }
+      name = this.props.data['master_site1'].value.replace(/'/g, '"');
+      this.setState({
+        masterDevice: JSON.parse(name).device.name
+      });
+    }
+    if (this.props.id > 1) {
+      let masterDeviceNew = this.props.data[
+        `master_site${this.props.id}`
+      ].value.replace(/'/g, '"');
+      this.setState({
+        masterDevice: JSON.parse(masterDeviceNew).device.name
+      });
     }
 
     Object.keys(this.props.data).forEach(key => {
@@ -119,9 +133,31 @@ class InstalledDevices extends Component {
     });
   };
 
+  handleChangeMaster = e => {
+    let newMaster = {
+      device: {
+        additionalInfo: '',
+        id: `${e.target.value[0]}`,
+        name: `${e.target.value[1]}`
+      }
+    };
+    this.setState({
+      masterDevice: `${e.target.value[1]}`,
+      masterDeviceToSend: newMaster
+    });
+  };
+
   handleSubmit = () => {
     let toSend;
     if (parseInt(this.props.id) === 1) {
+      let masterDeviceToSend = {
+        device: {
+          name: `${this.state.masterDevice}`
+        }
+      };
+      if (this.state.masterDeviceToSend !== {}) {
+        masterDeviceToSend = this.state.masterDeviceToSend;
+      }
       toSend = [
         {
           property: 'device_pool',
@@ -130,9 +166,21 @@ class InstalledDevices extends Component {
         {
           property: 'device_id',
           value: JSON.stringify(this.state.deviceList)
+        },
+        {
+          property: 'master_site1',
+          value: JSON.stringify(masterDeviceToSend)
         }
       ];
     } else {
+      let masterDeviceToSend = {
+        device: {
+          name: `${this.state.masterDevice}`
+        }
+      };
+      if (this.state.masterDeviceToSend !== {}) {
+        masterDeviceToSend = this.state.masterDeviceToSend;
+      }
       toSend = [
         {
           property: 'device_pool',
@@ -141,6 +189,10 @@ class InstalledDevices extends Component {
         {
           property: `device_list_site_${this.props.id}_`,
           value: JSON.stringify(this.state.deviceList)
+        },
+        {
+          property: `master_site${this.props.id}`,
+          value: JSON.stringify(masterDeviceToSend)
         }
       ];
     }
@@ -168,20 +220,42 @@ class InstalledDevices extends Component {
   render() {
     let listOfDevices;
     let listOfPool;
+    let listOfDevicesSelect;
 
     if (this.state.deviceList.device_list) {
       listOfDevices = this.state.deviceList.device_list.map(device => {
         return (
-          <button
-            name={device.device.name}
-            onClick={this.handleClick}
+          <div style={{ position: 'relative' }} key={uuid.v4()}>
+            <button
+              name={device.device.name}
+              onClick={this.handleClick}
+              className='installed-device-buttons'
+              value={device.device.id}
+            >
+              {device.device.name}{' '}
+              <i className='fas fa-times' style={{ color: 'grey' }} />
+            </button>
+            <div
+              className='master-device'
+              style={
+                this.state.masterDevice === device.device.name
+                  ? styles.masterDevice
+                  : styles.normalDevice
+              }
+            >
+              {' '}
+            </div>
+          </div>
+        );
+      });
+      listOfDevicesSelect = this.state.deviceList.device_list.map(device => {
+        return (
+          <MenuItem
             key={uuid.v4()}
-            className='installed-device-buttons'
-            value={device.device.id}
+            value={[device.device.id, device.device.name]}
           >
-            {device.device.name}{' '}
-            <i className='fas fa-times' style={{ color: 'grey' }} />
-          </button>
+            {device.device.name}
+          </MenuItem>
         );
       });
     }
@@ -214,6 +288,19 @@ class InstalledDevices extends Component {
             {listOfPool}
           </Select>
         </FormControl>
+        <FormControl className=''>
+          <InputLabel htmlFor='age-simple'>Master Device</InputLabel>
+          <Select
+            style={{ height: '50px', width: '250px' }}
+            onChange={this.handleChangeMaster}
+            inputProps={{
+              name: `master_site${this.props.id}`,
+              id: `master_site${this.props.id}`
+            }}
+          >
+            {listOfDevicesSelect}
+          </Select>
+        </FormControl>
         {listOfDevices}
         <div className='row'>
           <div className='col'>
@@ -228,6 +315,33 @@ class InstalledDevices extends Component {
     );
   }
 }
+
+const styles = {
+  masterDevice: {
+    height: '20px',
+    position: 'absolute',
+    zIndex: '10000',
+    width: '20px',
+    borderRadius: '50%',
+    backgroundColor: '#5bc232',
+    transform: 'translate(0,-50%)',
+    left: '200px',
+    top: '50%',
+    border: '5px solid white'
+  },
+  normalDevice: {
+    height: '20px',
+    position: 'absolute',
+    zIndex: '10000',
+    width: '20px',
+    borderRadius: '50%',
+    backgroundColor: 'grey',
+    transform: 'translate(0,-50%)',
+    left: '200px',
+    top: '50%',
+    border: '5px solid white'
+  }
+};
 
 const mapSateToProps = state => ({
   devices: state.userdata.data,

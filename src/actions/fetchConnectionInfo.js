@@ -25,6 +25,7 @@ export const fetchConnetionInfo = id => dispatch => {
             output[`gps_coordinate_site${id}_`] = { value: '' };
             output[`street_site${id}_`] = { value: '' };
             output[`city_site${id}_`] = { value: '' };
+            output[`master_site${id}`] = { value: '' };
             output[`state_site_${id}_`] = { value: '' };
             output[`postal_code_site_${id}_`] = { value: '' };
             output[`electricity_connection_name_site_${id}_`] = { value: '' };
@@ -35,6 +36,7 @@ export const fetchConnetionInfo = id => dispatch => {
             output[`electricity_quality_site_${id}_`] = { value: '' };
             output[`diesel_genset_operational_site_${id}_`] = { value: '' };
             output[`number_of_diesel_gensets_site_${id}_`] = { value: '' };
+            output[`device_list_site_${id}_`] = { value: '' };
             output[`total_kva_capacity_of_diesel_gensets_site_${id}_`] = {
               value: ''
             };
@@ -115,6 +117,7 @@ export const fetchConnetionInfo = id => dispatch => {
             output[`city`] = { value: '' };
             output[`state`] = { value: '' };
             output[`zip`] = { value: '' };
+            output[`master_site1`] = { value: '' };
             output[`electricity_connection_name`] = { value: '' };
             output[`connected_load_kw_`] = { value: '' };
             output[`segment`] = { value: '' };
@@ -127,6 +130,7 @@ export const fetchConnetionInfo = id => dispatch => {
             output[`monthly_running_cost_of_diesel_gensets`] = { value: '' };
             output[`adopted_solar`] = { value: '' };
             output[`total_capacity_kwp`] = { value: '' };
+            output[`device_id`] = { value: '' };
             output[`solar_generator_operational_since`] = { value: '' };
             output[`solar_panel_oem`] = { value: '' };
             output[`solar_inverter_oem`] = { value: '' };

@@ -898,9 +898,12 @@ input:checked + .slider:before {
     margin-left: 0;
   }
 
-  img.mysite-icons1 {
-  }
-  img.mysite-icons2 {
+  .master-device {
+    height: 20px !important;
+    width: 20px !important;
+    position: absolute !important;
+    background-color: green !important;
+    z-index: 10000000000000 !important;
   }
   .mysites-heading {
     font-size: 2rem;
