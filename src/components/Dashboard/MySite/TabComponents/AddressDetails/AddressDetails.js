@@ -1,27 +1,22 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { fetchConnetionInfo } from "../../../../../actions/fetchConnectionInfo";
-import Spinner from "../../../../../images";
-import csc from "country-state-city";
-import uuid from "uuid";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { fetchConnetionInfo } from '../../../../../actions/fetchConnectionInfo';
+import Spinner from '../../../../../images';
+import csc from 'country-state-city';
+import uuid from 'uuid';
 
 class AddressDetails extends Component {
   state = {
     data: {},
-    city: "-",
-    postal: "-",
-    state: "-",
-    street: "-",
+    city: '-',
+    postal: '-',
+    state: '-',
+    street: '-',
     isLoading: true,
-    name: "",
+    name: '',
     stateId: 0,
     cityReady: false
   };
-
-  constructor() {
-    super();
-    this.selectRef = React.createRef();
-  }
 
   componentDidMount() {
     this.setState({
@@ -30,11 +25,11 @@ class AddressDetails extends Component {
     this.setState({
       data: this.props.info
     });
-    let name = "";
+    let name = '';
 
     //get name of connection from keys
     Object.keys(this.state.data).forEach(key => {
-      if (key.indexOf("connection") === 12) {
+      if (key.indexOf('connection') === 12) {
         name = this.state.data[key].value.toString();
       }
     });
@@ -43,24 +38,24 @@ class AddressDetails extends Component {
     });
     //get city street state from the keys
     Object.keys(this.props.data).forEach(key => {
-      if (key.indexOf("city") === 0) {
+      if (key.indexOf('city') === 0) {
         // if (this.props.data[key].value.toString() === this.state.city) {
         this.setState({
           city: this.props.data[key].value.toString()
         });
         // }
       }
-      if (key.indexOf("street") === 0) {
+      if (key.indexOf('address') === 0) {
         this.setState({
           street: this.props.data[key].value.toString()
         });
       }
-      if (key.indexOf("state") === 0) {
+      if (key.indexOf('state') === 0) {
         this.setState({
           state: this.props.data[key].value.toString()
         });
       }
-      if (key.indexOf("postal") === 0) {
+      if (key.indexOf('zip') === 0) {
         this.setState({
           postal: this.props.data[key].value.toString()
         });
@@ -69,7 +64,7 @@ class AddressDetails extends Component {
     this.setState({
       isLoading: false
     });
-    const listOfStates = csc.getStatesOfCountry("101");
+    const listOfStates = csc.getStatesOfCountry('101');
     let idd;
 
     setTimeout(() => {
@@ -91,7 +86,7 @@ class AddressDetails extends Component {
       [e.target.name]: e.target.value
     });
     this.props.handleChildrenChange({
-      [e.target.name]: e.target.value
+      [e.target.id]: e.target.value
     });
   };
 
@@ -100,7 +95,7 @@ class AddressDetails extends Component {
       [e.target.name]: e.target.value
     });
     this.props.handleChildrenChange({
-      [e.target.name]: e.target.value
+      [e.target.id]: e.target.value
     });
     const stateId = e.target.options[e.target.selectedIndex].id;
     this.setState({
@@ -127,7 +122,7 @@ class AddressDetails extends Component {
     }
     const listOfStatesToRender = [];
     const listOfCitiesToRender = [];
-    const listOfStates = csc.getStatesOfCountry("101");
+    const listOfStates = csc.getStatesOfCountry('101');
     listOfStates.forEach(stateName => {
       listOfStatesToRender.push(
         <option id={stateName.id} key={uuid.v4()}>
@@ -145,28 +140,31 @@ class AddressDetails extends Component {
       );
     });
 
+    let id = this.props.id;
     return (
-      <div className="address-details">
+      <div className='address-details'>
         {!this.state.isLoading && (
           <>
-            <div className="address-details-div">
+            <div className='address-details-div'>
               <p>Street Address</p>
               <input
-                className="address-details-input "
-                type="text"
+                className='address-details-input '
+                type='text'
+                id={this.props.id > 1 ? `street_site${id}_` : 'address'}
                 value={this.state.street}
                 placeholder={this.state.street}
                 onChange={e => {
                   this.handleChange(e);
                 }}
-                name="street"
-              />{" "}
+                name='street'
+              />{' '}
             </div>
-            <div className="address-details-div ">
+            <div className='address-details-div '>
               <p>City</p>
               <select
-                className="address-details-select "
-                name="city"
+                className='address-details-select '
+                name='city'
+                id={this.props.id > 1 ? `city_site${id}_` : 'city'}
                 onChange={this.handleSelectChangeCity}
                 placeholder={this.state.city}
                 value={this.state.city}
@@ -174,31 +172,33 @@ class AddressDetails extends Component {
                 {listOfCitiesToRender}
               </select>
             </div>
-            <div className="address-details-div ">
+            <div className='address-details-div '>
               <p>State</p>
               <select
-                className="address-details-select "
-                name="state"
+                className='address-details-select '
+                name='state'
                 onChange={this.handleSelectChange}
                 ref={this.selectRef}
+                id={this.props.id > 1 ? `state_site_${id}_` : 'state'}
                 placeholder={this.state.state}
                 value={this.state.state}
               >
                 {listOfStatesToRender}
               </select>
             </div>
-            <div className="address-details-div ">
+            <div className='address-details-div '>
               <p>Pincode</p>
               <input
-                className="address-details-input "
-                type="text"
+                id={this.props.id > 1 ? `postal_code_site_${id}_` : 'zip'}
+                className='address-details-input '
+                type='text'
                 value={this.state.postal}
                 placeholder={this.state.postal}
                 onChange={e => {
                   this.handleChange(e);
                 }}
-                name="postal"
-              />{" "}
+                name='postal'
+              />
             </div>
           </>
         )}

@@ -1,13 +1,13 @@
-import { FETCH_CONNECTION_INFO, DEVICE_POOL } from "../actions/types";
+import { DEVICE_POOL, OUTPUT_ARR } from '../actions/types';
 
 const DEFAULT_STATE = {
-  data: {},
-  device_pool: ""
+  data: '',
+  device_pool: ''
 };
 
 export default (state = DEFAULT_STATE, action) => {
   switch (action.type) {
-    case FETCH_CONNECTION_INFO:
+    case OUTPUT_ARR:
       return {
         ...state,
         data: action.payload

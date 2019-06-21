@@ -40,7 +40,7 @@ class ConnectionInfo extends Component {
     enableSpinner: false
   };
 
-  componentDidMount() {
+  componentWillMount() {
     //get dynaic id from site
     const {
       match: { params }
@@ -53,19 +53,32 @@ class ConnectionInfo extends Component {
     this.props
       .fetchConnetionInfo(id)
       .then(res => {
+        console.log(res);
+
         //fetch connection info based upon the given id
         if (res) {
+          console.log(this.props.info, 'hi');
+
           //if there is a response
           //get data
           this.setState({
             data: this.props.info
           });
           let name = '';
-          Object.keys(this.state.data).forEach(key => {
-            if (key.indexOf('connection') === 12) {
-              name = this.state.data[key].value.toString();
-            }
-          });
+          if (id > 1) {
+            Object.keys(this.props.info).forEach(key => {
+              if (key.indexOf(`electricity_connection_name_site_${id}_`) >= 0) {
+                console.log(key);
+                name = this.props.info[key].value.toString();
+              }
+            });
+          } else {
+            Object.keys(this.props.info).forEach(key => {
+              if (key.search(`electricity_connection_name`) >= 0) {
+                name = this.props.info[key].value.toString();
+              }
+            });
+          }
           this.setState({
             name
           });
@@ -231,20 +244,21 @@ class ConnectionInfo extends Component {
   };
 
   handleChildrenChange = value => {
-    Object.keys(value).forEach(key => {
-      Object.keys(this.props.rawdatamapping).forEach(key2 => {
+    Object.keys(value).forEach(keyMain => {
+      Object.keys(this.props.info).forEach(key => {
         //mapping processed data from raw data, eg, mapping connection name with connection_name_site_:id_
-        let regex = new RegExp('^' + key, 'i');
-        if (key2.match(regex)) {
-          let objToBePushed = { [key2]: value[key] };
+        console.log(value, key);
+        if (key === keyMain) {
+          let objToBePushed = { [key]: value[key] };
           this.setState({
             bodyArray: [...this.state.bodyArray, objToBePushed]
           });
         }
+        this.setState({
+          [key]: value[key]
+        });
       });
-      this.setState({
-        [key]: value[key]
-      });
+      console.log(this.state.bodyArray);
     });
   };
 
@@ -324,6 +338,7 @@ class ConnectionInfo extends Component {
                 handleChildrenChange={this.handleChildrenChange}
                 update={this.update}
                 data={this.props.info}
+                id={this.state.id}
               />
               <div className='row'>
                 <div className='col'>
@@ -348,6 +363,7 @@ class ConnectionInfo extends Component {
                 handleChildrenChange={this.handleChildrenChange}
                 update={this.update}
                 data={this.props.info}
+                id={this.state.id}
               />
               <div className='row'>
                 <div className='col'>
@@ -372,6 +388,7 @@ class ConnectionInfo extends Component {
                 handleChildrenChange={this.handleChildrenChange}
                 update={this.update}
                 data={this.props.info}
+                id={this.state.id}
               />
               <div className='row'>
                 <div className='col'>
@@ -393,6 +410,7 @@ class ConnectionInfo extends Component {
             <>
               {/* solar power component */}
               <SolarPvGenerator
+                id={this.state.id}
                 handleChildrenChange={this.handleChildrenChange}
                 update={this.update}
                 data={this.props.info}
@@ -419,6 +437,7 @@ class ConnectionInfo extends Component {
                 <>
                   {/* installed devices component */}
                   <InstalledDevices
+                    id={this.state.id}
                     handleChildrenChange={this.handleChildrenChange}
                     update={this.update}
                     data={this.props.info}

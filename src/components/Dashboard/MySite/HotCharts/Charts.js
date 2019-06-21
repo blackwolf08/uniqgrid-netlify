@@ -899,6 +899,8 @@ export default class Charts extends Component {
                 <h4 style={{ width: '100%', textAlign: 'center' }}>
                   {this.state.deviceName}
                 </h4>
+                <div>
+                  </div>
                 <button
                   className={'filter-button' + this.state.day}
                   onClick={this.filterDay}
