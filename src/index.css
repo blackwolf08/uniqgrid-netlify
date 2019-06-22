@@ -177,6 +177,10 @@ button {
   margin-right: 30px;
 }
 
+.table {
+  margin-top: 30px !important;
+}
+
 .navbar-logo-div {
   height: 100%;
   background-color: rgb(38, 50, 56);
@@ -903,6 +907,9 @@ input:checked + .slider:before {
   }
   .my-device-graph {
     margin-top: 10px;
+  }
+  .form-w-100 {
+    width: 180px;
   }
   .switch-div {
     top: 220px;

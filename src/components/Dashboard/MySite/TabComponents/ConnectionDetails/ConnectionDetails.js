@@ -57,12 +57,14 @@ class ConnectionDetails extends Component {
     });
   }
   handleChange = e => {
-    this.setState({
-      [e.target.name]: e.target.value
-    });
-    this.props.handleChildrenChange({
-      [e.target.id]: e.target.value
-    });
+    if (!e.target.value.match(/[!@#$+_=%^&*()\\,.?"`~':{}|<>]/g)) {
+      this.setState({
+        [e.target.name]: e.target.value
+      });
+      this.props.handleChildrenChange({
+        [e.target.id]: e.target.value
+      });
+    }
   };
 
   handleSelectChange = e => {
@@ -105,7 +107,7 @@ class ConnectionDetails extends Component {
                     : 'connected_load_kw_'
                 }
                 className='address-details-input '
-                type='text'
+                type='number'
                 value={this.state.connected_load_kw}
                 placeholder={this.state.connected_load_kw}
                 onChange={this.handleChange}
@@ -169,7 +171,7 @@ class ConnectionDetails extends Component {
               <p>Average Monthly Cost</p>
               <input
                 className='address-details-input '
-                type='text'
+                type='number'
                 id={
                   this.props.id > 1
                     ? `average_monthly_energy_cost_site_${id}_`

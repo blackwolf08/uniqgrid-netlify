@@ -9,12 +9,14 @@ import { fetchConnetionInfo } from '../../../../actions/fetchConnectionInfo';
 import { connect } from 'react-redux';
 import MysiteMap from '../MySite Maps/MysiteMap';
 import Spinner from '../../../../images/index';
+import Modal from '@material-ui/core/Modal';
 
 // this componets gets keys for a particular site based upon the site id we recieve from /dashboard/mysite/:id
 
 class ConnectionInfo extends Component {
   state = {
     id: 0,
+    modal: false,
     tab1: ' connection-info-border',
     tab2: '',
     tab3: '',
@@ -233,7 +235,14 @@ class ConnectionInfo extends Component {
         .then(res => {
           //reload and refresh
           // console.log(res);
-          window.location.href = `/dashboard/my-sites/${this.state.id}`;
+          if (res.status.toString() === '400') {
+            this.setState({
+              modal: true
+            });
+          } else {
+            console.log(res);
+            window.location.href = `/dashboard/my-sites/${this.state.id}`;
+          }
         })
         .catch(res => {
           if (res.status === 401) {

@@ -51,12 +51,14 @@ export default class LocalGeneration extends Component {
     });
   };
   handleChange = e => {
-    this.setState({
-      [e.target.name]: e.target.value
-    });
-    this.props.handleChildrenChange({
-      [e.target.id]: e.target.value
-    });
+    if (!e.target.value.match(/[!@#$+_=%^&*()\\,.?"`~':{}|<>]/g)) {
+      this.setState({
+        [e.target.name]: e.target.value
+      });
+      this.props.handleChildrenChange({
+        [e.target.id]: e.target.value
+      });
+    }
   };
 
   render() {
@@ -92,7 +94,7 @@ export default class LocalGeneration extends Component {
                     : 'number_of_diesel_gensets'
                 }
                 className='address-details-input '
-                type='text'
+                type='number'
                 value={this.state.number_of_diesel_gensets}
                 placeholder={this.state.number_of_diesel_gensets}
                 onChange={this.handleChange}
@@ -103,7 +105,7 @@ export default class LocalGeneration extends Component {
               <p>Total kVA Capacity of Diesel Genset(s)</p>
               <input
                 className='address-details-input '
-                type='text'
+                type='number'
                 id={
                   this.props.id > 1
                     ? `total_kva_capacity_of_diesel_gensets_site_${id}_`
@@ -124,7 +126,7 @@ export default class LocalGeneration extends Component {
                     : 'monthly_running_cost_of_diesel_gensets'
                 }
                 className='address-details-input '
-                type='text'
+                type='number'
                 value={this.state.monthly_energy_cost}
                 placeholder={this.state.monthly_energy_cost}
                 onChange={this.handleChange}

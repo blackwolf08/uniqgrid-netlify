@@ -1,6 +1,6 @@
-import React, { Component } from "react";
-import { Map, TileLayer, Marker, Popup } from "react-leaflet";
-import { connect } from "react-redux";
+import React, { Component } from 'react';
+import { Map, TileLayer, Marker, Popup } from 'react-leaflet';
+import { connect } from 'react-redux';
 
 class MysiteMap extends Component {
   // Default Lat & Long is Spaze i-Tech park, change here if you want to set diff location default
@@ -19,12 +19,19 @@ class MysiteMap extends Component {
       Object.keys(this.state.data).forEach(key => {
         if (key.match(/^gps.*$/)) {
           let data = this.props.info[key].value;
-          data = data.split("/");
+          data = data.split('/');
           if (this.props.info[key].value.length >= 2) {
-            this.setState({
-              lng: data[1],
-              lat: data[0]
-            });
+            if (
+              data[1] !== '' &&
+              data[1] !== 'undefined' &&
+              data[0] !== '' &&
+              data[0] !== 'undefined'
+            ) {
+              this.setState({
+                lng: data[1],
+                lat: data[0]
+              });
+            }
           }
         }
       });
@@ -35,13 +42,13 @@ class MysiteMap extends Component {
     const position = [this.state.lat, this.state.lng];
     return (
       // set custom height and with of map
-      <div style={{ margin: "0 auto", width: "100%", height: "500px" }}>
+      <div style={{ margin: '0 auto', width: '100%', height: '500px' }}>
         <Map
-          style={{ margin: "0 auto", width: "100%", height: "500px" }}
+          style={{ margin: '0 auto', width: '100%', height: '500px' }}
           center={position}
           zoom={this.state.zoom}
         >
-          <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+          <TileLayer url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png' />
           <Marker position={position}>
             <Popup>Your Location</Popup>
           </Marker>

@@ -82,12 +82,14 @@ class AddressDetails extends Component {
   //handle select change and handleChange() are same for all components
 
   handleChange = e => {
-    this.setState({
-      [e.target.name]: e.target.value
-    });
-    this.props.handleChildrenChange({
-      [e.target.id]: e.target.value
-    });
+    if (!e.target.value.match(/[!@#$+_=%^&*()\\,.?"`~':{}|<>]/g)) {
+      this.setState({
+        [e.target.name]: e.target.value
+      });
+      this.props.handleChildrenChange({
+        [e.target.id]: e.target.value
+      });
+    }
   };
 
   handleSelectChange = e => {
@@ -160,19 +162,6 @@ class AddressDetails extends Component {
               />{' '}
             </div>
             <div className='address-details-div '>
-              <p>City</p>
-              <select
-                className='address-details-select '
-                name='city'
-                id={this.props.id > 1 ? `city_site${id}_` : 'city'}
-                onChange={this.handleSelectChangeCity}
-                placeholder={this.state.city}
-                value={this.state.city}
-              >
-                {listOfCitiesToRender}
-              </select>
-            </div>
-            <div className='address-details-div '>
               <p>State</p>
               <select
                 className='address-details-select '
@@ -187,11 +176,24 @@ class AddressDetails extends Component {
               </select>
             </div>
             <div className='address-details-div '>
+              <p>City</p>
+              <select
+                className='address-details-select '
+                name='city'
+                id={this.props.id > 1 ? `city_site${id}_` : 'city'}
+                onChange={this.handleSelectChangeCity}
+                placeholder={this.state.city}
+                value={this.state.city}
+              >
+                {listOfCitiesToRender}
+              </select>
+            </div>
+            <div className='address-details-div '>
               <p>Pincode</p>
               <input
                 id={this.props.id > 1 ? `postal_code_site_${id}_` : 'zip'}
                 className='address-details-input '
-                type='text'
+                type='number'
                 value={this.state.postal}
                 placeholder={this.state.postal}
                 onChange={e => {

@@ -75,12 +75,14 @@ export default class SolarPvGenerator extends Component {
   }
 
   handleChange = e => {
-    this.setState({
-      [e.target.name]: e.target.value
-    });
-    this.props.handleChildrenChange({
-      [e.target.id]: e.target.value
-    });
+    if (!e.target.value.match(/[!@#$+_=%^&*()\\,.?"`~':{}|<>]/g)) {
+      this.setState({
+        [e.target.name]: e.target.value
+      });
+      this.props.handleChildrenChange({
+        [e.target.id]: e.target.value
+      });
+    }
   };
 
   handleCheckboxInput = () => {
