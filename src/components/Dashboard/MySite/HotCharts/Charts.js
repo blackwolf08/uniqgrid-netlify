@@ -19,6 +19,7 @@ export default class Charts extends Component {
     deviceActivated: false,
     isLoading: false,
     keys: [],
+    checked: true,
     selectValue: '',
     graphData: '',
     //Default start time
@@ -168,7 +169,6 @@ export default class Charts extends Component {
         });
         //if no data
         if (typeof a[Object.keys(a)[0]] === 'undefined') {
-          console.log(s);
           this.setState({
             isLoading: false,
             graphData: ''
@@ -846,8 +846,30 @@ export default class Charts extends Component {
     }, 200);
   };
 
+  handleKeyChange = e => {
+    console.log(e.target.checked);
+    if (e.target.checked) {
+      this.setState({
+        key: 'import_energy'
+      });
+    } else {
+      this.setState({
+        key: 'active_power'
+      });
+    }
+    this.setState({
+      checked: !this.state.checked
+    });
+  };
+
   getConnectionList = () => {
     return <DeviceList handleMethod={this.handleClick} key={uuid.v4()} />;
+  };
+
+  toTitleCase = str => {
+    return str.replace(/\w\S*/g, function(txt) {
+      return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+    });
   };
 
   render() {
@@ -868,10 +890,14 @@ export default class Charts extends Component {
         });
       }
     }
+    let keyName = this.state.key;
+    keyName = keyName.split('_');
+    keyName = keyName.join(' ');
+    keyName = this.toTitleCase(keyName);
     return (
       <div className='hot_charts'>
         <h3 style={{ marginTop: '100px' }}>Select Device</h3>
-        <FormControl className=''>
+        <FormControl className='hot_chart_select'>
           <InputLabel htmlFor='devices'>Devices</InputLabel>
           <Select
             style={{ height: '50px', width: '250px' }}
@@ -886,10 +912,17 @@ export default class Charts extends Component {
           </Select>
         </FormControl>
         {this.state.deviceActivated && (
-          <label className='switch'>
-            <input type='checkbox' />
-            <span className='slider round' />
-          </label>
+          <div className='switch-div felex-col'>
+            <p className='text-toggle-hot-charts'>{keyName}</p>
+            <label className='switch'>
+              <input
+                onChange={this.handleKeyChange}
+                type='checkbox'
+                checked={this.state.checked}
+              />
+              <span className='slider round' />
+            </label>
+          </div>
         )}
         <div className='my-device-graph'>
           {this.state.deviceActivated && (
@@ -899,8 +932,7 @@ export default class Charts extends Component {
                 <h4 style={{ width: '100%', textAlign: 'center' }}>
                   {this.state.deviceName}
                 </h4>
-                <div>
-                  </div>
+                <div />
                 <button
                   className={'filter-button' + this.state.day}
                   onClick={this.filterDay}

@@ -44,17 +44,34 @@ class InstalledDevices extends Component {
         });
       }
       name = this.props.data['master_site1'].value.replace(/'/g, '"');
-      this.setState({
-        masterDevice: JSON.parse(name).device.name
-      });
+      if (
+        this.props.data['master_site1'] &&
+        this.props.data['master_site1'].value !== '{}' &&
+        this.props.data['master_site1'].value !== ''
+      ) {
+        let masterDeviceNew = this.props.data[
+          `master_site${this.props.id}`
+        ].value.replace(/'/g, '"');
+        let send = JSON.parse(masterDeviceNew);
+        this.setState({
+          masterDevice: send.device.name
+        });
+      }
     }
-    if (this.props.id > 1) {
-      let masterDeviceNew = this.props.data[
-        `master_site${this.props.id}`
-      ].value.replace(/'/g, '"');
-      this.setState({
-        masterDevice: JSON.parse(masterDeviceNew).device.name
-      });
+    if (parseInt(this.props.id) > 1) {
+      if (
+        this.props.data[`master_site${this.props.id}`] &&
+        this.props.data[`master_site${this.props.id}`].value !== '' &&
+        this.props.data[`master_site${this.props.id}`].value !== '{}'
+      ) {
+        let masterDeviceNew = this.props.data[
+          `master_site${this.props.id}`
+        ].value.replace(/'/g, '"');
+        let send = JSON.parse(masterDeviceNew);
+        this.setState({
+          masterDevice: send.device.name
+        });
+      }
     }
 
     Object.keys(this.props.data).forEach(key => {
@@ -81,6 +98,7 @@ class InstalledDevices extends Component {
   }
 
   handleClick = e => {
+    //console.log(e.target.value, e.target.id, e.target.id);
     let name = e.target.name;
     let new_device_arr = [];
     this.state.deviceList.device_list.forEach(device => {
@@ -227,13 +245,12 @@ class InstalledDevices extends Component {
         return (
           <div style={{ position: 'relative' }} key={uuid.v4()}>
             <button
+              value={device.device.id}
               name={device.device.name}
               onClick={this.handleClick}
               className='installed-device-buttons'
-              value={device.device.id}
             >
-              {device.device.name}{' '}
-              <i className='fas fa-times' style={{ color: 'grey' }} />
+              {device.device.name}
             </button>
             <div
               className='master-device'

@@ -232,6 +232,7 @@ class ConnectionInfo extends Component {
       )
         .then(res => {
           //reload and refresh
+          // console.log(res);
           window.location.href = `/dashboard/my-sites/${this.state.id}`;
         })
         .catch(res => {
@@ -262,6 +263,12 @@ class ConnectionInfo extends Component {
     });
   };
 
+  toTitleCase = str => {
+    return str.replace(/\w\S*/g, function(txt) {
+      return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+    });
+  };
+
   render() {
     if (this.state.enableSpinner) {
       return <Spinner />;
@@ -276,10 +283,12 @@ class ConnectionInfo extends Component {
     return (
       <div className='view'>
         <Helmet>
-          <title>{`${this.state.name || this.state.defaultName}`}</title>
+          <title>{`${this.toTitleCase(
+            this.state.name || this.state.defaultName
+          )}`}</title>
         </Helmet>
         <h1 className='mysites-heading1'>
-          {this.state.name || this.state.defaultName}
+          {this.toTitleCase(this.state.name || this.state.defaultName)}
         </h1>
         <div style={{ height: '500px' }}>
           <MysiteMap

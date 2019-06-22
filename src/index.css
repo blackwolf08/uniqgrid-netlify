@@ -772,12 +772,29 @@ tr {
   border-bottom: 1px solid #999999;
 }
 
+.text-toggle-hot-charts {
+  font-size: 1.5rem;
+  padding-right: 20px;
+}
+
+.switch-div {
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  position: absolute;
+  right: 10px;
+  top: 280px;
+}
+
 /* The switch - the box around the slider */
 .switch {
   position: relative;
   display: inline-block;
   width: 60px;
   height: 34px;
+}
+.icon_mobile {
+  display: none;
 }
 
 /* Hide default HTML checkbox */
@@ -829,6 +846,10 @@ input:checked + .slider:before {
   transform: translateX(26px);
 }
 
+.progress_span {
+  width: 100px;
+}
+
 /* Rounded sliders */
 .slider.round {
   border-radius: 34px;
@@ -843,12 +864,73 @@ input:checked + .slider:before {
   body {
     zoom: 1;
   }
+
+  .progress_span {
+    width: 70px;
+    overflow: hidden !important;
+  }
   .left-part {
     display: none;
   }
   .view {
     width: 100vw;
     left: 0;
+  }
+  .flex {
+    overflow: hidden !important;
+  }
+  .name_connection {
+    width: 100%;
+  }
+  .name_connection > p {
+    text-align: center !important;
+  }
+  .value_connection {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+  .settings_connection {
+    width: 100%;
+  }
+  .mysites-connections {
+    margin-left: -10px;
+  }
+  .hot_chart_select {
+    width: 200px;
+  }
+  .view {
+    width: 100vw !important;
+  }
+  .my-device-graph {
+    margin-top: 10px;
+  }
+  .switch-div {
+    top: 220px;
+    left: -70px;
+  }
+  .connection-info-hero {
+    overflow: hidden !important;
+  }
+  .new_connection_tabs {
+    margin-left: -150px;
+    width: 650px !important;
+  }
+
+  .progress_my {
+    width: 200px;
+    margin-left: 10px;
+  }
+  .mobile_connection {
+    flex-direction: column;
+    height: 120px;
+  }
+  .mobile_connection_header {
+    display: none;
+  }
+  .MuiInputBase-root.MuiInput-root.MuiInput-underline.MuiInputBase-formControl.MuiInput-formControl {
+    width: 100% !important;
+    height: 40px !important;
+    margin-bottom: 15px;
   }
   .connection-info-tabs {
     font-size: 0.72rem;
@@ -859,6 +941,16 @@ input:checked + .slider:before {
     font-size: 0.72rem;
     overflow: scroll;
     width: 100vw;
+  }
+  .mysites-connections {
+    border-bottom: 1px solid grey;
+  }
+
+  .icon_mobile {
+    display: inline-block;
+    height: 20px;
+    width: 20px;
+    margin-right: 10px;
   }
 
   .address-details-input {
@@ -905,9 +997,11 @@ input:checked + .slider:before {
     background-color: green !important;
     z-index: 10000000000000 !important;
   }
+
   .mysites-heading {
     font-size: 2rem;
   }
+
   .filter-button {
     width: 50vw;
     margin: 10px;

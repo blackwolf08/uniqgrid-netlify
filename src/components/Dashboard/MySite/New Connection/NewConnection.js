@@ -1,64 +1,64 @@
-import React, { Component } from "react";
-import { Helmet } from "react-helmet";
-import { fetchConnetionInfo } from "../../../../actions/fetchConnectionInfo";
-import { connect } from "react-redux";
-import Spinner from "../../../../images/index";
-import csc from "country-state-city";
-import uuid from "uuid";
-import axios from "axios";
-import jwtDecode from "jwt-decode";
-import NewConnectionMap from "../MySite Maps/NewConnectionMap";
+import React, { Component } from 'react';
+import { Helmet } from 'react-helmet';
+import { fetchConnetionInfo } from '../../../../actions/fetchConnectionInfo';
+import { connect } from 'react-redux';
+import Spinner from '../../../../images/index';
+import csc from 'country-state-city';
+import uuid from 'uuid';
+import axios from 'axios';
+import jwtDecode from 'jwt-decode';
+import NewConnectionMap from '../MySite Maps/NewConnectionMap';
 
 class NewConnection extends Component {
   state = {
     id: 0,
-    tab1: " connection-info-border",
-    tab2: "",
-    name: "",
+    tab1: ' connection-info-border',
+    tab2: '',
+    name: '',
     update: false,
-    defaultName: "New Connection Name",
+    defaultName: 'New Connection Name',
     active: 1,
     enableSpinner: false,
     isLoading: true,
     stateId: 0,
     cityReady: false,
-    city: "",
-    postal: "",
-    state: "",
-    street: "",
-    electricity_connection_name: "",
-    segment: "",
-    sub_segment: "",
-    vid: "",
-    lat: "",
-    lon: ""
+    city: '',
+    postal: '',
+    state: '',
+    street: '',
+    electricity_connection_name: '',
+    segment: '',
+    sub_segment: '',
+    vid: '',
+    lat: '',
+    lon: ''
   };
 
   //this method determines the border-bottom of the tabs
   handleTabChange = tab => {
-    if (tab === "connection-details") {
+    if (tab === 'connection-details') {
       this.setState({
-        tab1: "",
-        tab2: " connection-info-border",
-        tab3: "",
-        tab4: "",
-        tab5: "",
+        tab1: '',
+        tab2: ' connection-info-border',
+        tab3: '',
+        tab4: '',
+        tab5: '',
         active: 2
       });
-    } else if (tab === "address-details") {
+    } else if (tab === 'address-details') {
       this.setState({
-        tab1: " connection-info-border",
-        tab2: "",
-        tab3: "",
-        tab4: "",
-        tab5: "",
+        tab1: ' connection-info-border',
+        tab2: '',
+        tab3: '',
+        tab4: '',
+        tab5: '',
         active: 1
       });
     }
   };
 
   componentDidMount() {
-    if (typeof localStorage.jwtToken !== "undefined") {
+    if (typeof localStorage.jwtToken !== 'undefined') {
       let jwt = localStorage.jwtToken;
       jwt = jwtDecode(jwt);
       //get ViD id customer
@@ -85,9 +85,9 @@ class NewConnection extends Component {
             // according to the struct of API this piece of code gives site number as connection_site_'2'_, outputs 2
             let nanCheck = isNaN(parseInt(site.charAt(site.length - 2), 10));
             if (
-              site.search("electricity_connection_name") >= 0 &&
+              site.search('electricity_connection_name') >= 0 &&
               !nanCheck &&
-              properties[site].value !== ""
+              properties[site].value !== ''
             ) {
               noOfSites.push(parseInt(site.charAt(site.length - 2), 10));
             }
@@ -99,7 +99,7 @@ class NewConnection extends Component {
               maxConnections: 0
             });
           }
-          if (properties["electricity_connection_name"].value !== "") {
+          if (properties['electricity_connection_name'].value !== '') {
             this.setState({
               maxConnections: 1
             });
@@ -116,7 +116,7 @@ class NewConnection extends Component {
           this.setState({
             isLoading: false
           });
-          const listOfStates = csc.getStatesOfCountry("101");
+          const listOfStates = csc.getStatesOfCountry('101');
           let idd;
 
           setTimeout(() => {
@@ -133,7 +133,7 @@ class NewConnection extends Component {
         .catch(res => {
           if (res.status === 401) {
             localStorage.clear();
-            window.location.href = "/login";
+            window.location.href = '/login';
           }
         });
       this.setState({
@@ -187,7 +187,7 @@ class NewConnection extends Component {
 
   handleUpdateButtonClick = value => {
     if (value === 1) {
-      this.handleTabChange("connection-details");
+      this.handleTabChange('connection-details');
     }
     if (value === 2) {
       let objToSend;
@@ -228,7 +228,7 @@ class NewConnection extends Component {
             value: `${this.state.postal}`
           },
           {
-            property: "gps_coordinate",
+            property: 'gps_coordinate',
             value: `${this.state.lat}/${this.state.lon}`
           }
         ];
@@ -238,18 +238,18 @@ class NewConnection extends Component {
             this.state.vid
           }/profile?hapikey=bdcec428-e806-47ec-b7fd-ece8b03a870b`,
           {
-            method: "POST",
+            method: 'POST',
             body: `{  "properties": ${JSON.stringify(objToSend)}
           }`
           }
         )
           .then(res => {
-            window.location.href = "/dashboard/my-sites";
+            window.location.href = '/dashboard/my-sites';
           })
           .catch(res => {
             if (res.status === 401) {
               localStorage.clear();
-              window.location.href = "/login";
+              window.location.href = '/login';
             }
           });
       }
@@ -303,18 +303,18 @@ class NewConnection extends Component {
             this.state.vid
           }/profile?hapikey=bdcec428-e806-47ec-b7fd-ece8b03a870b`,
           {
-            method: "POST",
+            method: 'POST',
             body: `{  "properties": ${JSON.stringify(objToSend)}
           }`
           }
         )
           .then(res => {
-            window.location.href = "/dashboard/my-sites";
+            window.location.href = '/dashboard/my-sites';
           })
           .catch(res => {
             if (res.status === 401) {
               localStorage.clear();
-              window.location.href = "/login";
+              window.location.href = '/login';
             }
           });
       }
@@ -333,7 +333,7 @@ class NewConnection extends Component {
     //lists of states and sites returned as an option for select respectively
     const listOfStatesToRender = [];
     const listOfCitiesToRender = [];
-    const listOfStates = csc.getStatesOfCountry("101");
+    const listOfStates = csc.getStatesOfCountry('101');
     listOfStates.forEach(stateName => {
       listOfStatesToRender.push(
         <option id={stateName.id} key={uuid.v4()}>
@@ -351,47 +351,50 @@ class NewConnection extends Component {
       );
     });
     return (
-      <div className="view">
+      <div className='view'>
         <Helmet>
           <title>{`New Connection`}</title>
         </Helmet>
         {this.state.lon && this.state.lat && (
           <NewConnectionMap
-            className="flex"
-            style={{ width: "80%", height: "300px", margin: "0 auto" }}
+            className='flex'
+            style={{ width: '80%', height: '300px', margin: '0 auto' }}
             lat={this.state.lat}
             lon={this.state.lon}
           />
         )}
-        <div className="connection-info-hero">
-          <div className="connection-info-tabs" style={{ cursor: "pointer" }}>
+        <div className='connection-info-hero'>
+          <div
+            className='connection-info-tabs new_connection_tabs'
+            style={{ cursor: 'pointer' }}
+          >
             <div
               onClick={() => {
-                this.handleTabChange("address-details");
+                this.handleTabChange('address-details');
               }}
-              className={"mycol-5" + this.state.tab1}
+              className={'mycol-5' + this.state.tab1}
             >
-              <p className="connection-info-p">Address Details</p>
+              <p className='connection-info-p'>Address Details</p>
             </div>
             <div
               onClick={() => {
-                this.handleTabChange("connection-details");
+                this.handleTabChange('connection-details');
               }}
-              className={"mycol-5" + this.state.tab2}
+              className={'mycol-5' + this.state.tab2}
             >
-              <p className="connection-info-p">Connection Details</p>
+              <p className='connection-info-p'>Connection Details</p>
             </div>
           </div>
           {this.state.active === 1 && (
             <>
-              <div className="address-details">
+              <div className='address-details'>
                 {!this.state.isLoading && (
                   <>
-                    <div className="address-details-div ">
+                    <div className='address-details-div '>
                       <p>State</p>
                       <select
-                        className="address-details-select "
-                        name="state"
+                        className='address-details-select '
+                        name='state'
                         onChange={this.handleSelectChange}
                         ref={this.selectRef}
                         placeholder={this.state.state}
@@ -400,11 +403,11 @@ class NewConnection extends Component {
                         {listOfStatesToRender}
                       </select>
                     </div>
-                    <div className="address-details-div ">
+                    <div className='address-details-div '>
                       <p>City</p>
                       <select
-                        className="address-details-select "
-                        name="city"
+                        className='address-details-select '
+                        name='city'
                         onChange={this.handleSelectChangeCity}
                         placeholder={this.state.city}
                         value={this.state.city}
@@ -412,38 +415,38 @@ class NewConnection extends Component {
                         {listOfCitiesToRender}
                       </select>
                     </div>
-                    <div className="address-details-div">
+                    <div className='address-details-div'>
                       <p>Street Address</p>
                       <input
-                        className="address-details-input "
-                        type="text"
+                        className='address-details-input '
+                        type='text'
                         value={this.state.street}
                         placeholder={this.state.street}
                         onChange={e => {
                           this.handleChange(e);
                         }}
-                        name="street"
-                      />{" "}
+                        name='street'
+                      />{' '}
                     </div>
 
-                    <div className="address-details-div ">
+                    <div className='address-details-div '>
                       <p>Pincode</p>
                       <input
-                        className="address-details-input "
-                        type="text"
+                        className='address-details-input '
+                        type='text'
                         value={this.state.postal}
                         placeholder={this.state.postal}
                         onChange={e => {
                           this.handleChange(e);
                         }}
-                        name="postal"
-                      />{" "}
+                        name='postal'
+                      />{' '}
                     </div>
                   </>
                 )}
               </div>
               <button
-                className="update-button"
+                className='update-button'
                 onClick={() => {
                   this.handleUpdateButtonClick(1);
                 }}
@@ -454,25 +457,25 @@ class NewConnection extends Component {
           )}
           {this.state.active === 2 && (
             <>
-              <div className="address-details">
+              <div className='address-details'>
                 {!this.state.isLoading && (
                   <>
-                    <div className="address-details-div">
+                    <div className='address-details-div'>
                       <p>Connection Name</p>
                       <input
-                        className="address-details-input "
-                        type="text"
+                        className='address-details-input '
+                        type='text'
                         value={this.state.electricity_connection_name}
                         placeholder={this.state.electricity_connection_name}
                         onChange={this.handleChange}
-                        name="electricity_connection_name"
-                      />{" "}
+                        name='electricity_connection_name'
+                      />{' '}
                     </div>
-                    <div className="address-details-div ">
+                    <div className='address-details-div '>
                       <p>Segment</p>
                       <select
-                        className="address-details-select "
-                        name="segment"
+                        className='address-details-select '
+                        name='segment'
                         onChange={this.handleSelectChange}
                         placeholder={this.state.segment}
                         value={this.state.segment}
@@ -484,11 +487,11 @@ class NewConnection extends Component {
                         <option>Others</option>
                       </select>
                     </div>
-                    <div className="address-details-div ">
+                    <div className='address-details-div '>
                       <p>Sub Segment</p>
                       <select
-                        className="address-details-select "
-                        name="sub_segment"
+                        className='address-details-select '
+                        name='sub_segment'
                         onChange={this.handleSelectChange}
                         placeholder={this.state.sub_segment}
                         value={this.state.sub_segment}
@@ -521,7 +524,7 @@ class NewConnection extends Component {
                 )}
               </div>
               <button
-                className="update-button"
+                className='update-button'
                 onClick={() => {
                   this.handleUpdateButtonClick(2);
                 }}
@@ -530,7 +533,7 @@ class NewConnection extends Component {
               </button>
             </>
           )}
-          {this.state.update && <button className="edit-button">Update</button>}
+          {this.state.update && <button className='edit-button'>Update</button>}
         </div>
       </div>
     );

@@ -34,6 +34,9 @@ class MySite extends Component {
         .then(res => {
           const properties = res.data.properties;
           console.log(properties);
+          this.setState({
+            properties
+          });
           let arrayOfStrings = [];
           let noOfSites = [];
           //get the keys of data returned eg, connection_name_site_1_, energy_site_1 etc
@@ -184,6 +187,7 @@ class MySite extends Component {
       list.push(
         <Connection
           key={i}
+          properties={this.state.properties}
           id={i}
           name={`${this.state.nameOfSites[i - 1] || '--'}`}
           power={`${this.state.kWASite[`site${i}`]} kW`}
@@ -205,7 +209,10 @@ class MySite extends Component {
         </h1>
         {this.state.ready && (
           <div className='mysites-connection-list'>
-            <div className='mysites-connections' onClick={this.handleClick}>
+            <div
+              className='mysites-connections mobile_connection_header'
+              onClick={this.handleClick}
+            >
               <div className='my-col'>
                 <p>{}</p>
               </div>
