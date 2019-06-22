@@ -13,6 +13,7 @@
     "moment": "^2.24.0",
     "react": "^16.8.6",
     "react-bootstrap": "^1.0.0-beta.8",
+    "react-bootstrap-sweetalert": "^4.4.1",
     "react-dom": "^16.8.6",
     "react-geolocated": "^2.5.0",
     "react-helmet": "^5.2.1",
@@ -25,6 +26,7 @@
     "redux": "^4.0.1",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0",
+    "sweetalert-react": "^0.4.11",
     "thunk": "0.0.1",
     "typescript": "^3.5.2",
     "uuid": "^3.3.2"

@@ -37,6 +37,7 @@ class MyRequests extends Component {
       this.setState({
         spinner: true
       });
+
       this.props.fetchConnetionInfo();
       let jwt = localStorage.jwtToken;
       jwt = jwtDecode(jwt);
@@ -365,6 +366,9 @@ class MyRequests extends Component {
               key={uuid.v4()}
               id={site}
               value={`site`}
+              defaultValue={
+                localStorage.getItem('site') === `site` ? true : false
+              }
             >
               {site}
             </MenuItem>
@@ -376,6 +380,9 @@ class MyRequests extends Component {
               onClick={this.clickmee}
               id={site}
               value={`site_${i}`}
+              defaultValue={
+                localStorage.getItem('site') === `site_${i}` ? true : false
+              }
             >
               {site}
             </MenuItem>
