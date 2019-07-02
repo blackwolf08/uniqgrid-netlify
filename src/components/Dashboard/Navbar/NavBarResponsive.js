@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   Collapse,
   Navbar,
@@ -6,11 +6,11 @@ import {
   NavbarBrand,
   Nav,
   NavItem
-} from "reactstrap";
-import logo from "../../../images/logo.svg";
-import { Link } from "react-router-dom";
-import { logout } from "../../../actions/auth";
-import { connect } from "react-redux";
+} from 'reactstrap';
+import logo from '../../../images/logo.svg';
+import { Link } from 'react-router-dom';
+import { logout } from '../../../actions/auth';
+import { connect } from 'react-redux';
 
 class NavBarResponsive extends React.Component {
   constructor(props) {
@@ -34,50 +34,53 @@ class NavBarResponsive extends React.Component {
   render() {
     return (
       <div
-        className="navbar-responsive-2 navbar-dark"
-        style={{ zIndex: "1000" }}
+        className='navbar-responsive-2 navbar-dark'
+        style={{ zIndex: '1000' }}
       >
         <Navbar
-          color="faded"
+          color='faded'
           style={{
-            backgroundColor: "rgb(38, 50, 56)",
-            color: "white",
-            position: "absolute",
-            top: "0",
-            width: "100%"
+            backgroundColor: 'rgb(38, 50, 56)',
+            color: 'white',
+            position: 'absolute',
+            top: '0',
+            width: '100%'
           }}
           light
         >
-          <NavbarBrand href="/dashboard/my-sites" className="mr-auto">
-            <img className="logo" alt="logo" src={logo} />
+          <NavbarBrand href='/dashboard/my-sites' className='mr-auto'>
+            <img className='logo' alt='logo' src={logo} />
           </NavbarBrand>
           <NavbarToggler
             onClick={this.toggleNavbar}
-            className="mr-2 navbar-dark ham-burger"
+            className='mr-2 navbar-dark ham-burger'
           />
           <Collapse
-            style={{ color: "white", backgroundColor: "rgb(38, 50, 56)" }}
-            className="collapse"
+            style={{ color: 'white', backgroundColor: 'rgb(38, 50, 56)' }}
+            className='collapse'
             isOpen={!this.state.collapsed}
             navbar
           >
             <Nav navbar>
-              <Link to="/dashboard/my-sites">
-                <NavItem className="res-nav">My Sites</NavItem>
+              <Link to='/dashboard/my-sites'>
+                <NavItem className='res-nav'>My Sites</NavItem>
               </Link>
-              <Link to="/dashboard/my-device">
-                <NavItem className="res-nav">My Device</NavItem>
+              <Link to='/dashboard/my-device'>
+                <NavItem className='res-nav'>My Device</NavItem>
               </Link>
-              <Link to="/dashboard/my-requests">
-                <NavItem className="res-nav">My Requests</NavItem>
+              <Link to='/dashboard/my-requests'>
+                <NavItem className='res-nav'>My Requests</NavItem>
               </Link>
-              <Link to="/dashboard/feedback">
-                <NavItem className="res-nav">Feedback</NavItem>
+              <Link to='/dashboard/feedback'>
+                <NavItem className='res-nav'>Feedback</NavItem>
               </Link>
-              <Link to="/dashboard/my-profile">
-                <NavItem className="res-nav">My Profile</NavItem>
+              <Link to='/dashboard/my-profile'>
+                <NavItem className='res-nav'>My Profile</NavItem>
               </Link>
-              <NavItem onClick={this.logout} className="res-nav">
+              <Link to='/dashboard/portal'>
+                <NavItem className='res-nav'>Portal</NavItem>
+              </Link>
+              <NavItem onClick={this.logout} className='res-nav'>
                 Logout
               </NavItem>
             </Nav>
