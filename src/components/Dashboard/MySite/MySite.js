@@ -33,7 +33,6 @@ class MySite extends Component {
         .get(URL)
         .then(res => {
           const properties = res.data.properties;
-          console.log(properties);
           this.setState({
             properties
           });
@@ -157,7 +156,6 @@ class MySite extends Component {
               solarPower['site1'] = properties[site].value;
             }
           });
-          console.log(kWASite, solarPower);
 
           this.setState({
             kWASite,
