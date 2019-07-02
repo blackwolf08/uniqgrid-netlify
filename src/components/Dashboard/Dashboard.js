@@ -15,6 +15,7 @@ import { refreshUser } from '../../actions/auth';
 import NavBarResponsive from './Navbar/NavBarResponsive';
 import NewConnection from './MySite/New Connection/NewConnection';
 import Charts from './MySite/HotCharts/Charts';
+import Portal from './iFrame/Portal';
 
 //this is the parent component of all the logged in stuff
 
@@ -92,6 +93,11 @@ class Dashboard extends Component {
               key='my-sites/:id'
               path='/dashboard/hot-charts/:id'
               render={props => <Charts {...props} />}
+            />
+            <Route
+              key='my-sites/:id'
+              path='/dashboard/portal'
+              render={props => <Portal {...props} />}
             />
           </Switch>
         </div>

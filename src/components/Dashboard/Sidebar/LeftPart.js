@@ -8,7 +8,8 @@ class LeftPart extends Component {
     mydevice: 'leftpart-menu',
     myrequests: 'leftpart-menu',
     feedback: 'leftpart-menu',
-    myprofile: 'leftpart-menu'
+    myprofile: 'leftpart-menu',
+    portal: 'leftpart-menu'
   };
 
   componentDidMount() {
@@ -45,6 +46,10 @@ class LeftPart extends Component {
     } else if (url.includes('new-connection')) {
       this.setState({
         mysite: 'leftpart-menu bg-active'
+      });
+    } else if (url.includes('portal')) {
+      this.setState({
+        portal: 'leftpart-menu bg-active'
       });
     } else {
       this.setState({
@@ -112,6 +117,15 @@ class LeftPart extends Component {
         >
           <button className={this.state.myprofile}>
             <i className='fas fa-user' /> My Profile
+          </button>
+        </Link>
+        <Link
+          style={{ width: '100%' }}
+          className='link-p'
+          to='/dashboard/portal'
+        >
+          <button className={this.state.portal}>
+            <i className='fas fa-user' /> Portal
           </button>
         </Link>
       </div>
