@@ -13,6 +13,7 @@ import Select from '@material-ui/core/Select';
 export default class Charts extends Component {
   state = {
     deviceId: '',
+    key_selected: '',
     device_name: '',
     key: 'import_energy',
     devicesArr: [],
@@ -22,6 +23,7 @@ export default class Charts extends Component {
     checked: true,
     selectValue: '',
     graphData: '',
+    show_keys: false,
     //Default start time
     startTime: moment()
       .startOf('day')
@@ -122,6 +124,7 @@ export default class Charts extends Component {
   };
   handleChange1 = e => {
     //handle keys dropdown change
+    let deviceId = e.target.value[0];
     this.setState({
       isLoading: true,
       default: false,
@@ -133,10 +136,27 @@ export default class Charts extends Component {
       device_name: e.target.value[1],
       deviceId: e.target.value[0]
     });
-    console.log(e.target.value);
-    this.handleChange2(e.target.value[0]);
+    axios
+      .get(
+        `https://cors-anywhere.herokuapp.com/http://portal.uniqgridcloud.com:8080/api/plugins/telemetry/DEVICE/${deviceId}/keys/timeseries`
+      )
+      .then(res => {
+        this.setState({
+          keys: res.data,
+          show_keys: true
+        });
+      });
   };
-  handleChange2 = deviceId => {
+
+  handleKeyChange1 = e => {
+    this.setState({
+      key_selected: e.target.value,
+      isLoading: true
+    });
+    this.handleChange2(this.state.deviceId, e.target.value);
+  };
+
+  handleChange2 = (deviceId, key) => {
     //handle keys dropdown change
     this.setState({
       isLoading: true,
@@ -153,9 +173,7 @@ export default class Charts extends Component {
     //get the timeseries data for graph
     axios
       .get(
-        `https://cors-anywhere.herokuapp.com/http://portal.uniqgridcloud.com:8080/api/plugins/telemetry/DEVICE/${deviceId}/values/timeseries?limit=10000&interval=900000&agg=MAX&keys=${
-          this.state.key
-        }&startTs=${startTime}&endTs=${endtime}`
+        `https://cors-anywhere.herokuapp.com/http://portal.uniqgridcloud.com:8080/api/plugins/telemetry/DEVICE/${deviceId}/values/timeseries?limit=10000&interval=900000&agg=MAX&keys=${key}&startTs=${startTime}&endTs=${endtime}`
       )
       .then(res => {
         //extract data from response
@@ -890,10 +908,17 @@ export default class Charts extends Component {
         });
       }
     }
-    let keyName = this.state.key;
-    keyName = keyName.split('_');
-    keyName = keyName.join(' ');
-    keyName = this.toTitleCase(keyName);
+    let listOfKeys;
+    if ((this.state.keys && this.state.keys !== '') || this.state.keys !== []) {
+      listOfKeys = this.state.keys.map(key => {
+        return (
+          <MenuItem key={uuid.v4()} value={key}>
+            {this.toTitleCase(key.split('_').join(' '))}
+          </MenuItem>
+        );
+      });
+    }
+
     return (
       <div className='hot_charts'>
         <h3 style={{ marginTop: '100px' }}>Select Device</h3>
@@ -906,23 +931,28 @@ export default class Charts extends Component {
               name: 'devices',
               id: 'devices'
             }}
+            placeholder={this.state.device_name}
             value={this.state.deviceId}
           >
             {listOfDevices}
           </Select>
         </FormControl>
-        {this.state.deviceActivated && (
-          <div className='switch-div felex-col'>
-            <p className='text-toggle-hot-charts'>{keyName}</p>
-            <label className='switch'>
-              <input
-                onChange={this.handleKeyChange}
-                type='checkbox'
-                checked={this.state.checked}
-              />
-              <span className='slider round' />
-            </label>
-          </div>
+        {this.state.show_keys && (
+          <FormControl className='hot_chart_select'>
+            <InputLabel htmlFor='devices'>Keys</InputLabel>
+            <Select
+              style={{ height: '50px', width: '250px' }}
+              onChange={this.handleKeyChange1}
+              inputProps={{
+                name: 'keys',
+                id: 'keys'
+              }}
+              value={this.state.key_selected}
+              placeholder={this.state.key_selected}
+            >
+              {listOfKeys}
+            </Select>
+          </FormControl>
         )}
         <div className='my-device-graph'>
           {this.state.deviceActivated && (

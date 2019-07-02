@@ -7,23 +7,57 @@ import icon1 from '../../../../images/icon1.svg';
 import icon2 from '../../../../images/icon2.svg';
 
 class Connection extends Component {
+  state = {
+    power: 0,
+    load: '',
+    solar: 0
+  };
   componentDidMount() {
+    if (parseInt(this.props.id) === 1) {
+      this.setState({
+        load: parseFloat(this.props.properties[`connected_load_kw_`]),
+        solar: parseFloat(this.props.properties[`total_capacity_kwp`])
+      });
+    } else {
+      this.setState({
+        load: parseFloat(
+          this.props.properties[`connected_load_kw_site_${this.props.id}_`]
+        ),
+        solar: parseFloat(
+          this.props.properties[`solar_capacity_kwp_site_${this.props.id}_`]
+        )
+      });
+    }
     if (
       this.props.properties[`master_site${this.props.id}`] &&
       this.props.properties[`master_site${this.props.id}`].value !== '' &&
-      this.props.properties[`master_site${this.props.id}`].value !== '{}'
+      this.props.properties[`master_site${this.props.id}`].value !== '{}' &&
+      this.props.properties[`master_key_site_${this.props.id}`] &&
+      this.props.properties[`master_key_site_${this.props.id}`].value !== '' &&
+      this.props.properties[`master_key_site_${this.props.id}`].value !== '{}'
     ) {
+      console.log('object');
       let masterID = this.props.properties[`master_site${this.props.id}`].value;
+      let master_key = this.props.properties[`master_key_site_${this.props.id}`]
+        .value;
       masterID = masterID.replace(/'/g, '"');
       masterID = JSON.parse(masterID);
       masterID = masterID.device.id;
       //0006 id 2d2d09280-efba-11e8-914d-7bf7fdeefec4/
       axios
         .get(
-          `https://cors-anywhere.herokuapp.com/http://portal.uniqgridcloud.com:8080/api/plugins/telemetry/DEVICE/${masterID}values/timeseries?keys=active_power`
+          `https://cors-anywhere.herokuapp.com/http://portal.uniqgridcloud.com:8080/api/plugins/telemetry/DEVICE/${masterID}/values/timeseries?keys=${master_key}`
         )
         .then(res => {
-          console.log(res);
+          if (
+            res.data[master_key][0] &&
+            res.data[master_key][0].value &&
+            res.data[master_key][0].value !== ''
+          ) {
+            this.setState({
+              power: parseFloat(res.data[master_key][0].value)
+            });
+          }
         })
         .catch(res => {
           if (res.status === 401) {
@@ -43,13 +77,22 @@ class Connection extends Component {
   render() {
     const {
       id,
-      name,
-      power,
-      //powerPer,
-      consumption
+      name
+      //parseInt(power)Per,
       //consumptionPer
     } = this.props;
-
+    let numLoad = parseFloat(this.state.power);
+    let denoLoad = parseFloat(this.state.load);
+    let solar = parseFloat(this.state.solar);
+    let solarPower = 0;
+    let consumption = 0;
+    let power = 0;
+    if (denoLoad !== '' && denoLoad !== 0) {
+      power = (numLoad / denoLoad) * 100;
+    }
+    if (isNaN(power)) {
+      power = 0;
+    }
     const redirect = `/dashboard/my-sites/${id}`;
     const redirectSmallChart = `/dashboard/hot-charts/${id}`;
     return (
@@ -67,21 +110,21 @@ class Connection extends Component {
             <img alt='' src={icon1} className='icon_mobile' />
 
             <span className='progress_span'>
-              {power === ' kW' ? '--' : power}
+              {parseInt(power) === ' kW' ? '--' : parseInt(power)}
             </span>
             <span className='progress_my' style={styles.progress}>
               <Progress
                 color={
-                  parseInt(power) < 25
+                  parseInt(parseInt(power)) < 25
                     ? 'danger'
-                    : parseInt(power) < 75
+                    : parseInt(parseInt(power)) < 75
                     ? 'warning'
                     : 'success'
                 }
                 value={
-                  parseInt(power) > 100
-                    ? parseInt(power) % 100
-                    : parseInt(power)
+                  parseInt(parseInt(power)) > 100
+                    ? parseInt(parseInt(power)) % 100
+                    : parseInt(parseInt(power))
                 }
                 className='progress_my'
               />{' '}

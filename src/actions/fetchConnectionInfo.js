@@ -31,6 +31,7 @@ export const fetchConnetionInfo = id => dispatch => {
             output[`electricity_connection_name_site_${id}_`] = { value: '' };
             output[`connected_load_kw_site_${id}_`] = { value: '' };
             output[`segment_site_${id}_`] = { value: '' };
+            output[`master_key_site_${id}`] = { value: '' };
             output[`sub_segment_site_${id}_`] = { value: '' };
             output[`average_monthly_energy_cost_site_${id}_`] = { value: '' };
             output[`electricity_quality_site_${id}_`] = { value: '' };
@@ -124,6 +125,7 @@ export const fetchConnetionInfo = id => dispatch => {
             output[`sub_segment`] = { value: '' };
             output[`monthly_energy_cost`] = { value: '' };
             output[`electricity_quality`] = { value: '' };
+            output[`master_key_site_1`] = { value: '' };
             output[`diesel_genset_operational_`] = { value: '' };
             output[`number_of_diesel_gensets`] = { value: '' };
             output[`total_kva_capacity_of_diesel_gensets`] = { value: '' };

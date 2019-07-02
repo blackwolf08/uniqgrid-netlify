@@ -6,13 +6,19 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+import Axios from 'axios';
 
 class InstalledDevices extends Component {
   state = {
     deviceList: [],
     device_pool: [],
     masterDevice: '',
-    masterDeviceToSend: {}
+    masterDeviceToSend: {},
+    masterKey: '',
+    device_id: '',
+    device_key: '',
+    master_key: '',
+    device_name: ''
   };
 
   componentWillMount() {
@@ -54,7 +60,8 @@ class InstalledDevices extends Component {
         ].value.replace(/'/g, '"');
         let send = JSON.parse(masterDeviceNew);
         this.setState({
-          masterDevice: send.device.name
+          masterDevice: send.device.name,
+          device_id: send.device.id
         });
       }
     }
@@ -69,8 +76,10 @@ class InstalledDevices extends Component {
         ].value.replace(/'/g, '"');
         let send = JSON.parse(masterDeviceNew);
         this.setState({
-          masterDevice: send.device.name
+          masterDevice: send.device.name,
+          device_id: send.device.id
         });
+        console.log(send.device.name, send.device.name !== '');
       }
     }
 
@@ -97,10 +106,37 @@ class InstalledDevices extends Component {
     });
   }
 
+  componentDidMount() {
+    console.log(this.state.device);
+    if (this.state.masterDevice !== '') {
+      if (this.state.device_id !== '') {
+        console.log('object');
+        Axios.get(
+          `https://cors-anywhere.herokuapp.com/http://portal.uniqgridcloud.com:8080/api/plugins/telemetry/DEVICE/${
+            this.state.device_id
+          }/keys/timeseries`
+        ).then(res => {
+          //storing keys to display in dropdown, E.g. keys array === [current, ac power, ...]
+          this.setState({
+            device_key: res.data
+          });
+        });
+      }
+    }
+  }
+
+  handleMasterKeyChange = e => {
+    let key = e.target.value;
+    this.setState({
+      master_key: key
+    });
+  };
+
   handleClick = e => {
     //console.log(e.target.value, e.target.id, e.target.id);
     let name = e.target.name;
     let new_device_arr = [];
+    console.log(this.state.device);
     this.state.deviceList.device_list.forEach(device => {
       if (device.device.name !== name) {
         new_device_arr.push(device);
@@ -142,7 +178,8 @@ class InstalledDevices extends Component {
     this.setState({
       device_pool: {
         device_list: new_pool_arr
-      }
+      },
+      device_name: `${e.target.value[1]}`
     });
     this.setState({
       deviceList: {
@@ -188,6 +225,10 @@ class InstalledDevices extends Component {
         {
           property: 'master_site1',
           value: JSON.stringify(masterDeviceToSend)
+        },
+        {
+          property: 'master_key_site_1',
+          value: JSON.stringify(this.state.master_key)
         }
       ];
     } else {
@@ -211,6 +252,10 @@ class InstalledDevices extends Component {
         {
           property: `master_site${this.props.id}`,
           value: JSON.stringify(masterDeviceToSend)
+        },
+        {
+          property: `master_key_site_${this.props.id}`,
+          value: JSON.stringify(this.state.master_key)
         }
       ];
     }
@@ -239,6 +284,19 @@ class InstalledDevices extends Component {
     let listOfDevices;
     let listOfPool;
     let listOfDevicesSelect;
+    let listOfKeys;
+
+    if (this.state.device_key !== '') {
+      listOfKeys = this.state.device_key.map(key => {
+        if (key.match(/energy/gm) || key.match(/power/gm)) {
+          return (
+            <MenuItem key={uuid.v4()} value={key}>
+              {key}
+            </MenuItem>
+          );
+        }
+      });
+    }
 
     if (this.state.deviceList.device_list) {
       listOfDevices = this.state.deviceList.device_list.map(device => {
@@ -297,6 +355,8 @@ class InstalledDevices extends Component {
           <Select
             style={{ height: '50px', width: '250px' }}
             onChange={this.handleChange}
+            value={this.state.device_name}
+            placeholder={this.state.device_name}
             inputProps={{
               name: 'devices',
               id: 'devices'
@@ -310,6 +370,8 @@ class InstalledDevices extends Component {
           <Select
             style={{ height: '50px', width: '250px' }}
             onChange={this.handleChangeMaster}
+            value={this.state.masterDevice}
+            placeholder={this.state.masterDevice}
             inputProps={{
               name: `master_site${this.props.id}`,
               id: `master_site${this.props.id}`
@@ -318,6 +380,23 @@ class InstalledDevices extends Component {
             {listOfDevicesSelect}
           </Select>
         </FormControl>
+        {this.state.device_key !== '' && (
+          <FormControl className=''>
+            <InputLabel htmlFor='age-simple'>Master Key</InputLabel>
+            <Select
+              style={{ height: '50px', width: '250px' }}
+              onChange={this.handleMasterKeyChange}
+              value={this.state.device_key}
+              placeholder={this.state.master_key}
+              inputProps={{
+                name: `master_key_site_${this.props.id}`,
+                id: `master_key_site_${this.props.id}`
+              }}
+            >
+              {listOfKeys}
+            </Select>
+          </FormControl>
+        )}
         {listOfDevices}
         <div className='row'>
           <div className='col'>
