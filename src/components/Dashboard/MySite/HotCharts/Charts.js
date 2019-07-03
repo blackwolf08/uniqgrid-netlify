@@ -15,6 +15,7 @@ export default class Charts extends Component {
     deviceId: '',
     key_selected: '',
     device_name: '',
+    show_graph: false,
     key: 'import_energy',
     newKeys: [],
     devicesArr: [],
@@ -151,7 +152,8 @@ export default class Charts extends Component {
       deviceActivated: true,
       deviceName: name,
       selectValue: '',
-      graphData: ''
+      graphData: '',
+      show_graph: false
     });
     const URL = `https://cors-anywhere.herokuapp.com/http://portal.uniqgridcloud.com:8080/api/device/${deviceId}`;
     //grab device details
@@ -217,6 +219,7 @@ export default class Charts extends Component {
     //handle keys dropdown change
     this.setState({
       isLoading: true,
+      show_graph: true,
       default: false,
       back: 1
     });
@@ -1034,7 +1037,7 @@ export default class Charts extends Component {
           </FormControl>
         )}
         <div className='my-device-graph'>
-          {this.state.deviceActivated && (
+          {this.state.show_graph && (
             <>
               <div className='filter'>
                 <h4 style={{ width: '100%', textAlign: 'center' }}>
