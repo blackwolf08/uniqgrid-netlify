@@ -20,11 +20,18 @@ class MyDevice extends Component {
       // STATIC STUFF, DO NOT TAMPER
     ],
     deviceId: '',
+    show_graph: false,
     devicesArr: [],
     isLoading: false,
     keys: [],
     selectValue: 'Select Device',
     graphData: '',
+    show_keys: false,
+    show_filters: false,
+    power_active: '',
+    energy_acive: '',
+    others_active: '',
+    newKeys: [],
     //Default start time
     startTime: moment()
       .startOf('day')
@@ -58,11 +65,13 @@ class MyDevice extends Component {
     this.setState({
       deviceId,
       isLoading: true,
+      show_keys: false,
       deviceActivated: true,
       deviceName: name,
       selectValue: '',
       graphData: '',
-      valueToSub: ''
+      valueToSub: '',
+      show_graph: false
     });
     const URL = `https://cors-anywhere.herokuapp.com/http://portal.uniqgridcloud.com:8080/api/device/${deviceId}`;
     //grab device details
@@ -76,6 +85,7 @@ class MyDevice extends Component {
           //storing keys to display in dropdown, E.g. keys array === [current, ac power, ...]
           this.setState({
             keys: res.data,
+            newKeys: res.data,
             isLoading: false
           });
         })
@@ -94,7 +104,8 @@ class MyDevice extends Component {
       isLoading: true,
       default: false,
       back: 1,
-      valueToSub: ''
+      valueToSub: '',
+      show_graph: true
     });
     //setting select value to store selected key
     this.setState({ selectValue: e.target.value });
@@ -284,6 +295,55 @@ class MyDevice extends Component {
       });
     }
     return s;
+  };
+
+  filter_energy = () => {
+    let keys = this.state.newKeys;
+    let newKeys = [];
+    keys.forEach(key => {
+      if (key.match(/energy/) || key.match(/kwh_/) || key.match(/kWh_/)) {
+        newKeys.push(key);
+      }
+    });
+    this.setState({
+      keys: newKeys,
+      show_keys: true,
+      energy_acive: ' active-filter',
+      power_active: '',
+      others_active: ''
+    });
+  };
+  filter_power = () => {
+    let keys = this.state.newKeys;
+    let newKeys = [];
+    keys.forEach(key => {
+      if (key.match(/power/) || key.match(/kw_/) || key.match(/kW_/)) {
+        newKeys.push(key);
+      }
+    });
+    this.setState({
+      keys: newKeys,
+      show_keys: true,
+      energy_acive: '',
+      power_active: ' active-filter',
+      others_active: ''
+    });
+  };
+  filter_others = () => {
+    let keys = this.state.newKeys;
+    let newKeys = [];
+    keys.forEach(key => {
+      if (!key.match(/energy/) && !key.match(/power/)) {
+        newKeys.push(key);
+      }
+    });
+    this.setState({
+      keys: newKeys,
+      show_keys: true,
+      energy_acive: '',
+      power_active: '',
+      others_active: ' active-filter'
+    });
   };
 
   filterWeek = () => {
@@ -1034,107 +1094,133 @@ class MyDevice extends Component {
                 <h4 style={{ width: '100%', textAlign: 'center' }}>
                   {this.state.deviceName}
                 </h4>
-                <select
-                  value={this.state.selectValue}
-                  onChange={this.handleChange}
-                  className='key-select'
-                >
-                  <option defaultValue>Select</option>
-                  {listOfKeys}
-                </select>
-                <button
-                  className={'filter-button' + this.state.day}
-                  onClick={this.filterDay}
-                >
-                  Day
-                </button>
-                <button
-                  className={'filter-button' + this.state.week}
-                  onClick={this.filterWeek}
-                >
-                  Week
-                </button>
-                <button
-                  className={'filter-button' + this.state.month}
-                  onClick={this.filterMonth}
-                >
-                  Month
-                </button>
-                <button
-                  className={'filter-button' + this.state.year}
-                  onClick={this.filterYear}
-                >
-                  Year
-                </button>
-                <br />
-                <div className='row' style={{ marginTop: '10px' }}>
-                  <div className='col-sm-12 col flex'>
-                    <div style={{ width: '50%' }}>
-                      <button
-                        onClick={this.handleLeft}
-                        style={{
-                          position: 'absolute',
-                          left: '0',
-                          fontSize: '130%',
-                          backgroundColor: 'white'
-                        }}
-                      >
-                        <i
-                          style={{ color: 'black' }}
-                          className='fas fa-arrow-left'
-                        />
-                        <span style={{}}>
-                          {' '}
-                          Previous {this.state.selectedFilter}
-                        </span>
-                      </button>
-                    </div>
-                    <div style={{ width: '50%', position: 'relative' }}>
-                      <button
-                        onClick={this.handleRight}
-                        style={{
-                          position: 'absolute',
-                          right: '0',
-                          fontSize: '130%',
-                          backgroundColor: 'white'
-                        }}
-                      >
-                        <span style={{}}>
-                          Next {this.state.selectedFilter}{' '}
-                        </span>
-                        <i
-                          style={{ color: 'black' }}
-                          className='fas fa-arrow-right'
-                        />
-                      </button>
-                    </div>
-                  </div>
+                <div className='button-div'>
+                  <button
+                    className={'filter-button' + this.state.power_active}
+                    onClick={this.filter_power}
+                  >
+                    Power
+                  </button>
+                  <button
+                    className={'filter-button' + this.state.energy_acive}
+                    onClick={this.filter_energy}
+                  >
+                    Energy
+                  </button>
+                  <button
+                    className={'filter-button' + this.state.others_active}
+                    onClick={this.filter_others}
+                  >
+                    Others
+                  </button>
                 </div>
-                <br />
-                <br />
-                {/* <p>{this.state.graphData}</p> */}
-                <div>
-                  {!this.state.graphData && !this.state.isLoading && (
-                    <CanvasJSChart
-                      options={this.noDataSetOptions()}
-                      /* onRef = {ref => this.chart = ref} */
-                    />
-                  )}
-                  {this.state.isLoading && (
-                    <div style={{ height: '400px' }}>
-                      <Spinner />
+                {this.state.show_keys && (
+                  <select
+                    value={this.state.selectValue}
+                    onChange={this.handleChange}
+                    className='key-select'
+                  >
+                    <option defaultValue>Select</option>
+                    {listOfKeys}
+                  </select>
+                )}
+                {this.state.show_graph && (
+                  <>
+                    <button
+                      className={'filter-button' + this.state.day}
+                      onClick={this.filterDay}
+                    >
+                      Day
+                    </button>
+                    <button
+                      className={'filter-button' + this.state.week}
+                      onClick={this.filterWeek}
+                    >
+                      Week
+                    </button>
+                    <button
+                      className={'filter-button' + this.state.month}
+                      onClick={this.filterMonth}
+                    >
+                      Month
+                    </button>
+                    <button
+                      className={'filter-button' + this.state.year}
+                      onClick={this.filterYear}
+                    >
+                      Year
+                    </button>
+                    <br />
+                    <div className='row' style={{ marginTop: '10px' }}>
+                      <div className='col-sm-12 col flex'>
+                        <div style={{ width: '50%' }}>
+                          <button
+                            onClick={this.handleLeft}
+                            style={{
+                              position: 'absolute',
+                              left: '0',
+                              fontSize: '130%',
+                              backgroundColor: 'white'
+                            }}
+                          >
+                            <i
+                              style={{ color: 'black' }}
+                              className='fas fa-arrow-left'
+                            />
+                            <span style={{}}>
+                              {' '}
+                              Previous {this.state.selectedFilter}
+                            </span>
+                          </button>
+                        </div>
+                        <div style={{ width: '50%', position: 'relative' }}>
+                          <button
+                            onClick={this.handleRight}
+                            style={{
+                              position: 'absolute',
+                              right: '0',
+                              fontSize: '130%',
+                              backgroundColor: 'white'
+                            }}
+                          >
+                            <span style={{}}>
+                              Next {this.state.selectedFilter}{' '}
+                            </span>
+                            <i
+                              style={{ color: 'black' }}
+                              className='fas fa-arrow-right'
+                            />
+                          </button>
+                        </div>
+                      </div>
                     </div>
-                  )}
-                  {this.state.graphData &&
-                    !this.state.isLoading &&
-                    this.state.graphData.length > 1 &&
-                    !this.state.isLoading && (
-                      <CanvasJSChart
-                        options={this.setOptions()}
-                        /* onRef = {ref => this.chart = ref} */
-                      />
-                    )}
-                </div>
+                    <br />
+                    <br />
+                    {/* <p>{this.state.graphData}</p> */}
+                    <div>
+                      {!this.state.graphData && !this.state.isLoading && (
+                        <CanvasJSChart
+                          options={this.noDataSetOptions()}
+                          /* onRef = {ref => this.chart = ref} */
+                        />
+                      )}
+                      {this.state.isLoading && (
+                        <div style={{ height: '400px' }}>
+                          <Spinner />
+                        </div>
+                      )}
+                      {this.state.graphData &&
+                        !this.state.isLoading &&
+                        this.state.graphData.length > 1 &&
+                        !this.state.isLoading && (
+                          <CanvasJSChart
+                            options={this.setOptions()}
+                            /* onRef = {ref => this.chart = ref} */
+                          />
+                        )}
+                    </div>
+                  </>
+                )}
               </div>
             )}
           </div>

@@ -15,17 +15,15 @@ class Connection extends Component {
   componentDidMount() {
     if (parseInt(this.props.id) === 1) {
       this.setState({
-        load: parseFloat(this.props.properties[`connected_load_kw_`]),
-        solar: parseFloat(this.props.properties[`total_capacity_kwp`])
+        load: this.props.properties[`connected_load_kw_`],
+        solar: this.props.properties[`total_capacity_kwp`]
       });
     } else {
       this.setState({
-        load: parseFloat(
-          this.props.properties[`connected_load_kw_site_${this.props.id}_`]
-        ),
-        solar: parseFloat(
-          this.props.properties[`solar_capacity_kwp_site_${this.props.id}_`]
-        )
+        load: this.props.properties[`connected_load_kw_site_${this.props.id}_`],
+        solar: this.props.properties[
+          `solar_capacity_kwp_site_${this.props.id}_`
+        ]
       });
     }
     if (
@@ -36,7 +34,6 @@ class Connection extends Component {
       this.props.properties[`master_key_site_${this.props.id}`].value !== '' &&
       this.props.properties[`master_key_site_${this.props.id}`].value !== '{}'
     ) {
-      console.log('object');
       let masterID = this.props.properties[`master_site${this.props.id}`].value;
       let master_key = this.props.properties[`master_key_site_${this.props.id}`]
         .value;
@@ -110,7 +107,9 @@ class Connection extends Component {
             <img alt='' src={icon1} className='icon_mobile' />
 
             <span className='progress_span'>
-              {parseInt(power) === ' kW' ? '--' : parseInt(power)}
+              {this.state.load.value === '' || this.state.load.value === ' kW'
+                ? '--'
+                : this.state.load.value}
             </span>
             <span className='progress_my' style={styles.progress}>
               <Progress
@@ -135,7 +134,9 @@ class Connection extends Component {
           <div className='flex'>
             <img alt='' src={icon2} className='icon_mobile' />
             <span className='progress_span'>
-              {consumption === ' kW' ? '--' : consumption}
+              {this.state.solar.value === '' || this.state.solar.value === ' kW'
+                ? '--'
+                : this.state.solar.value}
             </span>
             <span className='progress_my' style={{ width: '250px' }}>
               <Progress

@@ -16,6 +16,7 @@ export default class Charts extends Component {
     key_selected: '',
     device_name: '',
     key: 'import_energy',
+    newKeys: [],
     devicesArr: [],
     deviceActivated: false,
     isLoading: false,
@@ -24,6 +25,10 @@ export default class Charts extends Component {
     selectValue: '',
     graphData: '',
     show_keys: false,
+    show_filters: false,
+    power_active: '',
+    energy_acive: '',
+    others_active: '',
     //Default start time
     startTime: moment()
       .startOf('day')
@@ -89,6 +94,55 @@ export default class Charts extends Component {
     });
   }
 
+  filter_energy = () => {
+    let keys = this.state.newKeys;
+    let newKeys = [];
+    keys.forEach(key => {
+      if (key.match(/energy/) || key.match(/kwh_/) || key.match(/kWh_/)) {
+        newKeys.push(key);
+      }
+    });
+    this.setState({
+      keys: newKeys,
+      show_keys: true,
+      energy_acive: ' active-filter',
+      power_active: '',
+      others_active: ''
+    });
+  };
+  filter_power = () => {
+    let keys = this.state.newKeys;
+    let newKeys = [];
+    keys.forEach(key => {
+      if (key.match(/power/) || key.match(/kw_/) || key.match(/kW_/)) {
+        newKeys.push(key);
+      }
+    });
+    this.setState({
+      keys: newKeys,
+      show_keys: true,
+      energy_acive: '',
+      power_active: ' active-filter',
+      others_active: ''
+    });
+  };
+  filter_others = () => {
+    let keys = this.state.newKeys;
+    let newKeys = [];
+    keys.forEach(key => {
+      if (!key.match(/energy/) && !key.match(/power/)) {
+        newKeys.push(key);
+      }
+    });
+    this.setState({
+      keys: newKeys,
+      show_keys: true,
+      energy_acive: '',
+      power_active: '',
+      others_active: ' active-filter'
+    });
+  };
+
   handleClick = (deviceId, name) => {
     //function executed when user clicks on one of the devices
     this.setState({
@@ -111,6 +165,7 @@ export default class Charts extends Component {
           //storing keys to display in dropdown, E.g. keys array === [current, ac power, ...]
           this.setState({
             keys: res.data,
+            newKeys: res.data,
             isLoading: false
           });
         })
@@ -129,7 +184,8 @@ export default class Charts extends Component {
       isLoading: true,
       default: false,
       back: 1,
-      deviceActivated: true
+      deviceActivated: true,
+      show_keys: false
     });
     //setting select value to store selected key
     this.setState({
@@ -143,7 +199,8 @@ export default class Charts extends Component {
       .then(res => {
         this.setState({
           keys: res.data,
-          show_keys: true
+          newKeys: res.data,
+          show_filters: true
         });
       });
   };
@@ -937,6 +994,28 @@ export default class Charts extends Component {
             {listOfDevices}
           </Select>
         </FormControl>
+        {this.state.show_filters && (
+          <div className='button-div'>
+            <button
+              className={'filter-button' + this.state.power_active}
+              onClick={this.filter_power}
+            >
+              Power
+            </button>
+            <button
+              className={'filter-button' + this.state.energy_acive}
+              onClick={this.filter_energy}
+            >
+              Energy
+            </button>
+            <button
+              className={'filter-button' + this.state.others_active}
+              onClick={this.filter_others}
+            >
+              Others
+            </button>
+          </div>
+        )}
         {this.state.show_keys && (
           <FormControl className='hot_chart_select'>
             <InputLabel htmlFor='devices'>Keys</InputLabel>
@@ -957,36 +1036,36 @@ export default class Charts extends Component {
         <div className='my-device-graph'>
           {this.state.deviceActivated && (
             <>
-              <h3>{this.state.device_name}</h3>
               <div className='filter'>
                 <h4 style={{ width: '100%', textAlign: 'center' }}>
-                  {this.state.deviceName}
+                  {this.state.device_name}
                 </h4>
-                <div />
-                <button
-                  className={'filter-button' + this.state.day}
-                  onClick={this.filterDay}
-                >
-                  Day
-                </button>
-                <button
-                  className={'filter-button' + this.state.week}
-                  onClick={this.filterWeek}
-                >
-                  Week
-                </button>
-                <button
-                  className={'filter-button' + this.state.month}
-                  onClick={this.filterMonth}
-                >
-                  Month
-                </button>
-                <button
-                  className={'filter-button' + this.state.year}
-                  onClick={this.filterYear}
-                >
-                  Year
-                </button>
+                <div className=''>
+                  <button
+                    className={'filter-button' + this.state.day}
+                    onClick={this.filterDay}
+                  >
+                    Day
+                  </button>
+                  <button
+                    className={'filter-button' + this.state.week}
+                    onClick={this.filterWeek}
+                  >
+                    Week
+                  </button>
+                  <button
+                    className={'filter-button' + this.state.month}
+                    onClick={this.filterMonth}
+                  >
+                    Month
+                  </button>
+                  <button
+                    className={'filter-button' + this.state.year}
+                    onClick={this.filterYear}
+                  >
+                    Year
+                  </button>
+                </div>
                 <br />
                 <div className='row' style={{ marginTop: '10px' }}>
                   <div className='col-sm-12 col flex'>

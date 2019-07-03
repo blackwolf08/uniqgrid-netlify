@@ -288,7 +288,7 @@ class InstalledDevices extends Component {
 
     if (this.state.device_key !== '') {
       listOfKeys = this.state.device_key.map(key => {
-        if (key.match(/energy/gm) || key.match(/power/gm)) {
+        if (key.match(/power/gm) || key.match(/kW_/) || key.match(/kw_/)) {
           return (
             <MenuItem key={uuid.v4()} value={key}>
               {key}

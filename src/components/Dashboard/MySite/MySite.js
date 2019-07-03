@@ -202,7 +202,7 @@ class MySite extends Component {
         <Helmet>
           <title>My Site</title>
         </Helmet>
-        <h1 className='mysites-heading'>
+        <h1 className='mysites-heading '>
           <i className='fas fa-house-damage icon-heading' /> My Sites
         </h1>
         {this.state.ready && (
