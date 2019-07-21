@@ -69,7 +69,6 @@ class MyDevice extends Component {
       deviceName: name,
       selectValue: '',
       graphData: '',
-      valueToSub: '',
       show_graph: false
     });
     const URL = `https://cors-anywhere.herokuapp.com/http://portal.uniqgridcloud.com:8080/api/device/${deviceId}`;
@@ -122,16 +121,14 @@ class MyDevice extends Component {
       .then(res => {
         let a = res.data;
         let s = a[Object.keys(a)[0]];
-        if (key.match(/energy/gm)) {
-          //energy conversion here
-        } else {
-          //extract data from response
-          //store data in state
-          this.setState({
-            isLoading: false,
-            graphData: s
-          });
-        }
+
+        //extract data from response
+        //store data in state
+        this.setState({
+          isLoading: false,
+          graphData: s
+        });
+
         //if no data
         if (typeof a[Object.keys(a)[0]] === 'undefined') {
           this.setState({
@@ -162,7 +159,7 @@ class MyDevice extends Component {
     const options = {
       title: {
         text: `${heading} Analysis`,
-        fontSize: 20
+        fontSize: 15
       },
       animationEnabled: true,
       //Downloadable ? true : false
@@ -255,7 +252,7 @@ class MyDevice extends Component {
     s = this.state.graphData.map(e => {
       return {
         label: moment(e.ts).format('MM Do YY'),
-        y: this.state.valueToSub - e.value
+        y: e.value
       };
     });
     s = this.state.graphData.map(e => {
@@ -320,8 +317,7 @@ class MyDevice extends Component {
   filterWeek = () => {
     this.setState({
       selectedFilter: 'week',
-      back: 1,
-      valueToSub: ''
+      back: 1
     });
     //for more details on isoWeek refer to MyDevice.md on same directory
     let startTime = moment()
@@ -347,33 +343,11 @@ class MyDevice extends Component {
         let a = res.data;
         let s = a[Object.keys(a)[0]];
         //getter and setter for graph data
-        if (
-          this.state.selectValue.match(/energy/gm) ||
-          this.state.selectValue.match(/power/gm)
-        ) {
-          axios
-            .get(
-              `https://cors-anywhere.herokuapp.com/http://portal.uniqgridcloud.com:8080/api/plugins/telemetry/DEVICE/${
-                this.state.deviceId
-              }/values/timeseries?keys=${this.state.selectValue}`
-            )
-            .then(res => {
-              this.setState({
-                valueToSub: parseFloat(
-                  res.data[this.state.selectValue][0].value
-                )
-              });
-              this.setState({
-                isLoading: false,
-                graphData: s
-              });
-            });
-        } else {
-          this.setState({
-            isLoading: false,
-            graphData: s
-          });
-        }
+
+        this.setState({
+          isLoading: false,
+          graphData: s
+        });
       })
       .catch(res => {
         console.log(res);
@@ -391,8 +365,7 @@ class MyDevice extends Component {
   filterDay = () => {
     this.setState({
       selectedFilter: 'day',
-      back: 1,
-      valueToSub: ''
+      back: 1
     });
     let startTime = moment()
       .startOf('day')
@@ -415,33 +388,11 @@ class MyDevice extends Component {
       .then(res => {
         let a = res.data;
         let s = a[Object.keys(a)[0]];
-        if (
-          this.state.selectValue.match(/energy/gm) ||
-          this.state.selectValue.match(/power/gm)
-        ) {
-          axios
-            .get(
-              `https://cors-anywhere.herokuapp.com/http://portal.uniqgridcloud.com:8080/api/plugins/telemetry/DEVICE/${
-                this.state.deviceId
-              }/values/timeseries?keys=${this.state.selectValue}`
-            )
-            .then(res => {
-              this.setState({
-                valueToSub: parseFloat(
-                  res.data[this.state.selectValue][0].value
-                )
-              });
-              this.setState({
-                isLoading: false,
-                graphData: s
-              });
-            });
-        } else {
-          this.setState({
-            isLoading: false,
-            graphData: s
-          });
-        }
+
+        this.setState({
+          isLoading: false,
+          graphData: s
+        });
       })
       .catch(res => {
         console.log(res);
@@ -457,8 +408,7 @@ class MyDevice extends Component {
   filterMonth = () => {
     this.setState({
       selectedFilter: 'month',
-      back: 1,
-      valueToSub: ''
+      back: 1
     });
     let startTime = moment()
       .startOf('month')
@@ -481,33 +431,11 @@ class MyDevice extends Component {
       .then(res => {
         let a = res.data;
         let s = a[Object.keys(a)[0]];
-        if (
-          this.state.selectValue.match(/energy/gm) ||
-          this.state.selectValue.match(/power/gm)
-        ) {
-          axios
-            .get(
-              `https://cors-anywhere.herokuapp.com/http://portal.uniqgridcloud.com:8080/api/plugins/telemetry/DEVICE/${
-                this.state.deviceId
-              }/values/timeseries?keys=${this.state.selectValue}`
-            )
-            .then(res => {
-              this.setState({
-                valueToSub: parseFloat(
-                  res.data[this.state.selectValue][0].value
-                )
-              });
-              this.setState({
-                isLoading: false,
-                graphData: s
-              });
-            });
-        } else {
-          this.setState({
-            isLoading: false,
-            graphData: s
-          });
-        }
+
+        this.setState({
+          isLoading: false,
+          graphData: s
+        });
       })
       .catch(res => {
         console.log(res);
@@ -523,8 +451,7 @@ class MyDevice extends Component {
   filterYear = () => {
     this.setState({
       selectedFilter: 'year',
-      back: 1,
-      valueToSub: ''
+      back: 1
     });
     let startTime = moment()
       .startOf('year')
@@ -547,33 +474,11 @@ class MyDevice extends Component {
       .then(res => {
         let a = res.data;
         let s = a[Object.keys(a)[0]];
-        if (
-          this.state.selectValue.match(/energy/gm) ||
-          this.state.selectValue.match(/power/gm)
-        ) {
-          axios
-            .get(
-              `https://cors-anywhere.herokuapp.com/http://portal.uniqgridcloud.com:8080/api/plugins/telemetry/DEVICE/${
-                this.state.deviceId
-              }/values/timeseries?keys=${this.state.selectValue}`
-            )
-            .then(res => {
-              this.setState({
-                valueToSub: parseFloat(
-                  res.data[this.state.selectValue][0].value
-                )
-              });
-              this.setState({
-                isLoading: false,
-                graphData: s
-              });
-            });
-        } else {
-          this.setState({
-            isLoading: false,
-            graphData: s
-          });
-        }
+
+        this.setState({
+          isLoading: false,
+          graphData: s
+        });
       })
       .catch(res => {
         console.log(res);
@@ -590,8 +495,7 @@ class MyDevice extends Component {
   // takes three inputs that are quite intutive
   handleGraphChange = (start_time, end_time, interval) => {
     this.setState({
-      startTime: start_time,
-      valueToSub: ''
+      startTime: start_time
     });
     this.setState({
       isLoading: true
@@ -609,33 +513,11 @@ class MyDevice extends Component {
         //getter and setter for graph data
         let a = res.data;
         let s = a[Object.keys(a)[0]];
-        if (
-          this.state.selectValue.match(/energy/gm) ||
-          this.state.selectValue.match(/power/gm)
-        ) {
-          axios
-            .get(
-              `https://cors-anywhere.herokuapp.com/http://portal.uniqgridcloud.com:8080/api/plugins/telemetry/DEVICE/${
-                this.state.deviceId
-              }/values/timeseries?keys=${this.state.selectValue}`
-            )
-            .then(res => {
-              this.setState({
-                valueToSub: parseFloat(
-                  res.data[this.state.selectValue][0].value
-                )
-              });
-              this.setState({
-                isLoading: false,
-                graphData: s
-              });
-            });
-        } else {
-          this.setState({
-            isLoading: false,
-            graphData: s
-          });
-        }
+
+        this.setState({
+          isLoading: false,
+          graphData: s
+        });
       })
       .catch(res => {
         console.log(res);
