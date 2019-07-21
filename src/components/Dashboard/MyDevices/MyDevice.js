@@ -92,7 +92,7 @@ class MyDevice extends Component {
         });
     });
   };
-  handleChange = e => {
+  handleChange = async e => {
     //handle keys dropdown change
     let key = e.target.value;
     this.setState({
@@ -112,6 +112,43 @@ class MyDevice extends Component {
       selectedFilter: 'day'
     });
     //get the timeseries data for graph
+    if (this.state.energy_acive === ' active-filter') {
+      let res = await axios.get(
+        `https://cors-anywhere.herokuapp.com/http://portal.uniqgridcloud.com:8080/api/plugins/telemetry/DEVICE/${
+          this.state.deviceId
+        }/values/timeseries?limit=10000&interval=3600000&agg=MAX&keys=${key}&startTs=${startTime}&endTs=${endtime}`
+      );
+
+      console.log(res.data[key]);
+      let newArr = [];
+      let oldArr = res.data[key];
+      for (let i = 1; i < oldArr.length; i++) {
+        newArr.push({
+          ts: oldArr[i].ts,
+          value:
+            oldArr[i].value - oldArr[i - 1].value > 0
+              ? oldArr[i].value - oldArr[i - 1].value
+              : 0
+        });
+      }
+      console.log(newArr);
+
+      //extract data from response
+      //store data in state
+      this.setState({
+        isLoading: false,
+        graphData: newArr
+      });
+
+      //if no data
+      if (newArr.length === 0) {
+        this.setState({
+          isLoading: false,
+          graphData: ''
+        });
+      }
+      return;
+    }
     axios
       .get(
         `https://cors-anywhere.herokuapp.com/http://portal.uniqgridcloud.com:8080/api/plugins/telemetry/DEVICE/${
@@ -150,6 +187,12 @@ class MyDevice extends Component {
     if (this.state.selectedFilter === 'day') {
       typeOfGraph = 'area';
     } else {
+      typeOfGraph = 'column';
+    }
+    if (
+      this.state.selectedFilter === 'day' &&
+      this.state.energy_acive === ' active-filter'
+    ) {
       typeOfGraph = 'column';
     }
     //Make heading from ac_power, to ac power
@@ -334,7 +377,7 @@ class MyDevice extends Component {
     });
   };
 
-  filterWeek = () => {
+  filterWeek = async () => {
     this.setState({
       selectedFilter: 'week',
       back: 1
@@ -351,6 +394,45 @@ class MyDevice extends Component {
     });
     //get current time in UNIX
     let endtime = moment().valueOf();
+    if (this.state.energy_acive === ' active-filter') {
+      let res = await axios.get(
+        `https://cors-anywhere.herokuapp.com/http://portal.uniqgridcloud.com:8080/api/plugins/telemetry/DEVICE/${
+          this.state.deviceId
+        }/values/timeseries?limit=10000&interval=86400000&agg=MAX&keys=${
+          this.state.selectValue
+        }&startTs=${startTime}&endTs=${endtime}`
+      );
+
+      console.log(res.data[this.state.selectValue]);
+      let newArr = [];
+      let oldArr = res.data[this.state.selectValue];
+      for (let i = 1; i < oldArr.length; i++) {
+        newArr.push({
+          ts: oldArr[i].ts,
+          value:
+            oldArr[i].value - oldArr[i - 1].value > 0
+              ? oldArr[i].value - oldArr[i - 1].value
+              : 0
+        });
+      }
+      console.log(newArr);
+
+      //extract data from response
+      //store data in state
+      this.setState({
+        isLoading: false,
+        graphData: newArr
+      });
+
+      //if no data
+      if (newArr.length === 0) {
+        this.setState({
+          isLoading: false,
+          graphData: ''
+        });
+      }
+      return;
+    }
     axios
       .get(
         `https://cors-anywhere.herokuapp.com/http://portal.uniqgridcloud.com:8080/api/plugins/telemetry/DEVICE/${
