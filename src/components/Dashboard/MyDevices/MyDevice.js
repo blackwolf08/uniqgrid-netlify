@@ -116,7 +116,7 @@ class MyDevice extends Component {
       .get(
         `https://cors-anywhere.herokuapp.com/http://portal.uniqgridcloud.com:8080/api/plugins/telemetry/DEVICE/${
           this.state.deviceId
-        }/values/timeseries?limit=10000&interval=900000&agg=MAX&keys=${key}&startTs=${startTime}&endTs=${endtime}`
+        }/values/timeseries?limit=10000&interval=3600000&agg=MAX&keys=${key}&startTs=${startTime}&endTs=${endtime}`
       )
       .then(res => {
         let a = res.data;
@@ -159,7 +159,7 @@ class MyDevice extends Component {
     const options = {
       title: {
         text: `${heading} Analysis`,
-        fontSize: 15
+        fontSize: 20
       },
       animationEnabled: true,
       //Downloadable ? true : false
@@ -247,22 +247,42 @@ class MyDevice extends Component {
 
       return s;
     }
-    //for all others
-    let s;
-    s = this.state.graphData.map(e => {
-      return {
-        label: moment(e.ts).format('MM Do YY'),
-        y: e.value
-      };
-    });
-    s = this.state.graphData.map(e => {
-      return {
-        label: moment(e.ts).format('MM Do YY'),
-        y: e.value * 1
-      };
-    });
+    if (this.state.selectedFilter === 'week') {
+      //formatting for week
+      let s;
+      s = this.state.graphData.map(e => {
+        return {
+          label: moment(e.ts).format('dddd'),
+          y: e.value
+        };
+      });
+      s = this.state.graphData.map(e => {
+        return {
+          label: moment(e.ts).format('dddd'),
+          y: e.value * 1
+        };
+      });
 
-    return s;
+      return s;
+    }
+    if (this.state.selectedFilter === 'month') {
+      //formatting for month
+      let s;
+      s = this.state.graphData.map(e => {
+        return {
+          label: moment(e.ts).format('D MMM'),
+          y: e.value
+        };
+      });
+      s = this.state.graphData.map(e => {
+        return {
+          label: moment(e.ts).format('D MMM'),
+          y: e.value * 1
+        };
+      });
+
+      return s;
+    }
   };
 
   filter_energy = () => {
@@ -335,7 +355,7 @@ class MyDevice extends Component {
       .get(
         `https://cors-anywhere.herokuapp.com/http://portal.uniqgridcloud.com:8080/api/plugins/telemetry/DEVICE/${
           this.state.deviceId
-        }/values/timeseries?limit=10000&interval=10800000&agg=MAX&keys=${
+        }/values/timeseries?limit=10000&interval=86400000&agg=MAX&keys=${
           this.state.selectValue
         }&startTs=${startTime}&endTs=${endtime}`
       )
@@ -381,7 +401,7 @@ class MyDevice extends Component {
       .get(
         `https://cors-anywhere.herokuapp.com/http://portal.uniqgridcloud.com:8080/api/plugins/telemetry/DEVICE/${
           this.state.deviceId
-        }/values/timeseries?limit=10000&interval=900000&agg=MAX&keys=${
+        }/values/timeseries?limit=10000&interval=3600000&agg=MAX&keys=${
           this.state.selectValue
         }&startTs=${startTime}&endTs=${endtime}`
       )
@@ -467,7 +487,7 @@ class MyDevice extends Component {
       .get(
         `https://cors-anywhere.herokuapp.com/http://portal.uniqgridcloud.com:8080/api/plugins/telemetry/DEVICE/${
           this.state.deviceId
-        }/values/timeseries?limit=10000&interval=86400000&agg=MAX&keys=${
+        }/values/timeseries?limit=10000&interval=2592000000&agg=MAX&keys=${
           this.state.selectValue
         }&startTs=${startTime}&endTs=${endtime}`
       )
@@ -545,19 +565,19 @@ class MyDevice extends Component {
 
         if (this.state.selectedFilter === 'day') {
           // 15 mins
-          interval = 900000;
+          interval = 3600000;
         }
         if (this.state.selectedFilter === 'week') {
           // 1 hour
-          interval = 10800000;
+          interval = 86400000;
         }
         if (this.state.selectedFilter === 'month') {
           // 1 day
           interval = 86400000;
         }
         if (this.state.selectedFilter === 'year') {
-          // 1 day
-          interval = 86400000;
+          // 1 month
+          interval = 2592000000;
         }
         if (this.state.selectedFilter === 'day') {
           // This whole logic is explained in MyDevice.md
@@ -719,16 +739,16 @@ class MyDevice extends Component {
           let start_time, end_time, interval;
           console.log(this.state.back);
           if (this.state.selectedFilter === 'day') {
-            interval = 900000;
+            interval = 3600000;
           }
           if (this.state.selectedFilter === 'week') {
-            interval = 10800000;
+            interval = 86400000;
           }
           if (this.state.selectedFilter === 'month') {
             interval = 86400000;
           }
           if (this.state.selectedFilter === 'year') {
-            interval = 86400000;
+            interval = 2592000000;
           }
           if (this.state.selectedFilter === 'day') {
             if (this.state.back === 1) {
