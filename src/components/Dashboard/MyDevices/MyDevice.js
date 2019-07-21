@@ -48,8 +48,7 @@ class MyDevice extends Component {
     id: '',
     selectedFilter: 'day',
     //back values handles LEFT and RIGHT changes to graph
-    back: 1,
-    valueToSub: ''
+    back: 1
   };
 
   componentDidMount() {
@@ -90,10 +89,7 @@ class MyDevice extends Component {
           });
         })
         .catch(res => {
-          if (res.status === 401) {
-            localStorage.clear();
-            window.location.href = '/login';
-          }
+          console.log(res);
         });
     });
   };
@@ -104,7 +100,6 @@ class MyDevice extends Component {
       isLoading: true,
       default: false,
       back: 1,
-      valueToSub: '',
       show_graph: true
     });
     //setting select value to store selected key
@@ -127,22 +122,8 @@ class MyDevice extends Component {
       .then(res => {
         let a = res.data;
         let s = a[Object.keys(a)[0]];
-        if (key.match(/energy/gm) || key.match(/power/gm)) {
-          axios
-            .get(
-              `https://cors-anywhere.herokuapp.com/http://portal.uniqgridcloud.com:8080/api/plugins/telemetry/DEVICE/${
-                this.state.deviceId
-              }/values/timeseries?keys=${key}`
-            )
-            .then(res => {
-              this.setState({
-                valueToSub: parseFloat(res.data[key][0].value)
-              });
-              this.setState({
-                isLoading: false,
-                graphData: s
-              });
-            });
+        if (key.match(/energy/gm)) {
+          //energy conversion here
         } else {
           //extract data from response
           //store data in state
@@ -153,7 +134,6 @@ class MyDevice extends Component {
         }
         //if no data
         if (typeof a[Object.keys(a)[0]] === 'undefined') {
-          console.log(s);
           this.setState({
             isLoading: false,
             graphData: ''
@@ -161,10 +141,7 @@ class MyDevice extends Component {
         }
       })
       .catch(res => {
-        if (res.status === 401) {
-          localStorage.clear();
-          window.location.href = '/login';
-        }
+        console.log(res);
       });
   };
   //this function sets options for the graph
@@ -184,7 +161,8 @@ class MyDevice extends Component {
     //custom options for graphs
     const options = {
       title: {
-        text: `${heading} Analysis`
+        text: `${heading} Analysis`,
+        fontSize: 20
       },
       animationEnabled: true,
       //Downloadable ? true : false
@@ -240,60 +218,53 @@ class MyDevice extends Component {
     if (this.state.selectedFilter === 'day') {
       let s;
       //change formatting for day filter on X axis and also scale the data on the y-axis
-      if (this.state.valueToSub !== '') {
-        s = this.state.graphData.map(e => {
-          return {
-            label: moment(e.ts).format('hh a'),
-            y: this.state.valueToSub - e.value
-          };
-        });
-      } else {
-        s = this.state.graphData.map(e => {
-          return {
-            label: moment(e.ts).format('hh a'),
-            y: e.value * 1
-          };
-        });
-      }
+      s = this.state.graphData.map(e => {
+        return {
+          label: moment(e.ts).format('hh a'),
+          y: e.value
+        };
+      });
+      s = this.state.graphData.map(e => {
+        return {
+          label: moment(e.ts).format('hh a'),
+          y: e.value * 1
+        };
+      });
       return s;
     }
     if (this.state.selectedFilter === 'year') {
       //formatting for year
       let s;
-      if (this.state.valueToSub !== '') {
-        s = this.state.graphData.map(e => {
-          return {
-            label: moment(e.ts).format('MMM'),
-            y: this.state.valueToSub - e.value
-          };
-        });
-      } else {
-        s = this.state.graphData.map(e => {
-          return {
-            label: moment(e.ts).format('MMM'),
-            y: e.value * 1
-          };
-        });
-      }
+      s = this.state.graphData.map(e => {
+        return {
+          label: moment(e.ts).format('MMM'),
+          y: e.value
+        };
+      });
+      s = this.state.graphData.map(e => {
+        return {
+          label: moment(e.ts).format('MMM'),
+          y: e.value * 1
+        };
+      });
+
       return s;
     }
     //for all others
     let s;
-    if (this.state.valueToSub !== '') {
-      s = this.state.graphData.map(e => {
-        return {
-          label: moment(e.ts).format('MM Do YY'),
-          y: this.state.valueToSub - e.value
-        };
-      });
-    } else {
-      s = this.state.graphData.map(e => {
-        return {
-          label: moment(e.ts).format('MM Do YY'),
-          y: e.value * 1
-        };
-      });
-    }
+    s = this.state.graphData.map(e => {
+      return {
+        label: moment(e.ts).format('MM Do YY'),
+        y: this.state.valueToSub - e.value
+      };
+    });
+    s = this.state.graphData.map(e => {
+      return {
+        label: moment(e.ts).format('MM Do YY'),
+        y: e.value * 1
+      };
+    });
+
     return s;
   };
 
@@ -405,10 +376,7 @@ class MyDevice extends Component {
         }
       })
       .catch(res => {
-        if (res.status === 401) {
-          localStorage.clear();
-          window.location.href = '/login';
-        }
+        console.log(res);
       });
     //apply CSS to selected filter
     this.setState({
@@ -476,10 +444,7 @@ class MyDevice extends Component {
         }
       })
       .catch(res => {
-        if (res.status === 401) {
-          localStorage.clear();
-          window.location.href = '/login';
-        }
+        console.log(res);
       });
     this.setState({
       day: ' active-filter',
@@ -545,10 +510,7 @@ class MyDevice extends Component {
         }
       })
       .catch(res => {
-        if (res.status === 401) {
-          localStorage.clear();
-          window.location.href = '/login';
-        }
+        console.log(res);
       });
     this.setState({
       day: '',
@@ -614,10 +576,7 @@ class MyDevice extends Component {
         }
       })
       .catch(res => {
-        if (res.status === 401) {
-          localStorage.clear();
-          window.location.href = '/login';
-        }
+        console.log(res);
       });
     this.setState({
       day: '',
@@ -679,10 +638,7 @@ class MyDevice extends Component {
         }
       })
       .catch(res => {
-        if (res.status === 401) {
-          localStorage.clear();
-          window.location.href = '/login';
-        }
+        console.log(res);
       });
   };
 

@@ -1,9 +1,9 @@
-import { USERDATA, CUSTOMERINFO, DEVICETYPES, LOADING } from "./types";
-import axios from "axios";
-import jwtDecode from "jwt-decode";
+import { USERDATA, CUSTOMERINFO, DEVICETYPES, LOADING } from './types';
+import axios from 'axios';
+import jwtDecode from 'jwt-decode';
 
 export const fetchUserData = () => dispatch => {
-  if (typeof localStorage.jwtToken !== "undefined") {
+  if (typeof localStorage.jwtToken !== 'undefined') {
     const jwt = localStorage.jwtToken;
     const user = jwtDecode(localStorage.jwtToken);
     const userId = user.customerId;
@@ -44,23 +44,17 @@ export const fetchUserData = () => dispatch => {
                 });
               })
               .catch(res => {
-                if (res.status === 401) {
-                  localStorage.clear();
-                  window.location.href = "/login";
-                }
+                console.log(res);
               });
           })
           .catch(res => {
-            if (res.status === 401) {
-              localStorage.clear();
-              window.location.href = "/login";
-            }
+            console.log(res);
           });
       })
       .catch(res => {
         if (res.status === 401) {
           localStorage.clear();
-          window.location.href = "/login";
+          window.location.href = '/login';
         }
       });
   }

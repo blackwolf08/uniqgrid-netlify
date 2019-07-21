@@ -19,6 +19,7 @@ class Connection extends Component {
         solar: this.props.properties[`total_capacity_kwp`]
       });
     } else {
+      console.log(this.props.properties);
       this.setState({
         load: this.props.properties[`connected_load_kw_site_${this.props.id}_`],
         solar: this.props.properties[

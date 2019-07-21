@@ -182,18 +182,34 @@ class MySite extends Component {
   render() {
     let list = [];
     for (let i = 1; i <= this.state.maxConnections; i++) {
-      list.push(
-        <Connection
-          key={i}
-          properties={this.state.properties}
-          id={i}
-          name={`${this.state.nameOfSites[i - 1] || '--'}`}
-          power={`${this.state.kWASite[`site${i}`]} kW`}
-          powerPer={`55%`}
-          consumption={`${this.state.solarPower[`site${i}`]} kW`}
-          consumptionPer={`100%`}
-        />
-      );
+      if (i === 1 && this.state.properties[`connected_load_kw_`]) {
+        list.push(
+          <Connection
+            key={i}
+            properties={this.state.properties}
+            id={i}
+            name={`${this.state.nameOfSites[i - 1] || '--'}`}
+            power={`${this.state.kWASite[`site${i}`]} kW`}
+            powerPer={`55%`}
+            consumption={`${this.state.solarPower[`site${i}`]} kW`}
+            consumptionPer={`100%`}
+          />
+        );
+      }
+      if (i > 1 && this.state.properties[`connected_load_kw_site_${i}_`]) {
+        list.push(
+          <Connection
+            key={i}
+            properties={this.state.properties}
+            id={i}
+            name={`${this.state.nameOfSites[i - 1] || '--'}`}
+            power={`${this.state.kWASite[`site${i}`]} kW`}
+            powerPer={`55%`}
+            consumption={`${this.state.solarPower[`site${i}`]} kW`}
+            consumptionPer={`100%`}
+          />
+        );
+      }
     }
 
     // Views for MySite

@@ -72,6 +72,7 @@ export const fetchConnetionInfo = id => dispatch => {
                 output[key] = properties[key];
               }
             });
+            console.log(OUTPUT_ARR);
 
             dispatch({
               type: SET_VID,
@@ -88,11 +89,7 @@ export const fetchConnetionInfo = id => dispatch => {
             resolve(true);
           })
           .catch(res => {
-            if (res.status === 401) {
-              localStorage.clear();
-              window.location.href = '/login';
-              resolve(false);
-            }
+            console.log(res);
           });
       }
     } else {
@@ -172,11 +169,7 @@ export const fetchConnetionInfo = id => dispatch => {
             resolve(true);
           })
           .catch(res => {
-            if (res.status === 401) {
-              localStorage.clear();
-              window.location.href = '/login';
-              resolve(false);
-            }
+            console.log(res);
           });
       }
     }

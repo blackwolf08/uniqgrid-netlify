@@ -1,6 +1,6 @@
-import { apiCall, setTokenHeader } from "../services/api";
-import { SET_CURRENT_USER, ERROR } from "../actions/types";
-import { fetchUserData } from "./userData";
+import { apiCall, setTokenHeader } from '../services/api';
+import { SET_CURRENT_USER, ERROR } from '../actions/types';
+import { fetchUserData } from './userData';
 export function setCurrentUser(user) {
   return {
     type: SET_CURRENT_USER,
@@ -39,27 +39,27 @@ export function authUser(type, userData) {
   return dispatch => {
     return new Promise((resolve, reject) => {
       return apiCall(
-        "post",
-        "https://cors-anywhere.herokuapp.com/http://portal.uniqgridcloud.com:8080/api/auth/login",
+        'post',
+        'https://cors-anywhere.herokuapp.com/http://portal.uniqgridcloud.com:8080/api/auth/login',
         userData
       )
         .then(async res => {
           //if successfull login set localstorages,
           //we are stroing
-          localStorage.setItem("email", userData.username);
-          localStorage.setItem("password", userData.password);
-          localStorage.setItem("jwtToken", res.token);
-          localStorage.setItem("refreshToken", res.refreshToken);
+          localStorage.setItem('email', userData.username);
+          localStorage.setItem('password', userData.password);
+          localStorage.setItem('jwtToken', res.token);
+          localStorage.setItem('refreshToken', res.refreshToken);
           setAuthorizationToken(res.token);
           dispatch(setCurrentUser(res.token));
           fetchUserData();
           resolve();
         })
         .catch(err => {
-          window.location.href = "/login";
+          window.location.href = '/login';
           dispatch({
             type: ERROR,
-            payload: "Invaild Email/Password"
+            payload: 'Invaild Email/Password'
           });
         });
     });
@@ -80,19 +80,17 @@ export const refreshUser = () => {
 const ff = () => {
   //apiCall is the function from /src/services/api.js which uses axios with proper headers
   apiCall(
-    "post",
-    "https://cors-anywhere.herokuapp.com/http://portal.uniqgridcloud.com:8080/api/auth/login",
+    'post',
+    'https://cors-anywhere.herokuapp.com/http://portal.uniqgridcloud.com:8080/api/auth/login',
     refreshData
   )
     .then(async res => {
-      localStorage.setItem("userData", res);
-      localStorage.setItem("jwtToken", res.token);
-      localStorage.setItem("refreshToken", res.refreshToken);
+      localStorage.setItem('userData', res);
+      localStorage.setItem('jwtToken', res.token);
+      localStorage.setItem('refreshToken', res.refreshToken);
       setAuthorizationToken(res.token);
     })
     .catch(err => {
-      window.location.href = "/login";
-      localStorage.clear();
-      window.location.href = "/login";
+      console.log(err);
     });
 };
