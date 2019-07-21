@@ -162,44 +162,48 @@ class InstalledDevices extends Component {
   };
 
   handleChange = e => {
-    let newDevice = {
-      device: {
-        additionalInfo: '',
-        id: `${e.target.value[0]}`,
-        name: `${e.target.value[1]}`
-      }
-    };
-    let new_pool_arr = [];
-    this.state.device_pool.device_list.forEach(device => {
-      if (device.device.name !== e.target.value[1]) {
-        new_pool_arr.push(device);
-      }
-    });
-    this.setState({
-      device_pool: {
-        device_list: new_pool_arr
-      },
-      device_name: `${e.target.value[1]}`
-    });
-    this.setState({
-      deviceList: {
-        device_list: [...this.state.deviceList.device_list, newDevice]
-      }
-    });
+    if (e.target.value !== 'No Device') {
+      let newDevice = {
+        device: {
+          additionalInfo: '',
+          id: `${e.target.value[0]}`,
+          name: `${e.target.value[1]}`
+        }
+      };
+      let new_pool_arr = [];
+      this.state.device_pool.device_list.forEach(device => {
+        if (device.device.name !== e.target.value[1]) {
+          new_pool_arr.push(device);
+        }
+      });
+      this.setState({
+        device_pool: {
+          device_list: new_pool_arr
+        },
+        device_name: `${e.target.value[1]}`
+      });
+      this.setState({
+        deviceList: {
+          device_list: [...this.state.deviceList.device_list, newDevice]
+        }
+      });
+    }
   };
 
   handleChangeMaster = e => {
-    let newMaster = {
-      device: {
-        additionalInfo: '',
-        id: `${e.target.value[0]}`,
-        name: `${e.target.value[1]}`
-      }
-    };
-    this.setState({
-      masterDevice: `${e.target.value[1]}`,
-      masterDeviceToSend: newMaster
-    });
+    if (e.target.value !== 'No Device') {
+      let newMaster = {
+        device: {
+          additionalInfo: '',
+          id: `${e.target.value[0]}`,
+          name: `${e.target.value[1]}`
+        }
+      };
+      this.setState({
+        masterDevice: `${e.target.value[1]}`,
+        masterDeviceToSend: newMaster
+      });
+    }
   };
 
   handleSubmit = () => {
@@ -323,29 +327,45 @@ class InstalledDevices extends Component {
           </div>
         );
       });
-      listOfDevicesSelect = this.state.deviceList.device_list.map(device => {
-        return (
-          <MenuItem
-            key={uuid.v4()}
-            value={[device.device.id, device.device.name]}
-          >
-            {device.device.name}
+      if (this.state.deviceList.device_list.length === 0) {
+        listOfDevicesSelect = (
+          <MenuItem key={uuid.v4()} value='No Device'>
+            No Device
           </MenuItem>
         );
-      });
+      } else {
+        listOfDevicesSelect = this.state.deviceList.device_list.map(device => {
+          return (
+            <MenuItem
+              key={uuid.v4()}
+              value={[device.device.id, device.device.name]}
+            >
+              {device.device.name}
+            </MenuItem>
+          );
+        });
+      }
     }
 
     if (this.state.device_pool) {
-      listOfPool = this.state.device_pool.device_list.map(device => {
-        return (
-          <MenuItem
-            key={uuid.v4()}
-            value={[device.device.id, device.device.name]}
-          >
-            {device.device.name}
+      if (this.state.device_pool.device_list.length === 0) {
+        listOfPool = (
+          <MenuItem key={uuid.v4()} value='No Device'>
+            No Device
           </MenuItem>
         );
-      });
+      } else {
+        listOfPool = this.state.device_pool.device_list.map(device => {
+          return (
+            <MenuItem
+              key={uuid.v4()}
+              value={[device.device.id, device.device.name]}
+            >
+              {device.device.name}
+            </MenuItem>
+          );
+        });
+      }
     }
 
     return (

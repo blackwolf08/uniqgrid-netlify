@@ -564,11 +564,11 @@ class MyDevice extends Component {
         //set interval timings for the day/week/month/year
 
         if (this.state.selectedFilter === 'day') {
-          // 15 mins
+          // 1 hour
           interval = 3600000;
         }
         if (this.state.selectedFilter === 'week') {
-          // 1 hour
+          // 1 day
           interval = 86400000;
         }
         if (this.state.selectedFilter === 'month') {

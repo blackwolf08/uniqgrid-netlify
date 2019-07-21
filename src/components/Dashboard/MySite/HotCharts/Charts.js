@@ -172,39 +172,38 @@ export default class Charts extends Component {
           });
         })
         .catch(res => {
-          if (res.status === 401) {
-            localStorage.clear();
-            window.location.href = '/login';
-          }
+          console.log(res);
         });
     });
   };
   handleChange1 = e => {
-    //handle keys dropdown change
-    let deviceId = e.target.value[0];
-    this.setState({
-      isLoading: true,
-      default: false,
-      back: 1,
-      deviceActivated: true,
-      show_keys: false
-    });
-    //setting select value to store selected key
-    this.setState({
-      device_name: e.target.value[1],
-      deviceId: e.target.value[0]
-    });
-    axios
-      .get(
-        `https://cors-anywhere.herokuapp.com/http://portal.uniqgridcloud.com:8080/api/plugins/telemetry/DEVICE/${deviceId}/keys/timeseries`
-      )
-      .then(res => {
-        this.setState({
-          keys: res.data,
-          newKeys: res.data,
-          show_filters: true
-        });
+    if (e.target.value !== 'No Device') {
+      //handle keys dropdown change
+      let deviceId = e.target.value[0];
+      this.setState({
+        isLoading: true,
+        default: false,
+        back: 1,
+        deviceActivated: true,
+        show_keys: false
       });
+      //setting select value to store selected key
+      this.setState({
+        device_name: e.target.value[1],
+        deviceId: e.target.value[0]
+      });
+      axios
+        .get(
+          `https://cors-anywhere.herokuapp.com/http://portal.uniqgridcloud.com:8080/api/plugins/telemetry/DEVICE/${deviceId}/keys/timeseries`
+        )
+        .then(res => {
+          this.setState({
+            keys: res.data,
+            newKeys: res.data,
+            show_filters: true
+          });
+        });
+    }
   };
 
   handleKeyChange1 = e => {
@@ -233,7 +232,7 @@ export default class Charts extends Component {
     //get the timeseries data for graph
     axios
       .get(
-        `https://cors-anywhere.herokuapp.com/http://portal.uniqgridcloud.com:8080/api/plugins/telemetry/DEVICE/${deviceId}/values/timeseries?limit=10000&interval=900000&agg=MAX&keys=${key}&startTs=${startTime}&endTs=${endtime}`
+        `https://cors-anywhere.herokuapp.com/http://portal.uniqgridcloud.com:8080/api/plugins/telemetry/DEVICE/${deviceId}/values/timeseries?limit=10000&interval=3600000&agg=MAX&keys=${key}&startTs=${startTime}&endTs=${endtime}`
       )
       .then(res => {
         //extract data from response
@@ -277,7 +276,8 @@ export default class Charts extends Component {
     //custom options for graphs
     const options = {
       title: {
-        text: `${heading} Analysis`
+        text: `${heading} Analysis`,
+        fontSize: 20
       },
       animationEnabled: true,
       //Downloadable ? true : false
@@ -331,8 +331,15 @@ export default class Charts extends Component {
 
   dataPoints = () => {
     if (this.state.selectedFilter === 'day') {
+      let s;
       //change formatting for day filter on X axis and also scale the data on the y-axis
-      let s = this.state.graphData.map(e => {
+      s = this.state.graphData.map(e => {
+        return {
+          label: moment(e.ts).format('hh a'),
+          y: e.value
+        };
+      });
+      s = this.state.graphData.map(e => {
         return {
           label: moment(e.ts).format('hh a'),
           y: e.value * 1
@@ -342,22 +349,58 @@ export default class Charts extends Component {
     }
     if (this.state.selectedFilter === 'year') {
       //formatting for year
-      let s = this.state.graphData.map(e => {
+      let s;
+      s = this.state.graphData.map(e => {
+        return {
+          label: moment(e.ts).format('MMM'),
+          y: e.value
+        };
+      });
+      s = this.state.graphData.map(e => {
         return {
           label: moment(e.ts).format('MMM'),
           y: e.value * 1
         };
       });
+
       return s;
     }
-    //for all others
-    let s = this.state.graphData.map(e => {
-      return {
-        label: moment(e.ts).format('MMM Do YY'),
-        y: e.value * 1
-      };
-    });
-    return s;
+    if (this.state.selectedFilter === 'week') {
+      //formatting for week
+      let s;
+      s = this.state.graphData.map(e => {
+        return {
+          label: moment(e.ts).format('dddd'),
+          y: e.value
+        };
+      });
+      s = this.state.graphData.map(e => {
+        return {
+          label: moment(e.ts).format('dddd'),
+          y: e.value * 1
+        };
+      });
+
+      return s;
+    }
+    if (this.state.selectedFilter === 'month') {
+      //formatting for month
+      let s;
+      s = this.state.graphData.map(e => {
+        return {
+          label: moment(e.ts).format('D MMM'),
+          y: e.value
+        };
+      });
+      s = this.state.graphData.map(e => {
+        return {
+          label: moment(e.ts).format('D MMM'),
+          y: e.value * 1
+        };
+      });
+
+      return s;
+    }
   };
 
   filterWeek = () => {
@@ -381,7 +424,7 @@ export default class Charts extends Component {
       .get(
         `https://cors-anywhere.herokuapp.com/http://portal.uniqgridcloud.com:8080/api/plugins/telemetry/DEVICE/${
           this.state.deviceId
-        }/values/timeseries?limit=10000&interval=10800000&agg=MAX&keys=${
+        }/values/timeseries?limit=10000&interval=86400000&agg=MAX&keys=${
           this.state.key
         }&startTs=${startTime}&endTs=${endtime}`
       )
@@ -395,10 +438,7 @@ export default class Charts extends Component {
         });
       })
       .catch(res => {
-        if (res.status === 401) {
-          localStorage.clear();
-          window.location.href = '/login';
-        }
+        console.log(res);
       });
     //apply CSS to selected filter
     this.setState({
@@ -429,7 +469,7 @@ export default class Charts extends Component {
       .get(
         `https://cors-anywhere.herokuapp.com/http://portal.uniqgridcloud.com:8080/api/plugins/telemetry/DEVICE/${
           this.state.deviceId
-        }/values/timeseries?limit=10000&interval=900000&agg=MAX&keys=${
+        }/values/timeseries?limit=10000&interval=3600000&agg=MAX&keys=${
           this.state.key
         }&startTs=${startTime}&endTs=${endtime}`
       )
@@ -442,10 +482,7 @@ export default class Charts extends Component {
         });
       })
       .catch(res => {
-        if (res.status === 401) {
-          localStorage.clear();
-          window.location.href = '/login';
-        }
+        console.log(res);
       });
     this.setState({
       day: ' active-filter',
@@ -487,10 +524,7 @@ export default class Charts extends Component {
         });
       })
       .catch(res => {
-        if (res.status === 401) {
-          localStorage.clear();
-          window.location.href = '/login';
-        }
+        console.log(res);
       });
     this.setState({
       day: '',
@@ -519,7 +553,7 @@ export default class Charts extends Component {
       .get(
         `https://cors-anywhere.herokuapp.com/http://portal.uniqgridcloud.com:8080/api/plugins/telemetry/DEVICE/${
           this.state.deviceId
-        }/values/timeseries?limit=10000&interval=86400000&agg=MAX&keys=${
+        }/values/timeseries?limit=10000&interval=2592000000&agg=MAX&keys=${
           this.state.key
         }&startTs=${startTime}&endTs=${endtime}`
       )
@@ -573,10 +607,7 @@ export default class Charts extends Component {
         });
       })
       .catch(res => {
-        if (res.status === 401) {
-          localStorage.clear();
-          window.location.href = '/login';
-        }
+        console.log(res);
       });
   };
 
@@ -600,20 +631,20 @@ export default class Charts extends Component {
         //set interval timings for the day/week/month/year
 
         if (this.state.selectedFilter === 'day') {
-          // 15 mins
-          interval = 900000;
+          // 1 hour
+          interval = 3600000;
         }
         if (this.state.selectedFilter === 'week') {
-          // 1 hour
-          interval = 10800000;
+          // 1 day
+          interval = 86400000;
         }
         if (this.state.selectedFilter === 'month') {
           // 1 day
           interval = 86400000;
         }
         if (this.state.selectedFilter === 'year') {
-          // 1 day
-          interval = 86400000;
+          // 1 month
+          interval = 2592000000;
         }
         if (this.state.selectedFilter === 'day') {
           // This whole logic is explained in MyDevice.md
@@ -775,16 +806,20 @@ export default class Charts extends Component {
           let start_time, end_time, interval;
           console.log(this.state.back);
           if (this.state.selectedFilter === 'day') {
-            interval = 900000;
+            // 1 hour
+            interval = 3600000;
           }
           if (this.state.selectedFilter === 'week') {
-            interval = 10800000;
+            // 1 day
+            interval = 86400000;
           }
           if (this.state.selectedFilter === 'month') {
+            // 1 day
             interval = 86400000;
           }
           if (this.state.selectedFilter === 'year') {
-            interval = 86400000;
+            // 1 month
+            interval = 2592000000;
           }
           if (this.state.selectedFilter === 'day') {
             if (this.state.back === 1) {
@@ -925,7 +960,6 @@ export default class Charts extends Component {
   };
 
   handleKeyChange = e => {
-    console.log(e.target.checked);
     if (e.target.checked) {
       this.setState({
         key: 'import_energy'
@@ -956,18 +990,27 @@ export default class Charts extends Component {
     let listOfDevices;
     if (this.state.device_list) {
       if (this.state.device_list.device_list) {
-        listOfDevices = this.state.device_list.device_list.map(device => {
-          return (
-            <MenuItem
-              key={uuid.v4()}
-              value={[device.device.id, device.device.name]}
-            >
-              {device.device.name}
+        if (this.state.device_list.device_list.length === 0) {
+          listOfDevices = (
+            <MenuItem key={uuid.v4()} value='No Device'>
+              No Device
             </MenuItem>
           );
-        });
+        } else {
+          listOfDevices = this.state.device_list.device_list.map(device => {
+            return (
+              <MenuItem
+                key={uuid.v4()}
+                value={[device.device.id, device.device.name]}
+              >
+                {device.device.name}
+              </MenuItem>
+            );
+          });
+        }
       }
     }
+
     let listOfKeys;
     if ((this.state.keys && this.state.keys !== '') || this.state.keys !== []) {
       listOfKeys = this.state.keys.map(key => {
