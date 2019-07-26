@@ -1,5 +1,5 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
 export default function withAuth(ComponentToBeRendered) {
   // Component to be rendered inputs Component
@@ -7,12 +7,12 @@ export default function withAuth(ComponentToBeRendered) {
     // All the components and methods are self intutive
     componentWillMount() {
       if (!this.props.isAuthenticated) {
-        this.props.history.push("/login");
+        this.props.history.push('/');
       }
     }
     componentWillUpdate(nextProps) {
       if (!nextProps.isAuthenticated) {
-        this.props.history.push("/login");
+        this.props.history.push('/');
       }
     }
     render() {

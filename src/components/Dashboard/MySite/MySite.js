@@ -228,7 +228,7 @@ class MySite extends Component {
               onClick={this.handleClick}
             >
               <div className='my-col'>
-                <p>{}</p>
+                <p className='_head'>Connection Name</p>
               </div>
               <div className='my-col'>
                 <img className='mysite-icons1' src={icon1} alt='power' />
@@ -240,7 +240,11 @@ class MySite extends Component {
                 className='my-col mysites-icons'
                 style={{ display: 'flex', justifyContent: 'space-around' }}
               >
-                <p>Insights / Settings</p>
+                <p>
+                  <span className='insights'>Insights</span>
+                  <span className='space' />
+                  Settings
+                </p>
               </div>
             </div>
             {list}

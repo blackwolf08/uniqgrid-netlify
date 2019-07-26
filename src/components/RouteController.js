@@ -20,7 +20,8 @@ class RouteController extends Component {
           {/* login route */}
           {/* AuthLogin component */}
           <Route
-            path='/login'
+            path='/'
+            exact
             render={props => <AuthLogin signin onAuth={authUser} {...props} />}
           />
           <Route path='/forgot-password' render={props => <ResetPassword />} />

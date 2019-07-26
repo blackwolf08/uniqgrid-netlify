@@ -692,6 +692,11 @@ i {
   border-radius: 5px;
 }
 
+._head {
+  font-weight: 500;
+  font-size: 1.2rem;
+}
+
 .filter-button:hover {
   opacity: 0.7;
 }
@@ -705,9 +710,23 @@ input:focus {
   background-color: #eee;
 }
 
+.agg-select {
+  width: 100px;
+  position: absolute;
+  right: 30px;
+}
+
 .mysites-connections {
   margin-top: 10px;
   cursor: auto;
+}
+.insights {
+  margin-left: -30px;
+}
+.space {
+  width: 100px;
+  margin-left: 40px;
+  display: inline-block;
 }
 
 .button-div {

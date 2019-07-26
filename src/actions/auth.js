@@ -18,6 +18,7 @@ export function logout() {
     setAuthorizationToken(false);
     //window.location.reload();
     dispatch(setCurrentUser({}));
+    window.location.href = '/';
   };
 }
 
@@ -56,7 +57,7 @@ export function authUser(type, userData) {
           resolve();
         })
         .catch(err => {
-          window.location.href = '/login';
+          window.location.href = '/';
           dispatch({
             type: ERROR,
             payload: 'Invaild Email/Password'
