@@ -9,6 +9,7 @@ import CanvasJSReact from '../../../lib/canvasjs.react';
 import moment from 'moment';
 import { fetchUserData } from '../../../actions/userData';
 
+import myDeviceImg from '../../../images/my-devices.png';
 //Info about tampering with momentJS is in MyDevice.md (same folder)
 
 class MyDevice extends Component {
@@ -1270,7 +1271,8 @@ class MyDevice extends Component {
         </Helmet>
         <div className='mydevice-hero'>
           <h1 style={{ marginBottom: '20px' }} className='mysite-heading'>
-            <i className='fas fa-mobile-alt icon-heading' /> My Devices
+            <img className='_my_sites_logo' src={myDeviceImg} alt='logo' /> My
+            Devices
           </h1>
 
           <div className='mydevice-list'>

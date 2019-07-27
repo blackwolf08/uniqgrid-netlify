@@ -2,6 +2,13 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
+import mySiteImg from '../../../images/my-sites.png';
+import myDeviceImg from '../../../images/my-devices.png';
+import insightsImg from '../../../images/insights.png';
+import userImg from '../../../images/user.png';
+import feedbackImg from '../../../images/feedback.png';
+import myReqimg from '../../../images/my-requests.png';
+
 class LeftPart extends Component {
   state = {
     mysite: 'leftpart-menu',
@@ -78,8 +85,12 @@ class LeftPart extends Component {
           className='link-p'
           to='/dashboard/my-sites'
         >
-          <button className={this.state.mysite}>
-            <i className='fas fa-house-damage' /> My Site
+          <button
+            style={{ display: 'flex', alignItems: 'center' }}
+            className={this.state.mysite}
+          >
+            <img className='icons_sidebar' alt='custom logo' src={mySiteImg} />{' '}
+            My Site
           </button>
         </Link>
         <Link
@@ -87,8 +98,16 @@ class LeftPart extends Component {
           className='link-p'
           to='/dashboard/my-device'
         >
-          <button className={this.state.mydevice}>
-            <i className='fas fa-mobile-alt' /> My Device
+          <button
+            style={{ display: 'flex', alignItems: 'center' }}
+            className={this.state.mydevice}
+          >
+            <img
+              className='icons_sidebar my_device_icon'
+              alt='custom logo'
+              src={myDeviceImg}
+            />{' '}
+            My Devices
           </button>
         </Link>
         <Link
@@ -96,8 +115,12 @@ class LeftPart extends Component {
           className='link-p'
           to='/dashboard/my-requests'
         >
-          <button className={this.state.myrequests}>
-            <i className='fas fa-ticket-alt' /> My Requests
+          <button
+            style={{ display: 'flex', alignItems: 'center' }}
+            className={this.state.myrequests}
+          >
+            <img className='icons_sidebar' alt='custom logo' src={myReqimg} />{' '}
+            My Requests
           </button>
         </Link>
         <Link
@@ -105,8 +128,16 @@ class LeftPart extends Component {
           className='link-p'
           to='/dashboard/feedback'
         >
-          <button className={this.state.feedback}>
-            <i className='fas fa-star' /> Feedback
+          <button
+            style={{ display: 'flex', alignItems: 'center' }}
+            className={this.state.feedback}
+          >
+            <img
+              className='icons_sidebar'
+              alt='custom logo'
+              src={feedbackImg}
+            />{' '}
+            Feedback
           </button>
         </Link>
 
@@ -115,8 +146,12 @@ class LeftPart extends Component {
           className='link-p'
           to='/dashboard/my-profile'
         >
-          <button className={this.state.myprofile}>
-            <i className='fas fa-user' /> My Profile
+          <button
+            style={{ display: 'flex', alignItems: 'center' }}
+            className={this.state.myprofile}
+          >
+            <img className='icons_sidebar' alt='custom logo' src={userImg} /> My
+            Profile
           </button>
         </Link>
         <Link
@@ -124,8 +159,16 @@ class LeftPart extends Component {
           className='link-p'
           to='/dashboard/portal'
         >
-          <button className={this.state.portal}>
-            <i className='fas fa-user' /> Portal
+          <button
+            style={{ display: 'flex', alignItems: 'center' }}
+            className={this.state.portal}
+          >
+            <img
+              className='icons_sidebar'
+              alt='custom logo'
+              src={insightsImg}
+            />{' '}
+            Insights
           </button>
         </Link>
       </div>

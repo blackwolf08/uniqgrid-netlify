@@ -15,6 +15,9 @@ import { Redirect } from 'react-router-dom';
 import { fetchConnetionInfo } from '../../../actions/fetchConnectionInfo';
 import Spinner from '../../../images/index';
 import moment from 'moment';
+
+import myReqimg from '../../../images/my-requests.png';
+
 class MyRequests extends Component {
   state = {
     newTicket: false,
@@ -428,7 +431,8 @@ class MyRequests extends Component {
             // this section is basically the table with tickets
             <>
               <h1 className='mysites-heading'>
-                <i className='fas fa-ticket-alt icon-heading' /> My Requests
+                <img className='_my_sites_logo' src={myReqimg} alt='logo' /> My
+                Requests
               </h1>
               <div className='myrequest-hero'>
                 {!this.state.newTicket && (

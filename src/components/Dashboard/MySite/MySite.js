@@ -9,6 +9,8 @@ import { Link } from 'react-router-dom';
 import { fetchUserData } from '../../../actions/userData';
 import { connect } from 'react-redux';
 
+import mySiteImg from '../../../images/my-sites.png';
+
 class MySite extends Component {
   state = {
     maxConnections: 0,
@@ -219,7 +221,7 @@ class MySite extends Component {
           <title>My Site</title>
         </Helmet>
         <h1 className='mysites-heading '>
-          <i className='fas fa-house-damage icon-heading' /> My Sites
+          <img className='_my_sites_logo' src={mySiteImg} alt='logo' /> My Sites
         </h1>
         {this.state.ready && (
           <div className='mysites-connection-list'>

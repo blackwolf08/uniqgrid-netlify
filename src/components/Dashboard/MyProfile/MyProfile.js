@@ -1,20 +1,20 @@
-import React, { Component } from "react";
-import { Helmet } from "react-helmet";
-import { connect } from "react-redux";
-import Container from "@material-ui/core/Container";
-import TextField from "@material-ui/core/TextField";
-import Button from "@material-ui/core/Button";
-import Spinner from "../../../images";
-import jwtDecode from "jwt-decode";
-import axios from "axios";
+import React, { Component } from 'react';
+import { Helmet } from 'react-helmet';
+import { connect } from 'react-redux';
+import Container from '@material-ui/core/Container';
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
+import Spinner from '../../../images';
+import jwtDecode from 'jwt-decode';
+import axios from 'axios';
 
 class MyProfile extends Component {
   state = {
     readOnly: true,
     isSubmitButtonDisabled: true,
-    firstname: "",
-    mobilephone: "",
-    email: "",
+    firstname: '',
+    mobilephone: '',
+    email: '',
     spinner: false
   };
 
@@ -44,7 +44,7 @@ class MyProfile extends Component {
         .catch(res => {
           if (res.status === 401) {
             localStorage.clear();
-            window.location.href = "/login";
+            window.location.href = '/login';
           }
         });
     }
@@ -60,15 +60,15 @@ class MyProfile extends Component {
     let obj = {
       properties: [
         {
-          property: "email",
+          property: 'email',
           value: `${this.state.email}`
         },
         {
-          property: "firstname",
+          property: 'firstname',
           value: `${this.state.firstname}`
         },
         {
-          property: "mobilephone",
+          property: 'mobilephone',
           value: `${this.state.mobilephone}`
         }
       ]
@@ -78,10 +78,10 @@ class MyProfile extends Component {
       url: `https://cors-anywhere.herokuapp.com/https://api.hubapi.com/contacts/v1/contact/vid/${
         this.state.vid
       }/profile?hapikey=bdcec428-e806-47ec-b7fd-ece8b03a870b`,
-      method: "POST",
+      method: 'POST',
       config: {
         headers: {
-          "Content-Type": "application/json"
+          'Content-Type': 'application/json'
         }
       },
       data: obj
@@ -93,7 +93,7 @@ class MyProfile extends Component {
       .catch(res => {
         if (res.status === 401) {
           localStorage.clear();
-          window.location.href = "/login";
+          window.location.href = '/login';
         }
       });
   };
@@ -114,10 +114,10 @@ class MyProfile extends Component {
   };
 
   render() {
-    let shortName = "";
+    let shortName = '';
     //getting customer initials
-    if (typeof this.props.data !== "undefined") {
-      let nameArr = this.props.data.name.split(" ");
+    if (typeof this.props.data !== 'undefined') {
+      let nameArr = this.props.data.name.split(' ');
       nameArr.splice(0, 1);
       nameArr.forEach(e => {
         shortName += e[0].toUpperCase();
@@ -128,38 +128,38 @@ class MyProfile extends Component {
     if (this.state.spinner) return <Spinner />;
 
     return (
-      <div className="flex h-w-100">
+      <div className='flex h-w-100'>
         <Helmet>
           <title>My Profile</title>
         </Helmet>
         <Container fixed>
-          <div className="circle circle-myprofile">
+          <div className='circle circle-myprofile'>
             <p>{shortName}</p>
           </div>
           <form
-            className="flex flex-col"
+            className='flex flex-col'
             noValidate
-            autoComplete="off"
+            autoComplete='off'
             onSubmit={this.handleSubmit}
           >
             <TextField
-              id="firstname"
-              label="Name"
+              id='firstname'
+              label='Name'
               onChange={this.handleChange}
               value={this.state.firstname}
               style={styles.textField}
-              margin="normal"
+              margin='normal'
               InputProps={{
                 readOnly: this.state.readOnly
               }}
             />
             <br />
             <TextField
-              id="email"
-              label="Email"
+              id='email'
+              label='Email'
               value={this.state.email}
               style={styles.textField}
-              margin="normal"
+              margin='normal'
               onChange={this.handleChange}
               InputProps={{
                 readOnly: this.state.readOnly
@@ -167,12 +167,12 @@ class MyProfile extends Component {
             />
             <br />
             <TextField
-              id="mobilephone"
-              label="Phone"
+              id='mobilephone'
+              label='Phone'
               value={this.state.mobilephone}
               style={styles.textField}
               onChange={this.handleChange}
-              margin="normal"
+              margin='normal'
               InputProps={{
                 readOnly: this.state.readOnly
               }}
@@ -181,16 +181,16 @@ class MyProfile extends Component {
             <div>
               <Button
                 onClick={this.handleClick}
-                variant="contained"
+                variant='contained'
                 style={styles.button}
               >
                 Edit
               </Button>
               <Button
                 disabled={this.state.isSubmitButtonDisabled}
-                type="submit"
-                color="primary"
-                variant="contained"
+                type='submit'
+                color='primary'
+                variant='contained'
                 style={styles.button}
               >
                 Submit
@@ -205,10 +205,10 @@ class MyProfile extends Component {
 
 const styles = {
   textField: {
-    width: "300px"
+    width: '300px'
   },
   button: {
-    margin: "10px"
+    margin: '10px'
   }
 };
 

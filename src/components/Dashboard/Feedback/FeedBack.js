@@ -6,6 +6,8 @@ import axios from 'axios';
 import SweetAlert from 'react-bootstrap-sweetalert';
 import Spinner from '../../../images';
 
+import feedbackImg from '../../../images/feedback.png';
+
 class FeedBack extends Component {
   state = {
     //Dynamic class to add to star array
@@ -197,7 +199,7 @@ class FeedBack extends Component {
           <title>Feedback</title>
         </Helmet>
         <h1 className='mysites-heading'>
-          <i style={{ color: 'black' }} className='fas fa-star icon-heading' />{' '}
+          <img className='_my_sites_logo' src={feedbackImg} alt='logo' />
           Feedback
         </h1>
         <div className='feedback-hero flex'>
