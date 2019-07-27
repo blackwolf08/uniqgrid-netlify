@@ -133,7 +133,7 @@ class NewConnection extends Component {
         .catch(res => {
           if (res.status === 401) {
             localStorage.clear();
-            window.location.href = '/login';
+            window.location.href = '/';
           }
         });
       this.setState({
@@ -249,7 +249,7 @@ class NewConnection extends Component {
           .catch(res => {
             if (res.status === 401) {
               localStorage.clear();
-              window.location.href = '/login';
+              window.location.href = '/';
             }
           });
       }
@@ -314,7 +314,7 @@ class NewConnection extends Component {
           .catch(res => {
             if (res.status === 401) {
               localStorage.clear();
-              window.location.href = '/login';
+              window.location.href = '/';
             }
           });
       }

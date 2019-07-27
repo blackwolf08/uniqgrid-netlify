@@ -99,7 +99,7 @@ class MyRequests extends Component {
         .catch(res => {
           if (res.status === 401) {
             localStorage.clear();
-            window.location.href = '/login';
+            window.location.href = '/';
           }
         });
       // all done, now ready to render
@@ -202,7 +202,7 @@ class MyRequests extends Component {
       .catch(res => {
         if (res.status === 401) {
           localStorage.clear();
-          window.location.href = '/login';
+          window.location.href = '/';
         }
       });
   };
@@ -333,7 +333,7 @@ class MyRequests extends Component {
           .catch(res => {
             if (res.status === 401) {
               localStorage.clear();
-              window.location.href = '/login';
+              window.location.href = '/';
             }
           });
 
@@ -342,7 +342,7 @@ class MyRequests extends Component {
       .catch(res => {
         if (res.status === 401) {
           localStorage.clear();
-          window.location.href = '/login';
+          window.location.href = '/';
         }
       });
   };

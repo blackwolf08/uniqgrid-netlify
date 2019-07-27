@@ -72,6 +72,7 @@ button {
 ._my_sites_logo {
   height: 50px;
   width: 50px;
+  filter: brightness(0) invert(0);
 }
 
 .h-w-100 {

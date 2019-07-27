@@ -279,7 +279,7 @@ class InstalledDevices extends Component {
       .catch(res => {
         if (res.status === 401) {
           localStorage.clear();
-          window.location.href = '/login';
+          window.location.href = '/';
         }
       });
   };
