@@ -9,7 +9,6 @@ import { fetchConnetionInfo } from '../../../../actions/fetchConnectionInfo';
 import { connect } from 'react-redux';
 import MysiteMap from '../MySite Maps/MysiteMap';
 import Spinner from '../../../../images/index';
-import Modal from '@material-ui/core/Modal';
 
 // this componets gets keys for a particular site based upon the site id we recieve from /dashboard/mysite/:id
 

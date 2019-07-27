@@ -291,6 +291,7 @@ class InstalledDevices extends Component {
     let listOfKeys;
 
     if (this.state.device_key !== '') {
+      // eslint-disable-next-line
       listOfKeys = this.state.device_key.map(key => {
         if (key.match(/power/gm) || key.match(/kW_/) || key.match(/kw_/)) {
           return (

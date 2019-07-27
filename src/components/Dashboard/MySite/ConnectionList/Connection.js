@@ -81,8 +81,10 @@ class Connection extends Component {
     } = this.props;
     let numLoad = parseFloat(this.state.power);
     let denoLoad = parseFloat(this.state.load);
-    let solar = parseFloat(this.state.solar);
-    let solarPower = 0;
+    // eslint-disable-next-line no-use-before-define
+    // let solar = parseFloat(this.state.solar);
+    // // eslint-disable-next-line no-use-before-define
+    // let solarPower = 0;
     let consumption = 0;
     let power = 0;
     if (denoLoad !== '' && denoLoad !== 0) {
