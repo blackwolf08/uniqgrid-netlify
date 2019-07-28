@@ -4,9 +4,6 @@ import { connect } from 'react-redux';
 import logo from '../../images/logo.png';
 import { Helmet } from 'react-helmet';
 import { Link } from 'react-router-dom';
-import root_gif from '../../images/root.gif';
-import Typed from 'react-typed';
-
 class AuthLogin extends Component {
   state = {
     username: '',
@@ -90,28 +87,7 @@ class AuthLogin extends Component {
         <Helmet>
           <title>Uniqgrid | Login</title>
         </Helmet>
-        <div className='root_left flex-col'>
-          <Typed
-            strings={[
-              'Be informed.',
-              'Be efficient.',
-              'Be assured.',
-              'Be smart'
-            ]}
-            typeSpeed={40}
-            backSpeed={50}
-            attr='placeholder'
-            loop
-          >
-            <input className='my_typed' type='text' />
-          </Typed>
-          <img
-            src={root_gif}
-            alt='Uniqgrid IOT Solutions'
-            className='root_gif'
-          />
-        </div>
-        <div className='root_right flex-col'>
+        <div className='container_root_main flex-col'>
           <img src={logo} alt='uniqgrid' className='auth-logo' />
           <div className='auth-container flex flex-col'>
             <form
@@ -141,7 +117,7 @@ class AuthLogin extends Component {
                 onChange={this.handleChange}
                 className='auth-input'
               />
-              <button className='auth-button'>Login</button>
+              <button className='auth-button'>LOGIN</button>
               <Link to='/forgot-password' className='auth-p'>
                 Forgot Password?
               </Link>

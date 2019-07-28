@@ -3,7 +3,7 @@ import { Route, Switch, withRouter } from 'react-router-dom';
 import withAuth from '../hocs/withAuth';
 import { connect } from 'react-redux';
 import { authUser } from '../actions/auth';
-import Spinner from '../images/index';
+import Spinner from '../images';
 const ResetPassword = lazy(() => import('./Auth/ResetPassword'));
 const AuthLogin = lazy(() => import('./Auth/AuthLogin'));
 const Dashboard = lazy(() => import('./Dashboard/Dashboard'));
@@ -15,7 +15,7 @@ class RouteController extends Component {
     const { authUser } = this.props;
     //
     return (
-      <Suspense fallback={Spinner}>
+      <Suspense fallback={() => <Spinner />}>
         <Switch>
           {/* login route */}
           {/* AuthLogin component */}

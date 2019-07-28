@@ -1,10 +1,10 @@
-import axios from "axios";
+import axios from 'axios';
 
 export function setTokenHeader(token) {
   if (token) {
-    axios.defaults.headers.common["X-Authorization"] = `Bearer ${token}`;
+    axios.defaults.headers.common['X-Authorization'] = `Bearer ${token}`;
   } else {
-    delete axios.defaults.headers.common["X-Authorization"];
+    delete axios.defaults.headers.common['X-Authorization'];
   }
 }
 
@@ -16,7 +16,7 @@ export function apiCall(method, path, data) {
       })
       .catch(err => {
         localStorage.clear();
-        window.location.href = "/login";
+        console.log(err);
       });
   });
 }

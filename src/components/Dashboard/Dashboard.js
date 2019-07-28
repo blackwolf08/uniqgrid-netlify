@@ -3,7 +3,7 @@ import { Route, Switch } from 'react-router-dom';
 import { refreshUser } from '../../actions/auth';
 import { fetchUserData } from '../../actions/userData';
 import { connect } from 'react-redux';
-import Spinner from '../../images/index';
+import Spinner from '../../images';
 const NavBar = lazy(() => import('./Navbar/NavBar'));
 const LeftPart = lazy(() => import('./Sidebar/LeftPart'));
 const MySite = lazy(() => import('./MySite/MySite'));
@@ -53,7 +53,7 @@ class Dashboard extends Component {
         <LeftPart />
         <NavBarResponsive />
         <div className='view'>
-          <Suspense fallback={Spinner}>
+          <Suspense fallback={() => <Spinner />}>
             <Switch>
               {/* rendering components according to routes */}
               <Route

@@ -229,13 +229,16 @@ class MySite extends Component {
               className='mysites-connections mobile_connection_header'
               onClick={this.handleClick}
             >
-              <div className='my-col'>
+              <div className='my-col cont_mysites'>
                 <p className='_head'>Connection Name</p>
               </div>
               <div className='my-col'>
+                <span className='span_mysites'>Rated Load (kW)</span>
                 <img className='mysite-icons1' src={icon1} alt='power' />
               </div>
               <div className='my-col'>
+                <span className='span_mysites'>Rated Solar (kWp)</span>
+
                 <img className='mysite-icons2' src={icon2} alt='charge' />
               </div>
               <div

@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import Container from '@material-ui/core/Container';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
 import Spinner from '../../../images';
 import jwtDecode from 'jwt-decode';
 import axios from 'axios';
@@ -15,10 +17,20 @@ class MyProfile extends Component {
     firstname: '',
     mobilephone: '',
     email: '',
-    spinner: false
+    spinner: false,
+    code: {
+      IN: '+91'
+    }
   };
 
   componentDidMount() {
+    axios
+      .get('https://cors-anywhere.herokuapp.com/http://country.io/phone.json')
+      .then(res => {
+        this.setState({
+          code: res.data
+        });
+      });
     this.setState({
       spinner: true
     });
@@ -124,6 +136,11 @@ class MyProfile extends Component {
       });
     }
 
+    let codes = [];
+    Object.keys(this.state.code).forEach(code => {
+      codes.push(<MenuItem value={this.state.code[code]}>{code}</MenuItem>);
+    });
+
     //if loading return spinner
     if (this.state.spinner) return <Spinner />;
 
@@ -166,9 +183,13 @@ class MyProfile extends Component {
               }}
             />
             <br />
+            <Select label='Country-Code' value='IN'>
+              {codes}
+            </Select>
             <TextField
               id='mobilephone'
               label='Phone'
+              type='number'
               value={this.state.mobilephone}
               style={styles.textField}
               onChange={this.handleChange}

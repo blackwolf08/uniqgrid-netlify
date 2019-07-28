@@ -98,9 +98,10 @@ button {
   margin-left: 300px;
 }
 
-.root_left {
+.container_root_main {
   height: 100%;
-  width: 50%;
+  width: 100%;
+  max-width: 1000px;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -755,14 +756,14 @@ input:focus {
   height: 30px;
   width: 30px;
   margin-top: 0px;
-  margin-left: 250px;
+  margin-left: 150px;
 }
 
 .mysite-icons2 {
   height: 30px;
   width: 30px;
   margin-top: 0px;
-  margin-left: 250px;
+  margin-left: 150px;
 }
 
 .update-button {
